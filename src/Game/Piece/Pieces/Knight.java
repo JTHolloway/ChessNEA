@@ -37,6 +37,8 @@ public class Knight extends Piece
     {
         List<Move> LegalMoves = new ArrayList<>();
         Square[][] BoardArray = board.getBoardArray();
+        List<Square> PossibleDestinations = new ArrayList<>();
+        
         for (Square[] Row : BoardArray) {
             for (Square square : Row) {
                 Coordinate Destination = square.ReturnCoordinate();
@@ -47,21 +49,24 @@ public class Knight extends Piece
                 /*
                 The knight always moves two squares in one direction and then 1 square perpendicular, Therefore the
                 product of x and y displacements is always 1*2 = 2
-                 */
+                */
                 if(XDisplacement * YDisplacement == 2){
-                    if (square.SquareOccupied()){  //If the destination square is not Empty then;
-                        if (!(square.ReturnPiece().getColour() == getColour())){ //If the destination square DOES NOT contain a piece of the same colour then;
-                            //LegalMoves.add(new Move.CapturingMove(OriginSquare, square, square.ReturnPiece()));
-                            System.out.println(Destination.FileToNotation() + "" + Destination.getRank());
-                        }
-                    }else{
-                        LegalMoves.add(new Move(OriginSquare, square));
-                        System.out.println(Destination.FileToNotation() + "" + Destination.getRank());
-                    }
+                    PossibleDestinations.add(square);
                 }
             }
         }
-        //TODO Look for check
+    
+        //TODO Look for check and remove any squares which don't remove check
+        
+        /*Remove Square that moving piece is occupying and squares which
+        cannot be captured (because a piece of equal colour occupies it)*/
+        PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
+    
+        //TODO remove once finished
+        //Print moves for testing purposes
+        for (Square s : PossibleDestinations){
+            System.out.println(s.ReturnCoordinate().CoordinateToNotation());
+        }
         
         return LegalMoves;
     }

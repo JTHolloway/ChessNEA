@@ -34,7 +34,7 @@ public class Pawn extends Piece
     public List<Move> CalculateValidMoves(Board board)
     {
         //TODO calculate pawn moves
-        //TODO Look for check
+        //TODO Look for check and remove any squares which don't remove check
         //TODO Create legal moves
         return null;
     }

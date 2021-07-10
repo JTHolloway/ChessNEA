@@ -48,26 +48,13 @@ public class Rook extends Piece
         Row = CheckCollisions(Row);
         PossibleDestinations.addAll(Column);
         PossibleDestinations.addAll(Row);
-        
+    
+        //TODO Look for check and remove any squares which don't remove check
+
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
-        List<Square> ToBeRemoved = new ArrayList<>();
-        for (Square square : PossibleDestinations)
-        {
-            if (getPieceCoordinate().CompareCoordinates(square))
-            {
-                ToBeRemoved.add(square);
-            }
-            else if (square.SquareOccupied())
-            {
-                if (square.ReturnPiece().getColour() == getColour()){
-                    ToBeRemoved.add(square);
-                }
-            }
-        }
-        PossibleDestinations.removeAll(ToBeRemoved);
+        PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
         
-        //TODO Check for check and remove last squares from PossibleDestinations()
         //TODO Create legal moves
         
         for (Square square : PossibleDestinations)

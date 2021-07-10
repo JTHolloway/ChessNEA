@@ -68,26 +68,13 @@ public class Bishop extends Piece
         
         List<Square> PossibleDestinations = PositiveDiagonal;
         PossibleDestinations.addAll(NegativeDiagonal);
+    
+        //TODO Look for check and remove any squares which don't remove check
         
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
-        List<Square> ToBeRemoved = new ArrayList<>();
-        for (Square square : PossibleDestinations)
-        {
-            if (getPieceCoordinate().CompareCoordinates(square))
-            {
-                ToBeRemoved.add(square);
-            }
-            else if (square.SquareOccupied())
-            {
-                if (square.ReturnPiece().getColour() == getColour()){
-                    ToBeRemoved.add(square);
-                }
-            }
-        }
-        PossibleDestinations.removeAll(ToBeRemoved);
+        PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
         
-        //TODO Look for check
         //TODO Create legal moves
         
         //Print moves for testing purposes //TODO remove once finished

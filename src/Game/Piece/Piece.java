@@ -7,6 +7,7 @@ import Game.Coordinate;
 import Game.Move.Move;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Piece {
@@ -91,9 +92,33 @@ public abstract class Piece {
         return OneDimensionalArray;
     }
     
+    /**
+     * Remove Square that moving piece is occupying and squares which
+     *      cannot be captured (because a piece of equal colour occupies it)
+     * @param PossibleDestinations A list of possible destinations which also includes invalid moves such as
+     *                             destinations with a piece of the same colour
+     * @return a list of squares which contains only valid moves
+     */
+    protected List<Square> RemoveRemainingInvalidDestinations(List<Square> PossibleDestinations){
+        List<Square> ToBeRemoved = new ArrayList<>();
+        for (Square square : PossibleDestinations)
+        {
+            if (getPieceCoordinate().CompareCoordinates(square))
+            {
+                ToBeRemoved.add(square);
+            }
+            else if (square.SquareOccupied())
+            {
+                if (square.ReturnPiece().getColour() == getColour()){
+                    ToBeRemoved.add(square);
+                }
+            }
+        }
+        PossibleDestinations.removeAll(ToBeRemoved);
+        return PossibleDestinations;
+    }
     
     //TODO find check, checked squares and checking piece
-    
 
     /*Getter methods for all member variables*/
     public Coordinate getPieceCoordinate() {

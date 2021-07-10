@@ -1,16 +1,20 @@
 package Game.Piece.Pieces;
 
 import Game.Board.Board;
+import Game.Board.Square;
 import Game.Colour;
 import Game.Coordinate;
 import Game.Move.Move;
 import Game.Piece.Piece;
 import Game.Piece.PieceType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class King extends Piece
 {
+    private boolean isChecked = false;
+    
     /**
      * Constructor for a king piece
      * @param coordinate A coordinate object identifying the tile coordinate of the piece
@@ -33,7 +37,37 @@ public class King extends Piece
     @Override
     public List<Move> CalculateValidMoves(Board board)
     {
-        //TODO calculate King moves
+        List<Move> LegalMoves = new ArrayList<>();
+        Square[][] BoardArray = board.getBoardArray();
+        List<Square> PossibleDestinations = new ArrayList<>();
+    
+        for (Square[] row : BoardArray)
+        {
+            for (Square square : row)
+            {
+                Coordinate Destination = square.ReturnCoordinate();
+                int XDisplacement = Math.abs(getPieceCoordinate().getFile() - Destination.getFile());
+                int YDisplacement = Math.abs(getPieceCoordinate().getRank() - Destination.getRank());
+    
+                /*Check if max displacement = 1 because a king
+                can move a maximum of 1 square away from origin in any direction*/
+                if (Math.max(XDisplacement, YDisplacement) == 1) {
+                    PossibleDestinations.add(square);
+                }
+            }
+        }
+    
+        /*Remove Square that moving piece is occupying and squares which
+        cannot be captured (because a piece of equal colour occupies it)*/
+        PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
+    
+        //TODO remove once finished
+        //Print moves for testing purposes
+        for (Square s : PossibleDestinations){
+            System.out.println(s.ReturnCoordinate().CoordinateToNotation());
+        }
+        
+        //TODO look for checked squares (in board class). If a checked square is in the Destinations array then remove it.
         //TODO Create legal moves
         return null;
     }

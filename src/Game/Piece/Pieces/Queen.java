@@ -39,35 +39,28 @@ public class Queen extends Piece
         Square[][] BoardArray = board.getBoardArray();
         List<Square> PossibleDestinations = CalculateDiagonals(BoardArray);
         PossibleDestinations.addAll(CalculateStraights(BoardArray));
+    
+        //TODO Look for check and remove any squares which don't remove check
         
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
-        List<Square> ToBeRemoved = new ArrayList<>();
-        for (Square square : PossibleDestinations)
-        {
-            if (getPieceCoordinate().CompareCoordinates(square))
-            {
-                ToBeRemoved.add(square);
-            }
-            else if (square.SquareOccupied())
-            {
-                if (square.ReturnPiece().getColour() == getColour()){
-                    ToBeRemoved.add(square);
-                }
-            }
-        }
-        PossibleDestinations.removeAll(ToBeRemoved);
+        PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
     
         //Print moves for testing purposes //TODO remove once finished
         for (Square s : PossibleDestinations){
             System.out.println(s.ReturnCoordinate().CoordinateToNotation());
         }
         
-        //TODO Look for check
         //TODO Create legal moves
         return null;
     }
     
+    /**
+     * Calculates the valid diagonal moves of the queen
+     * @param BoardArray a 2-Dimensional array of squares so that the diagonal line that the piece occupies can be found
+     *                   in the board array
+     * @return a list of possible destination squares
+     */
     private List<Square> CalculateDiagonals(final Square[][] BoardArray)
     {
         //Find Diagonal moves
@@ -105,6 +98,12 @@ public class Queen extends Piece
         return PossibleDestinations;
     }
     
+    /**
+     * Calculates the valid horizontal and vertical (straight) line moves of the queen
+     * @param BoardArray a 2-Dimensional array of squares so that the straight line that the piece occupies can be found
+     *                   in the board array
+     * @return a list of possible destination squares
+     */
     private List<Square> CalculateStraights(final Square[][] BoardArray)
     {
         List<Move> LegalMoves = new ArrayList<>();
