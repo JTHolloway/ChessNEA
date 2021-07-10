@@ -50,7 +50,7 @@ public abstract class Square {
 
         /**
          * Constructor for an empty Square object
-         * Takes in the x and y coordinates of the square and calls the super class constructor
+         * An empty square does not contain piece object
          * @param XCoordinate The X-Coordinate of the piece (the file)
          * @param YCoordinate The Y-Coordinate of the piece (the rank)
          */
@@ -89,8 +89,7 @@ public abstract class Square {
 
         /**
          * Constructor for a Square Occupied by a piece
-         * Takes in the x and y coordinates of the square and calls the super class constructor
-         * Takes in the piece on the square
+         * This type of square contains a piece of any colour
          * @param XCoordinate The X-Coordinate of the piece (the file)
          * @param YCoordinate The Y-Coordinate of the piece (the rank)
          * @param occupyingPiece The piece occupying the square with given coordinates
