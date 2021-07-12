@@ -61,6 +61,7 @@ public class Knight extends Piece
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
+        
     
         //TODO remove once finished
         //Print moves for testing purposes
@@ -68,7 +69,7 @@ public class Knight extends Piece
             System.out.println(s.ReturnCoordinate().CoordinateToNotation());
         }
         
-        return LegalMoves;
+        return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
     
     /**

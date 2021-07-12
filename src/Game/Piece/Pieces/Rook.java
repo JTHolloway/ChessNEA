@@ -61,8 +61,8 @@ public class Rook extends Piece
         {
             System.out.println(square.ReturnCoordinate().CoordinateToNotation());
         }
-        
-        return LegalMoves;
+    
+        return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
     
     /**

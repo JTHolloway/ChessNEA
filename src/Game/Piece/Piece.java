@@ -118,6 +118,21 @@ public abstract class Piece {
         return PossibleDestinations;
     }
     
+    //TODO: Decide weather this class belongs in the piece class
+    protected List<Move> DestinationsToMoves(final List<Square> PossibleDestinations, final Square[][] Board){
+        List<Move> Moves = new ArrayList<>();
+        for (Square square: PossibleDestinations) {
+            if (square.SquareOccupied()){
+                //Capturing move
+                Moves.add(new Move.CapturingMove(PieceCoordinate.GetSquareAt(Board), square, square.ReturnPiece()));
+            }else{
+                //General move
+                Moves.add(new Move(PieceCoordinate.GetSquareAt(Board), square));
+            }
+        }
+        return Moves;
+    }
+    
     //TODO find check, checked squares and checking piece
 
     /*Getter methods for all member variables*/

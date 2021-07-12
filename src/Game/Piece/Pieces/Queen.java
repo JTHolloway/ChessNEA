@@ -52,7 +52,7 @@ public class Queen extends Piece
         }
         
         //TODO Create legal moves
-        return null;
+        return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
     
     /**

@@ -82,7 +82,7 @@ public class Bishop extends Piece
             System.out.println(s.ReturnCoordinate().CoordinateToNotation());
         }
         
-        return LegalMoves;
+        return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
     
     /**

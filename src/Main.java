@@ -22,8 +22,8 @@ public class Main
     
         Board hi = new Board();
         //hi.ReturnSquare(new Coordinate(3,5)).ReturnPiece().CalculateValidMoves(hi);
-        hi.ReturnSquare(new Coordinate(2,1)).ReturnPiece().CalculateValidMoves(hi);
-        System.out.println(hi.ReturnSquare(new Coordinate(2,1)).ReturnPiece().PieceTypeToNotation());
+        hi.ReturnSquare(new Coordinate(6,5)).ReturnPiece().CalculateValidMoves(hi);
+        System.out.println(hi.ReturnSquare(new Coordinate(6,5)).ReturnPiece().PieceTypeToNotation());
         
     }
 

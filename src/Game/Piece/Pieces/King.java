@@ -69,7 +69,7 @@ public class King extends Piece
         
         //TODO look for checked squares (in board class). If a checked square is in the Destinations array then remove it.
         //TODO Create legal moves
-        return null;
+        return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
     
     /**
