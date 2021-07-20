@@ -60,15 +60,9 @@ public class King extends Piece
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
-    
-        //TODO remove once finished
-        //Print moves for testing purposes
-        for (Square s : PossibleDestinations){
-            System.out.println(s.ReturnCoordinate().CoordinateToNotation());
-        }
         
         //TODO look for checked squares (in board class). If a checked square is in the Destinations array then remove it.
-        //TODO Create legal moves
+        
         return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
     

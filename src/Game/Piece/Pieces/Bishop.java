@@ -75,13 +75,6 @@ public class Bishop extends Piece
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
         
-        //TODO Create legal moves
-        
-        //Print moves for testing purposes //TODO remove once finished
-        for (Square s : PossibleDestinations){
-            System.out.println(s.ReturnCoordinate().CoordinateToNotation());
-        }
-        
         return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
     

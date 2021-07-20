@@ -83,7 +83,7 @@ public class Board {
         
         //TODO: Test, remove when no longer needed
         BoardArray[4][5] = new Square.OccupiedSquare(6,5,
-                new Queen(new Coordinate(6,5), Colour.WHITE, PieceType.QUEEN));
+                new Queen(new Coordinate(6,5), Colour.BLACK, PieceType.QUEEN));
     }
     
     // TODO: 10/07/2021: complete and comment

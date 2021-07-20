@@ -41,7 +41,7 @@ public abstract class Move
      */
     public abstract Piece getCapturedPiece();
     
-    public abstract boolean wasCaptured();
+    public abstract boolean wasCapture();
 
     /*Getter methods for each member variable*/
     public Square getStartPosition() {
@@ -89,7 +89,7 @@ public abstract class Move
         }
     
         @Override
-        public boolean wasCaptured()
+        public boolean wasCapture()
         {
             return true;
         }
@@ -124,7 +124,7 @@ public abstract class Move
         }
     
         @Override
-        public boolean wasCaptured()
+        public boolean wasCapture()
         {
             return false;
         }

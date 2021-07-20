@@ -45,13 +45,7 @@ public class Queen extends Piece
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
-    
-        //Print moves for testing purposes //TODO remove once finished
-        for (Square s : PossibleDestinations){
-            System.out.println(s.ReturnCoordinate().CoordinateToNotation());
-        }
         
-        //TODO Create legal moves
         return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
     

@@ -13,7 +13,7 @@ public abstract class Square {
      * @param XCoordinate The X-Coordinate of the piece (the file)
      * @param YCoordinate The Y-Coordinate of the piece (the rank)
      */
-    public Square(int XCoordinate, int YCoordinate) {
+    public Square(final int XCoordinate, final int YCoordinate) {
         coordinate = new Coordinate(XCoordinate, YCoordinate);
     }
     

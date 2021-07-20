@@ -62,13 +62,6 @@ public class Knight extends Piece
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
         
-    
-        //TODO remove once finished
-        //Print moves for testing purposes
-        for (Square s : PossibleDestinations){
-            System.out.println(s.ReturnCoordinate().CoordinateToNotation());
-        }
-        
         return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
     

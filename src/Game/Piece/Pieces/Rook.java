@@ -54,13 +54,6 @@ public class Rook extends Piece
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
-        
-        //TODO Create legal moves
-        
-        for (Square square : PossibleDestinations)
-        {
-            System.out.println(square.ReturnCoordinate().CoordinateToNotation());
-        }
     
         return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
