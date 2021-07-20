@@ -91,7 +91,6 @@ public class Board {
     {
         Piece MovedPiece = move.getMovedPiece();
         //Todo look for captures and remove captured pieces from board
-        
     }
     
     /**

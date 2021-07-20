@@ -127,7 +127,7 @@ public abstract class Piece {
                 Moves.add(new Move.CapturingMove(PieceCoordinate.GetSquareAt(Board), square, square.ReturnPiece()));
             }else{
                 //General move
-                Moves.add(new Move(PieceCoordinate.GetSquareAt(Board), square));
+                Moves.add(new Move.RegularMove(PieceCoordinate.GetSquareAt(Board), square));
             }
         }
         return Moves;

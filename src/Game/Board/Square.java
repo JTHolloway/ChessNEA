@@ -5,7 +5,7 @@ import Game.Piece.Piece;
 
 public abstract class Square {
 
-    protected Coordinate coordinate;
+    protected final Coordinate coordinate;
     
     /**
      * Constructor for a Square object
