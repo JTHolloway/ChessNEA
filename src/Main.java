@@ -25,20 +25,20 @@ public class Main
     
         Board hi = new Board();
         //hi.ReturnSquare(new Coordinate(3,5)).ReturnPiece().CalculateValidMoves(hi);
-        List<Move> moves = hi.ReturnSquare(new Coordinate(6,5)).ReturnPiece().CalculateValidMoves(hi);
+        List<Move> moves = hi.ReturnSquare(new Coordinate(4,5)).ReturnPiece().CalculateValidMoves(hi);
+        //moves.addAll(hi.ReturnSquare(new Coordinate(5,5)).ReturnPiece().CalculateValidMoves(hi));
         
         for (Move m : moves) {
             if (m.wasCapture()){
-                System.out.println(m.getMovedPiece().getType() + ", " + m.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
-                        m.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", " + m.getCapturedPiece().getType() + ", " + m.getCapturedPiece().getColour());
+                System.out.println(m.getMovedPiece().getColour() +" " +m.getMovedPiece().getType() + ", " + m.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
+                        m.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", " + m.getCapturedPiece().getType() + ", " + m.getCapturedPiece().getColour() + ", " +
+                        m.getCapturedPiece().getPieceCoordinate().CoordinateToNotation());
             }else{
-                System.out.println(m.getMovedPiece().getType() + ", " + m.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
+                System.out.println(m.getMovedPiece().getColour() +" " +m.getMovedPiece().getType() + ", " + m.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
                         m.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", NULL");
             }
             
         }
-    
-        System.out.println(Colour.GetOtherColour(Colour.WHITE));
     }
 
 }
