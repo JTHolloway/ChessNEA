@@ -36,7 +36,6 @@ public class Rook extends Piece
     @Override
     public List<Move> CalculateValidMoves(Board board)
     {
-        List<Move> LegalMoves = new ArrayList<>();
         Square[][] BoardArray = board.getBoardArray();
         List<Square> PossibleDestinations = new ArrayList<>();
         

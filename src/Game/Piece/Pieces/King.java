@@ -14,6 +14,7 @@ import java.util.List;
 public class King extends Piece
 {
     private boolean isChecked = false;
+    private boolean hasMoved = false;
     
     /**
      * Constructor for a king piece
@@ -37,7 +38,6 @@ public class King extends Piece
     @Override
     public List<Move> CalculateValidMoves(Board board)
     {
-        List<Move> LegalMoves = new ArrayList<>();
         Square[][] BoardArray = board.getBoardArray();
         List<Square> PossibleDestinations = new ArrayList<>();
     

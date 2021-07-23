@@ -35,14 +35,12 @@ public class Knight extends Piece
     @Override
     public List<Move> CalculateValidMoves(Board board)
     {
-        List<Move> LegalMoves = new ArrayList<>();
         Square[][] BoardArray = board.getBoardArray();
         List<Square> PossibleDestinations = new ArrayList<>();
         
         for (Square[] Row : BoardArray) {
             for (Square square : Row) {
                 Coordinate Destination = square.ReturnCoordinate();
-                Square OriginSquare = PieceCoordinate.GetSquareAt(BoardArray);
                 int XDisplacement = Math.abs(getPieceCoordinate().getFile() - Destination.getFile());
                 int YDisplacement = Math.abs(getPieceCoordinate().getRank() - Destination.getRank());
                 

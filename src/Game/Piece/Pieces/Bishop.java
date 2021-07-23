@@ -36,7 +36,6 @@ public class Bishop extends Piece
     public List<Move> CalculateValidMoves(Board board)
     {
         //Find Diagonal moves
-        List<Move> LegalMoves = new ArrayList<>();
         List<Square> PositiveDiagonal = new ArrayList<>();
         List<Square> NegativeDiagonal = new ArrayList<>();
         Square[][] BoardArray = board.getBoardArray();

@@ -58,7 +58,6 @@ public class Queen extends Piece
     private List<Square> CalculateDiagonals(final Square[][] BoardArray)
     {
         //Find Diagonal moves
-        List<Move> LegalMoves = new ArrayList<>();
         List<Square> PositiveDiagonal = new ArrayList<>();
         List<Square> NegativeDiagonal = new ArrayList<>();
     
@@ -100,7 +99,6 @@ public class Queen extends Piece
      */
     private List<Square> CalculateStraights(final Square[][] BoardArray)
     {
-        List<Move> LegalMoves = new ArrayList<>();
         List<Square> PossibleDestinations = new ArrayList<>();
     
         List<Square> Row = ArrayManipulation.ArrayToRow(BoardArray, getPieceCoordinate().GetSquareAt(BoardArray));
