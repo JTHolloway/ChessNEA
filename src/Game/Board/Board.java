@@ -7,9 +7,12 @@ import Game.Piece.Piece;
 import Game.Piece.PieceType;
 import Game.Piece.Pieces.*;
 
+import javax.print.attribute.standard.Destination;
+
 public class Board {
     
     private final Square[][] BoardArray = new Square[8][8];
+    private Pawn enPassantPawn;
     
     /**
      * Board constructor
@@ -82,8 +85,13 @@ public class Board {
         }
         
         //TODO: Test, remove when no longer needed
-        BoardArray[4][5] = new Square.OccupiedSquare(6,5,
-                new Queen(new Coordinate(6,5), Colour.BLACK, PieceType.QUEEN));
+        BoardArray[4][3] = new Square.OccupiedSquare(4,5,
+                new Pawn(new Coordinate(4,5), Colour.WHITE, PieceType.PAWN));
+        BoardArray[4][4] = new Square.OccupiedSquare(5,5,
+                new Pawn(new Coordinate(5,5), Colour.BLACK, PieceType.PAWN));
+        BoardArray[5][2] = new Square.OccupiedSquare(3,6,
+                new Pawn(new Coordinate(3,6), Colour.BLACK, PieceType.PAWN));
+        enPassantPawn = (Pawn) BoardArray[4][4].ReturnPiece();
     }
     
     // TODO: 10/07/2021: complete and comment
@@ -103,6 +111,33 @@ public class Board {
         int Y_coordinate = coordinate.getRank();
         
         return BoardArray[Y_coordinate-1][X_coordinate-1];
+    }
+    
+    public void setEnPassantPawn(Pawn pawn){
+        this.enPassantPawn = pawn;
+    }
+    
+    public Pawn getEnPassantPawn(){
+        return enPassantPawn;
+    }
+    
+    public Square getEnPassantDestination(){
+        
+        try{
+            int File = enPassantPawn.getPieceCoordinate().getFile();
+            Coordinate Destination;
+            if (enPassantPawn.getColour() == Colour.WHITE){
+                Destination = new Coordinate(File, 3);
+            }
+            else{
+                Destination = new Coordinate(File, 6);
+            }
+            return Destination.GetSquareAt(BoardArray);
+            
+        } catch (NullPointerException exception){
+            System.out.println("EnPassant Pawn does not exist");
+            return null;
+        }
     }
     
     //Getter variable which returns the board array of squares

@@ -1,13 +1,15 @@
 package Game;
 
 import Game.Board.Board;
+import Game.Piece.Piece;
+import Game.Piece.Pieces.Pawn;
 import User.User;
 
 public class Game
 {
-    private Player whitePlayer;
-    private Player blackPlayer;
-    private Board board;
+    private final Player whitePlayer;
+    private final Player blackPlayer;
+    private final Board board;
     
     public Game(final GameType Gametype, final Colour SelectedColour, final User user)
     {
