@@ -98,8 +98,8 @@ public abstract class Move
 //...............................................................................................................
     
     /**
-     * Capturing move Inner class used to uniquely identify
-     * properties of a Capture
+     * Regular move Inner class used to uniquely identify
+     * properties of a move
      */
     public static class RegularMove extends Move
     {
@@ -114,7 +114,7 @@ public abstract class Move
         }
     
         /**
-         * Returns the piece that was captured
+         * Returns the piece that was captured (If a piece was captured)
          * @return null
          */
         @Override
@@ -129,4 +129,58 @@ public abstract class Move
             return false;
         }
     }
+    
+    
+//...............................................................................................................
+    
+    /**
+     * En Passant move Inner class used to uniquely identify
+     * properties of an En Passant move
+     */
+    //TODO Check if necessary
+    public static class EnPassantMove extends Move
+    {
+        private final Piece CapturedPiece;
+        private final Square CapturedPieceLocation;
+        
+        /**
+         * Constructor for a En Passant move. Calls super class constructor
+         * @param startPosition Origin Square of piece
+         * @param endPosition   Destination Square of piece
+         * @param capturedPiece The piece object that was captured
+         * @param capturedPieceLocation The location of the captured piece (since, unlike a capturing move, the captured piece and
+         *                              destination of the moving piece are not the same square)
+         */
+        public EnPassantMove(final Square startPosition,
+                             final Square endPosition,
+                             final Piece capturedPiece,
+                             final Square capturedPieceLocation)
+        {
+            super(startPosition, endPosition);
+            this.CapturedPiece = capturedPiece;
+            this.CapturedPieceLocation = capturedPieceLocation;
+        }
+        
+        /**
+         * Returns the piece that was captured
+         * @return null
+         */
+        @Override
+        public Piece getCapturedPiece()
+        {
+            return CapturedPiece;
+        }
+        
+        @Override
+        public boolean wasCapture()
+        {
+            return true;
+        }
+    
+        public Square getCapturedPieceLocation()
+        {
+            return CapturedPieceLocation;
+        }
+    }
+    
 }
