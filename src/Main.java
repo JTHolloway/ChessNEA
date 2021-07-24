@@ -37,8 +37,9 @@ public class Main
                 System.out.println(m.getMovedPiece().getColour() +" " +m.getMovedPiece().getType() + ", " + m.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
                         m.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", NULL");
             }
-            
         }
+    
+        ((Pawn) hi.ReturnSquare(new Coordinate(4,5)).ReturnPiece()).FindCheckingSquares(hi);
     }
 
 }
