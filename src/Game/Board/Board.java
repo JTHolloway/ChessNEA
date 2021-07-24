@@ -85,15 +85,18 @@ public class Board {
         }
         
         //TODO: Test, remove when no longer needed
-        BoardArray[4][3] = new Square.OccupiedSquare(4,5,
-                new Pawn(new Coordinate(4,5), Colour.WHITE, PieceType.PAWN));
-        BoardArray[4][4] = new Square.OccupiedSquare(5,5,
-                new Pawn(new Coordinate(5,5), Colour.BLACK, PieceType.PAWN));
-        BoardArray[5][2] = new Square.OccupiedSquare(3,6,
-                new Pawn(new Coordinate(3,6), Colour.BLACK, PieceType.PAWN));
-        enPassantPawn = (Pawn) BoardArray[4][4].ReturnPiece();
-        
-        //((Pawn) BoardArray[4][4].ReturnPiece()).PawnMoved();
+//        BoardArray[4][3] = new Square.OccupiedSquare(4,5,
+//                new Pawn(new Coordinate(4,5), Colour.WHITE, PieceType.PAWN));
+//        BoardArray[4][4] = new Square.OccupiedSquare(5,5,
+//                new Pawn(new Coordinate(5,5), Colour.BLACK, PieceType.PAWN));
+//        BoardArray[5][2] = new Square.OccupiedSquare(3,6,
+//                new Pawn(new Coordinate(3,6), Colour.BLACK, PieceType.PAWN));
+//        enPassantPawn = (Pawn) BoardArray[4][4].ReturnPiece();
+    
+        //BoardArray[2][1] = new Square.OccupiedSquare(2,3,
+            //    new Pawn(new Coordinate(2,3), Colour.BLACK, PieceType.PAWN));
+        //BoardArray[5][5] = new Square.OccupiedSquare(6,6,
+          //      new Pawn(new Coordinate(6,6), Colour.BLACK, PieceType.PAWN));
     }
     
     // TODO: 10/07/2021: complete and comment

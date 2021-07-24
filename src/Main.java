@@ -25,7 +25,7 @@ public class Main
     
         Board hi = new Board();
         //hi.ReturnSquare(new Coordinate(3,5)).ReturnPiece().CalculateValidMoves(hi);
-        List<Move> moves = hi.ReturnSquare(new Coordinate(4,5)).ReturnPiece().CalculateValidMoves(hi);
+        List<Move> moves = hi.ReturnSquare(new Coordinate(6,7)).ReturnPiece().CalculateValidMoves(hi);
         //moves.addAll(hi.ReturnSquare(new Coordinate(5,5)).ReturnPiece().CalculateValidMoves(hi));
         
         for (Move m : moves) {
@@ -39,7 +39,7 @@ public class Main
             }
         }
     
-        ((Pawn) hi.ReturnSquare(new Coordinate(4,5)).ReturnPiece()).FindCheckingSquares(hi);
+        //((Pawn) hi.ReturnSquare(new Coordinate(4,5)).ReturnPiece()).FindCheckingSquares(hi);
     }
 
 }

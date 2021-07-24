@@ -81,6 +81,8 @@ public class Pawn extends Piece
             }
         }
         
+        PossibleDestinations = CheckDoubleMoveCollision(BoardArray, PossibleDestinations);
+        
         /*
         Remove squares which cannot be
         captured (because a piece of equal colour occupies it)
@@ -115,6 +117,35 @@ public class Pawn extends Piece
         
     }
     
+    /**
+     * TODO finish comment
+     * If a pawn can move twice, check that its path is not obstructed, if so, don't allow it to move twice.
+     * @param BoardArray
+     * @param PossibleDestinations
+     * @return
+     */
+    private List<Square> CheckDoubleMoveCollision(Square[][] BoardArray, List<Square> PossibleDestinations)
+    {
+        if ((getPieceCoordinate().getRank() == 2) || (getPieceCoordinate().getRank() == 7))
+        {
+            if (BoardArray[2][getPieceCoordinate().getFile() - 1].SquareOccupied()){
+                if (!BoardArray[3][getPieceCoordinate().getFile() - 1].SquareOccupied()){
+                    System.out.println(BoardArray[3][getPieceCoordinate().getFile() - 1].ReturnCoordinate().CoordinateToNotation());
+                    PossibleDestinations.remove(BoardArray[3][getPieceCoordinate().getFile() - 1]);
+                }
+            }
+            else if (BoardArray[5][getPieceCoordinate().getFile() - 1].SquareOccupied()) {
+                if (!BoardArray[4][getPieceCoordinate().getFile() - 1].SquareOccupied()) {
+                    System.out.println(BoardArray[4][getPieceCoordinate().getFile() - 1].ReturnCoordinate().CoordinateToNotation());
+                    PossibleDestinations.remove(BoardArray[4][getPieceCoordinate().getFile() - 1]);
+                }
+            }
+        }
+        
+        return PossibleDestinations;
+    }
+    
+    //TODO comment
     private List<Move> DestinationsToMoves(final List<Square> PossibleDestinations, final Square[][] BoardArray, final Board board)
     {
         List<Move> Moves = new ArrayList<>();
@@ -140,16 +171,6 @@ public class Pawn extends Piece
             }
         }
         return Moves;
-    }
-    
-    /**
-     * Converts the type of piece to its Notation equivalent
-     * @return a String with the type notation (Pawn = null)
-     */
-    @Override
-    public String PieceTypeToNotation()
-    {
-        return "";
     }
     
     /**
@@ -192,7 +213,6 @@ public class Pawn extends Piece
                 if (getColour() == Colour.WHITE) {
                     if ((YDisplacement == -1) && (XDisplacement == 1)) {
                         CheckedDestinations.add(square);
-                        System.out.println(square.ReturnCoordinate().CoordinateToNotation());
                     }
                 } else {
                     if ((YDisplacement == 1) && (XDisplacement == 1)) {
@@ -203,6 +223,16 @@ public class Pawn extends Piece
         }
         
         return CheckedDestinations;
+    }
+    
+    /**
+     * Converts the type of piece to its Notation equivalent
+     * @return a String with the type notation (Pawn = null)
+     */
+    @Override
+    public String PieceTypeToNotation()
+    {
+        return "";
     }
     
     //TODO pawn promotion handling
