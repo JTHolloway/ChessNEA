@@ -14,9 +14,6 @@ import java.util.List;
 
 public class Pawn extends Piece
 {
-    
-    private boolean hasMoved = false;
-    
     /**
      * Constructor for a pawn piece
      * @param coordinate A coordinate object identifying the tile coordinate of the piece
@@ -41,7 +38,6 @@ public class Pawn extends Piece
     {
         Square[][] BoardArray = board.getBoardArray();
         List<Square> PossibleDestinations = new ArrayList<>();
-        boolean EnPassantPerformed = false;
     
         for (Square[] Row : BoardArray) {
             for (Square square : Row) {
@@ -55,44 +51,29 @@ public class Pawn extends Piece
                 The absolute value of X Displacement is always <= 1,
                 because it can move a maximum of 1 square either side when capturing.
                 */
-                if (getColour() == Colour.WHITE)
-                {
-                    if ((YDisplacement == -1) && (XDisplacement == 1))
-                    {
+                if (getColour() == Colour.WHITE) {
+                    if ((YDisplacement == -1) && (XDisplacement == 1)) {
                         PossibleDestinations.add(square);
-                    }
-                    else if ((YDisplacement == -1) && (XDisplacement == 0))
-                    {
-                        if (!square.SquareOccupied())
-                        {
+                    } else if ((YDisplacement == -1) && (XDisplacement == 0)) {
+                        if (!square.SquareOccupied()) {
+                            PossibleDestinations.add(square);
+                        }
+                    } else if ((YDisplacement == -2) && (XDisplacement == 0)) {
+                        //A white pawn starts on Y = 2. Therefore if the square is not occupied and the pawn has not yet moved, they can move 2 spaces.
+                        if ((!square.SquareOccupied()) && (getPieceCoordinate().getRank() == 2)) {
                             PossibleDestinations.add(square);
                         }
                     }
-                    else if ((YDisplacement == -2) && (XDisplacement == 0))
-                    {
-                        if (!square.SquareOccupied() && !hasMoved)
-                        {
-                            PossibleDestinations.add(square);
-                        }
-                    }
-                }
-                else
-                {
-                    if ((YDisplacement == 1) && (XDisplacement == 1))
-                    {
+                } else {
+                    if ((YDisplacement == 1) && (XDisplacement == 1)) {
                         PossibleDestinations.add(square);
-                    }
-                    else if ((YDisplacement == 1) && (XDisplacement == 0))
-                    {
-                        if (!square.SquareOccupied())
-                        {
+                    } else if ((YDisplacement == 1) && (XDisplacement == 0)) {
+                        if (!square.SquareOccupied()) {
                             PossibleDestinations.add(square);
                         }
-                    }
-                    else if ((YDisplacement == 2) && (XDisplacement == 0))
-                    {
-                        if (!square.SquareOccupied() && !hasMoved)
-                        {
+                    } else if ((YDisplacement == 2) && (XDisplacement == 0)) {
+                        //A white pawn starts on Y = 2. Therefore if the square is not occupied and the pawn has not yet moved, they can move 2 spaces.
+                        if (!square.SquareOccupied() && getPieceCoordinate().getRank() == 7) {
                             PossibleDestinations.add(square);
                         }
                     }
@@ -130,17 +111,16 @@ public class Pawn extends Piece
     
         //TODO Look for check and remove any squares which don't remove check
     
-        return DestinationsToMoves(PossibleDestinations, BoardArray, board, EnPassantPerformed);
+        return DestinationsToMoves(PossibleDestinations, BoardArray, board);
         
     }
     
-    private List<Move> DestinationsToMoves(final List<Square> PossibleDestinations, final Square[][] BoardArray, final Board board,
-                                           final boolean EnPassantPerformed)
+    private List<Move> DestinationsToMoves(final List<Square> PossibleDestinations, final Square[][] BoardArray, final Board board)
     {
         List<Move> Moves = new ArrayList<>();
         
         for (Square square : PossibleDestinations) {
-            if (EnPassantPerformed)
+            if ((board.getEnPassantPawn() != null) && (board.getEnPassantDestination().ReturnCoordinate().CompareCoordinates(square)))
             {
                 Square EnPassantDestination = board.getEnPassantDestination();
         
@@ -172,12 +152,57 @@ public class Pawn extends Piece
         return "";
     }
     
-    //TODO en passant handling (if a pawn moves 2 squares, then call baord.enpassentpawn)
-    public void PawnMoved(Board board){
-        hasMoved = true;
+    /**
+     * If a pawn was moved, check if the pawn moved 2 spaces, if so then it is the new en passant pawn
+     * @param board The board stores data about the En Passant Pawn
+     * @param moveMade The move that the player or computer made, used to see if it were a 2 space pawn move
+     */
+    public void PawnMoved(Board board, Move moveMade){
+        int XDisplacement = Math.abs(moveMade.getStartPosition().ReturnCoordinate().getFile() - moveMade.getEndPosition().ReturnCoordinate().getFile());
+        int YDisplacement = moveMade.getStartPosition().ReturnCoordinate().getRank() - moveMade.getEndPosition().ReturnCoordinate().getRank();
         
-        //TODO IF PAWN HAS MOVED 2 SPACES THEN PAWN = EN PASSANT PAWN
-        board.setEnPassantPawn(this);
+        if (XDisplacement == 0){
+            if ((YDisplacement == -2) && moveMade.getMovedPiece().getColour() == Colour.WHITE){
+                board.setEnPassantPawn(this);
+            }
+            else if ((YDisplacement == 2) && moveMade.getMovedPiece().getColour() == Colour.BLACK){
+                board.setEnPassantPawn(this);
+            }
+        }
+    }
+    
+    /**
+     * The Pawn is much different from the other pieces, Unlike other pieces such as the rook where any of its destinations
+     * is being checked, The Pawn instead only checks the squares in front and diagonal to itself, So the
+     * 'CalculateValidMoves()' method cannot be used to find checked squares, because the forwards straight
+     * move is not a checking move.
+     * @return A list of squares Forwards and Diagonal to the Pawn
+     */
+    public List<Square> FindCheckingSquares(Board board)
+    {
+        Square[][] BoardArray = board.getBoardArray();
+        List<Square> CheckedDestinations = new ArrayList<>();
+    
+        for (Square[] Row : BoardArray) {
+            for (Square square : Row) {
+                Coordinate Destination = square.ReturnCoordinate();
+                int XDisplacement = Math.abs(getPieceCoordinate().getFile() - Destination.getFile());
+                int YDisplacement = getPieceCoordinate().getRank() - Destination.getRank();
+                
+                if (getColour() == Colour.WHITE) {
+                    if ((YDisplacement == -1) && (XDisplacement == 1)) {
+                        CheckedDestinations.add(square);
+                        System.out.println(square.ReturnCoordinate().CoordinateToNotation());
+                    }
+                } else {
+                    if ((YDisplacement == 1) && (XDisplacement == 1)) {
+                        CheckedDestinations.add(square);
+                    }
+                }
+            }
+        }
+        
+        return CheckedDestinations;
     }
     
     //TODO pawn promotion handling

@@ -5,6 +5,7 @@ import Game.Board.Square;
 import Game.Colour;
 import Game.Coordinate;
 import Game.Move.Move;
+import Game.Piece.Pieces.Pawn;
 
 import javax.swing.*;
 import java.util.ArrayList;
