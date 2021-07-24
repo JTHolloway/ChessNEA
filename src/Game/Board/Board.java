@@ -92,6 +92,8 @@ public class Board {
         BoardArray[5][2] = new Square.OccupiedSquare(3,6,
                 new Pawn(new Coordinate(3,6), Colour.BLACK, PieceType.PAWN));
         enPassantPawn = (Pawn) BoardArray[4][4].ReturnPiece();
+        
+        //((Pawn) BoardArray[4][4].ReturnPiece()).PawnMoved();
     }
     
     // TODO: 10/07/2021: complete and comment
