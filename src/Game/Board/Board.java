@@ -150,4 +150,23 @@ public class Board {
     {
         return BoardArray;
     }
+    
+    //TODO remove test method
+    public void PrintBoard(){
+        for (int i = 7; i >= 0; i--){
+            for (int j = 0; j <= 7; j++){
+                if (getBoardArray()[i][j].SquareOccupied()){
+                    String s = getBoardArray()[i][j].ReturnPiece().getType().toString();
+                    s = s.substring(0,1);
+                    if (getBoardArray()[i][j].ReturnPiece().getColour() == Colour.BLACK){
+                        s = s.toLowerCase();
+                    }
+                    System.out.print(s);
+                } else {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println("");
+        }
+    }
 }

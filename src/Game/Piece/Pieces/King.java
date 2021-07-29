@@ -2,6 +2,7 @@ package Game.Piece.Pieces;
 
 import Game.Board.Board;
 import Game.Board.Square;
+import Game.CastlingAvailability;
 import Game.Colour;
 import Game.Coordinate;
 import Game.Move.Move;
@@ -13,8 +14,9 @@ import java.util.List;
 
 public class King extends Piece
 {
-    private boolean isChecked = false;
-    private boolean hasMoved = false;
+    private boolean isChecked;
+    private boolean hasMoved;
+    private CastlingAvailability castlingAvailability;
     
     /**
      * Constructor for a king piece
@@ -25,6 +27,9 @@ public class King extends Piece
     public King(Coordinate coordinate, Colour colour, PieceType type)
     {
         super(coordinate, colour, type);
+        this.isChecked = false;
+        this.hasMoved = false;
+        this.castlingAvailability = CastlingAvailability.Both;
         //TODO colour == Colour.WHITE ? (pieceImage = Database.getWhiteImage) : (pieceImage = Database.getBlackImage);
     }
     

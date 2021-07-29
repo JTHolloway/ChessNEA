@@ -81,7 +81,7 @@ public abstract class Piece {
         int FrontIndex = -1;
         for (int i = PiecePositionIndex; i < OneDimensionalArray.size(); i++) {
             Square square = OneDimensionalArray.get(i);
-            if (i == 7 && FrontIndex == -1){
+            if (i == OneDimensionalArray.size()-1 && FrontIndex == -1){
                 FrontIndex = i;
             } else if (square.SquareOccupied()  &&  i != PiecePositionIndex){
                 FrontIndex = i;
