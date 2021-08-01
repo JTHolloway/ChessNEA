@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class MainJFrame extends javax.swing.JFrame {
+public class GUI_MainJFrame extends javax.swing.JFrame {
 
     private static User CurrentUser;
 
@@ -25,10 +25,8 @@ public class MainJFrame extends javax.swing.JFrame {
     private JLabel LogOutButton;
 
 
-    public MainJFrame(GameType GameType, Colour PlayerColour, User user) {
+    public GUI_MainJFrame(GameType GameType, Colour PlayerColour, User user) {
         CurrentUser = user;
-        new GamePanel(GameType, PlayerColour);
-
         Initialise();
     }
 
@@ -37,19 +35,31 @@ public class MainJFrame extends javax.swing.JFrame {
 
         //region Init Components
         JPanel sideBar = new JPanel();
-        gamePanel = GamePanel.getGameTab();
+        JPanel learnPanel = new GUI_LearnPanel();
+        JPanel AnalysisPanel = new GUI_AnalysisPanel();
+        JPanel FriendsPanel = new GUI_FriendsPanel();
+        JPanel MorePanel = new GUI_MorePanel();
+
         CloseWindowButton = new JLabel();
         MinimiseWindowButton = new JLabel();
-        OpenPlayPanel = new JLabel("Play  ", SwingConstants.RIGHT);
-        OpenLearnPanel = new JLabel("Learn  ", SwingConstants.RIGHT);
-        OpenAnalysisPanel = new JLabel("Analysis  ", SwingConstants.RIGHT);
-        MoreButton = new JLabel("More...  ", SwingConstants.RIGHT);
+        OpenPlayPanel = new JLabel("♟ Play  ", SwingConstants.RIGHT);
+        OpenLearnPanel = new JLabel("\uD83D\uDD6E Learn  ", SwingConstants.RIGHT);
+        OpenAnalysisPanel = new JLabel("\uD83D\uDD0D Analysis  ", SwingConstants.RIGHT);
+        MoreButton = new JLabel("⋯ More  ", SwingConstants.RIGHT);
         LogOutButton = new JLabel("Log Out", SwingConstants.CENTER);
         //endregion
 
+        //region SetVisibility
+        learnPanel.setVisible(false);
+        AnalysisPanel.setVisible(false);
+        FriendsPanel.setVisible(false);
+        MorePanel.setVisible(false);
+        //todo the rest
+        //endregion
+
         //region Screen Dimensions
-        int screenHeight = (Toolkit.getDefaultToolkit().getScreenSize().height);
-        int screenWidth = (Toolkit.getDefaultToolkit().getScreenSize().width);
+        int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+        int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
         //endregion
 
         //region Setup the Main Window
@@ -127,7 +137,7 @@ public class MainJFrame extends javax.swing.JFrame {
         //endregion
 
         //region Setup Play Button
-        OpenPlayPanel.setSize((int) (screenWidth * 0.2d), screenHeight / 26);
+        OpenPlayPanel.setSize((int) (screenWidth * 0.2d), screenHeight / 22);
         OpenPlayPanel.setFont(new Font("PlayButton", Font.PLAIN, screenHeight / 26));
         OpenPlayPanel.setForeground(Color.WHITE);
         OpenPlayPanel.setLocation(0, (int) (sideBar.getHeight() * 0.2d));
@@ -136,8 +146,41 @@ public class MainJFrame extends javax.swing.JFrame {
         OpenPlayPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
+                JComboBox<String> gameType = new JComboBox<>(new String[]{"Local", "Computer"});
+                JComboBox<String> colour = new JComboBox<>(new String[]{"White", "Black"});
+                GameType type = GameType.VERSES_COMPUTER;
+                Colour playerColour = Colour.BLACK;
+
+                final JComponent[] Options = new JComponent[]{
+                        new JLabel("Game Type"),
+                        gameType,
+                        new JLabel("Colour"),
+                        colour,
+                };
+
+                int result = JOptionPane.showConfirmDialog(null, Options, "Game Options", JOptionPane.DEFAULT_OPTION);
+                if (result == JOptionPane.OK_OPTION) {
+                    if (gameType.getItemAt(gameType.getSelectedIndex()).equals("Local")) {
+                        //TODO maybe add a timer for local games
+                        type = GameType.LOCAL_MULTIPLAYER;
+                    }
+                    if (colour.getItemAt(colour.getSelectedIndex()).equals("White")) {
+                        playerColour = Colour.WHITE;
+                    }
+                } else {
+                    playerColour = Colour.WHITE;
+                }
+                System.out.println(type.toString() + " " + playerColour.toString());
+
+                gamePanel = new GUI_GamePanel(type, playerColour);
+                gamePanel.setVisible(false);
+                MainWindow.getContentPane().add(gamePanel);
+
                 if (!gamePanel.isVisible()) {
                     gamePanel.setVisible(true);
+                    learnPanel.setVisible(false);
+                    AnalysisPanel.setVisible(false);
                     //TODO set other panels visibility to false
                 }
             }
@@ -147,6 +190,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 if (OpenPlayPanel.getForeground() == Color.WHITE) {
                     OpenPlayPanel.setForeground(Color.gray);
                 }
+                MorePanel.setVisible(false);
             }
 
             @Override
@@ -168,7 +212,16 @@ public class MainJFrame extends javax.swing.JFrame {
         OpenLearnPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (!learnPanel.isVisible()) {
+                    learnPanel.setVisible(true);
+                    AnalysisPanel.setVisible(false);
+                    MorePanel.setVisible(false);
 
+                    if (gamePanel != null) {
+                        gamePanel.setVisible(false);
+                    }
+                    //TODO set other panels visibility to false
+                }
             }
 
             @Override
@@ -176,6 +229,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 if (OpenLearnPanel.getForeground() == Color.WHITE) {
                     OpenLearnPanel.setForeground(Color.gray);
                 }
+                MorePanel.setVisible(false);
             }
 
             @Override
@@ -188,7 +242,7 @@ public class MainJFrame extends javax.swing.JFrame {
         //endregion
 
         //region Setup Analysis Button
-        OpenAnalysisPanel.setSize((int) (screenWidth * 0.2d), screenHeight / 26);
+        OpenAnalysisPanel.setSize((int) (screenWidth * 0.2d), screenHeight / 22);
         OpenAnalysisPanel.setFont(new Font("AnalysisButton", Font.PLAIN, screenHeight / 26));
         OpenAnalysisPanel.setForeground(Color.WHITE);
         OpenAnalysisPanel.setLocation(0, (int) (sideBar.getHeight() * 0.36d));
@@ -197,7 +251,15 @@ public class MainJFrame extends javax.swing.JFrame {
         OpenAnalysisPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (!AnalysisPanel.isVisible()) {
+                    AnalysisPanel.setVisible(true);
+                    learnPanel.setVisible(false);
 
+                    if (gamePanel != null) {
+                        gamePanel.setVisible(false);
+                    }
+                    //TODO set other panels visibility to false
+                }
             }
 
             @Override
@@ -205,6 +267,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 if (OpenAnalysisPanel.getForeground() == Color.WHITE) {
                     OpenAnalysisPanel.setForeground(Color.gray);
                 }
+                MorePanel.setVisible(false);
             }
 
             @Override
@@ -225,15 +288,11 @@ public class MainJFrame extends javax.swing.JFrame {
 
         MoreButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            @Override
             public void mouseEntered(MouseEvent e) {
                 if (MoreButton.getForeground() == Color.WHITE) {
                     MoreButton.setForeground(Color.gray);
                 }
+                MorePanel.setVisible(true);
             }
 
             @Override
@@ -241,6 +300,21 @@ public class MainJFrame extends javax.swing.JFrame {
                 if (MoreButton.getForeground() == Color.gray) {
                     MoreButton.setForeground(Color.WHITE);
                 }
+                MorePanel.setVisible(false);
+            }
+        });
+        //endregion
+
+        //region More Panel ActionListener
+        MorePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                MorePanel.setVisible(true);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                MorePanel.setVisible(false);
             }
         });
         //endregion
@@ -286,7 +360,9 @@ public class MainJFrame extends javax.swing.JFrame {
 
         //region Add Panels to the JFrame
         this.getContentPane().add(sideBar);
-        this.getContentPane().add(gamePanel);
+        this.getContentPane().add(learnPanel);
+        this.getContentPane().add(FriendsPanel);
+        this.getContentPane().add(MorePanel);
         //endregion
 
         this.setVisible(true);
