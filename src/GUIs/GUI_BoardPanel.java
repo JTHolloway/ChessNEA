@@ -10,28 +10,26 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GUI_BoardPanel {
-    private static JPanel BoardDisplay;
+public class GUI_BoardPanel extends JPanel {
+
     private static List<Tile> Tiles;
 
     public GUI_BoardPanel() {
-        BoardDisplay = new JPanel();
-
         int Size = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height) * (0.89));
 
-        BoardDisplay.setSize(Size, Size);
-        BoardDisplay.setLayout(null);
+        this.setSize(Size, Size);
+        this.setLayout(null);
 
         InitialiseTiles();
     }
 
-    private static void InitialiseTiles() {
+    private void InitialiseTiles() {
 
         Colour colour = Colour.BLACK;
-        int TileSize = (BoardDisplay.getSize().height) / 8;
+        int TileSize = (this.getSize().height) / 8;
         Tile tile;
         Tiles = new ArrayList<>();
-        Game game = GamePanel.getGame();
+        Game game = GUI_GamePanel.getGame();
 
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
@@ -48,19 +46,22 @@ public class GUI_BoardPanel {
                     tile.setBackground(new Color(148, 85, 9));
                 }
 
-                tile.setBounds((j - 1) * (TileSize), BoardDisplay.getSize().height - (i * TileSize), TileSize, TileSize);
+                tile.setBounds((j - 1) * (TileSize), this.getSize().height - (i * TileSize), TileSize, TileSize);
                 tile.setLayout(null);
 
-                BoardDisplay.add(tile);
+                this.add(tile);
                 Tiles.add(tile);
                 colour = Colour.GetOtherColour(colour);
             }
         }
     }
 
-    public JPanel getBoardDisplay() {
-        return BoardDisplay;
-    }
-
     //TODO init Pieces
+    private void InitialisePieces() {
+//        JLabel f = new JLabel("♛",SwingConstants.CENTER);
+//        f.setForeground(Color.WHITE);
+//        f.setSize(TileSize, TileSize);
+//        f.setFont(new Font("f", Font.PLAIN, TileSize));
+//        tile.add(f);
+    }
 }
