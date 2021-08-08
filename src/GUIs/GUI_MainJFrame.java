@@ -15,6 +15,10 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
 
     private JFrame MainWindow;
     private static JPanel gamePanel;
+    private static JPanel learnPanel;
+    private static JPanel AnalysisPanel;
+    private static JPanel MorePanel;
+    private static JPanel FriendsPanel;
 
     private JLabel CloseWindowButton;
     private JLabel MinimiseWindowButton;
@@ -30,15 +34,31 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         Initialise();
     }
 
+    public static void FriendsPanelClicked() {
+        GUI_FriendsPanel.UpdateFriendsTable();
+
+        if (!FriendsPanel.isVisible()) {
+            FriendsPanel.setVisible(true);
+            AnalysisPanel.setVisible(false);
+            learnPanel.setVisible(false);
+
+            if (gamePanel != null) {
+                gamePanel.setVisible(false);
+            }
+            MorePanel.setVisible(false);
+            //TODO set other panels visibility to false
+        }
+    }
+
     private void Initialise() {
         MainWindow = this;
 
         //region Init Components
         JPanel sideBar = new JPanel();
-        JPanel learnPanel = new GUI_LearnPanel();
-        JPanel AnalysisPanel = new GUI_AnalysisPanel();
-        JPanel FriendsPanel = new GUI_FriendsPanel();
-        JPanel MorePanel = new GUI_MorePanel();
+        learnPanel = new GUI_LearnPanel();
+        AnalysisPanel = new GUI_AnalysisPanel();
+        MorePanel = new GUI_MorePanel();
+        FriendsPanel = new GUI_FriendsPanel();
 
         CloseWindowButton = new JLabel();
         MinimiseWindowButton = new JLabel();
@@ -181,6 +201,8 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     gamePanel.setVisible(true);
                     learnPanel.setVisible(false);
                     AnalysisPanel.setVisible(false);
+                    MorePanel.setVisible(false);
+                    FriendsPanel.setVisible(false);
                     //TODO set other panels visibility to false
                 }
             }
@@ -216,6 +238,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     learnPanel.setVisible(true);
                     AnalysisPanel.setVisible(false);
                     MorePanel.setVisible(false);
+                    FriendsPanel.setVisible(false);
 
                     if (gamePanel != null) {
                         gamePanel.setVisible(false);
@@ -254,6 +277,8 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                 if (!AnalysisPanel.isVisible()) {
                     AnalysisPanel.setVisible(true);
                     learnPanel.setVisible(false);
+                    MorePanel.setVisible(false);
+                    FriendsPanel.setVisible(false);
 
                     if (gamePanel != null) {
                         gamePanel.setVisible(false);
@@ -329,7 +354,8 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         LogOutButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                //TODO create new login panel
+                MainWindow.dispose();
             }
 
             @Override

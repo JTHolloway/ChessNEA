@@ -46,7 +46,7 @@ public class GUI_MorePanel extends JPanel {
         FriendsPanelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                GUI_MainJFrame.FriendsPanelClicked();
             }
 
             @Override
