@@ -3,6 +3,7 @@ package LibaryFunctions;
 import Game.Board.Square;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Utility {
     /**
@@ -50,11 +51,26 @@ public class Utility {
         return hashPassword(EnteredPassword).equals(StoredPassword);
     }
 
+    //TODO
     public static String SQLInjectionPrevent() {
         return null;
     }
 
+    //TODO
     public static boolean CheckValidLogin() {
         return true;
+    }
+
+    public static String[] ObjectArrayToStringArray(List<String> Array) {
+        String[] StringArray = new String[Array.size()];
+        Object[] ObjectArray = Array.toArray();
+
+        int iteration = 0;
+        for (Object object : ObjectArray) {
+            StringArray[iteration] = object.toString();
+            iteration++;
+        }
+
+        return StringArray;
     }
 }
