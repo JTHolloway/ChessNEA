@@ -1,6 +1,4 @@
-import GUIs.GUI_MainJFrame;
-import Game.Colour;
-import Game.GameType;
+import GUIs.GUI_LoginScreen;
 import User.User;
 import User.UserStats;
 
@@ -15,7 +13,8 @@ public class Main
                 new java.sql.Date(Calendar.getInstance().getTime().getTime()));
         User me = new User("1", "James123", "get", "james", "Holloway", "UK", userStatsTest, null);
 
-        new GUI_MainJFrame(GameType.LOCAL_MULTIPLAYER, Colour.WHITE, me);
+        //new GUI_MainJFrame(GameType.LOCAL_MULTIPLAYER, Colour.WHITE, me);
+        new GUI_LoginScreen();
 
 //        Square e4 = new Square.EmptySquare(5,4);
 //        e4 = new Square.OccupiedSquare(5,4,new Pawn(new Coordinate(5,4),Colour.WHITE,PieceType.PAWN));
