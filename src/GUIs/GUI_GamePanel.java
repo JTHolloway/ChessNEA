@@ -3,6 +3,7 @@ package GUIs;
 import Game.Colour;
 import Game.Game;
 import Game.GameType;
+import LibaryFunctions.Repository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,7 @@ public class GUI_GamePanel extends JPanel {
     private static GUI_BoardPanel boardPanel;
 
     public GUI_GamePanel(GameType GameType, Colour PlayerColour) {
-        game = new Game(GameType, PlayerColour, GUI_MainJFrame.getCurrentUser());
+        game = new Game(GameType, PlayerColour, Repository.getCurrentUser());
         InitComponents();
     }
 

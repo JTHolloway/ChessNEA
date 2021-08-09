@@ -1,6 +1,5 @@
 package Game.Piece.Pieces;
 
-import ArrayHandling.ArrayManipulation;
 import Game.Board.Board;
 import Game.Board.Square;
 import Game.Colour;
@@ -8,6 +7,7 @@ import Game.Coordinate;
 import Game.Move.Move;
 import Game.Piece.Piece;
 import Game.Piece.PieceType;
+import LibaryFunctions.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,19 +97,18 @@ public class Queen extends Piece
      *                   in the board array
      * @return a list of possible destination squares
      */
-    private List<Square> CalculateStraights(final Square[][] BoardArray)
-    {
+    private List<Square> CalculateStraights(final Square[][] BoardArray) {
         List<Square> PossibleDestinations = new ArrayList<>();
-    
-        List<Square> Row = ArrayManipulation.ArrayToRow(BoardArray, getPieceCoordinate().GetSquareAt(BoardArray));
-        List<Square> Column = ArrayManipulation.ArrayToColumn(BoardArray, getPieceCoordinate().GetSquareAt(BoardArray));
-    
+
+        List<Square> Row = Utility.ArrayToRow(BoardArray, getPieceCoordinate().GetSquareAt(BoardArray));
+        List<Square> Column = Utility.ArrayToColumn(BoardArray, getPieceCoordinate().GetSquareAt(BoardArray));
+
         //Check For any path obstructions regardless of piece colour
         Column = CheckCollisions(Column);
         Row = CheckCollisions(Row);
         PossibleDestinations.addAll(Column);
         PossibleDestinations.addAll(Row);
-        
+
         return PossibleDestinations;
     }
     

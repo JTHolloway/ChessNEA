@@ -11,8 +11,6 @@ import java.awt.event.MouseEvent;
 
 public class GUI_MainJFrame extends javax.swing.JFrame {
 
-    private static User CurrentUser;
-
     private JFrame MainWindow;
     private static JPanel gamePanel;
     private static JPanel learnPanel;
@@ -30,7 +28,6 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
 
 
     public GUI_MainJFrame(GameType GameType, Colour PlayerColour, User user) {
-        CurrentUser = user;
         Initialise();
     }
 
@@ -392,9 +389,5 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         //endregion
 
         this.setVisible(true);
-    }
-
-    public static User getCurrentUser() {
-        return CurrentUser;
     }
 }
