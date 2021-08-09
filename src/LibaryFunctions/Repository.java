@@ -4,6 +4,9 @@ import User.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Repository {
 
@@ -13,7 +16,7 @@ public class Repository {
 
     public static Connection getConnection() {
         try {
-            connection = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
+            connection = DriverManager.getConnection("jdbc:ucanaccess:\\" + DatabaseLocation, "", "");
             return connection;
         } catch (Exception e) {
             System.out.println("Error in the repository class: " + e);
@@ -25,6 +28,7 @@ public class Repository {
         return currentUser;
     }
 
+    //TODO fix getCurrentUsersFriends()
 //    public static ArrayList<User> getCurrentUsersFriends() {
 //        User friend = null;
 //        ArrayList<User> friends = new ArrayList<User>();
@@ -60,5 +64,27 @@ public class Repository {
 //        return friends;
 //    }
 
+    public static List<String> getCountriesFromDatabase() {
+        List<String> Countries = new ArrayList<String>();
 
+        try {
+
+            String sql = "SELECT Country.CountryName " +
+                    "FROM Country";
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+
+            while (rs.next()) {
+                Countries.add(rs.getString("CountryName"));
+            }
+            rs.close();
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+        }
+        return Countries;
+    }
+
+    public static void setCurrentUser(User currentUser) {
+        Repository.currentUser = currentUser;
+    }
 }
