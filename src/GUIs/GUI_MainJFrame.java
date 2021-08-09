@@ -31,22 +31,6 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         Initialise();
     }
 
-    public static void FriendsPanelClicked() {
-        GUI_FriendsPanel.UpdateFriendsTable();
-
-        if (!FriendsPanel.isVisible()) {
-            FriendsPanel.setVisible(true);
-            AnalysisPanel.setVisible(false);
-            learnPanel.setVisible(false);
-
-            if (gamePanel != null) {
-                gamePanel.setVisible(false);
-            }
-            MorePanel.setVisible(false);
-            //TODO set other panels visibility to false
-        }
-    }
-
     private void Initialise() {
         MainWindow = this;
 
@@ -389,5 +373,21 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         //endregion
 
         this.setVisible(true);
+    }
+
+    public static void FriendsPanelClicked() {
+        GUI_FriendsPanel.UpdateFriendsTable();
+
+        if (!FriendsPanel.isVisible()) {
+            FriendsPanel.setVisible(true);
+            AnalysisPanel.setVisible(false);
+            learnPanel.setVisible(false);
+
+            if (gamePanel != null) {
+                gamePanel.setVisible(false);
+            }
+            MorePanel.setVisible(false);
+            //TODO set other panels visibility to false
+        }
     }
 }
