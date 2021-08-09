@@ -1,15 +1,15 @@
-package ArrayHandling;
+package LibaryFunctions;
 
 import Game.Board.Square;
 
 import java.util.ArrayList;
 
-public class ArrayManipulation
-{
+public class Utility {
     /**
      * Converts one row of a board to a 1D array so that it can be manipulated to look for
      * for piece collisions or check pathways.
-     * @param board a 2D square array to represent a board, so that one dimension can be copied to another array,
+     *
+     * @param board       a 2D square array to represent a board, so that one dimension can be copied to another array,
      * @param PieceOrigin The square that holds the piece involved on the row, such as a pathway of checked squares by a rook.
      *                    All squares returned will be on the same row as this piece.
      * @return an Arraylist of square objects, representing a board row
@@ -32,13 +32,29 @@ public class ArrayManipulation
      *                    All squares returned will be on the same Column as this piece.
      * @return an Arraylist of square objects, representing a board row
      */
-    public static ArrayList<Square> ArrayToColumn(Square[][] board, Square PieceOrigin)
-    {
+    public static ArrayList<Square> ArrayToColumn(Square[][] board, Square PieceOrigin) {
         ArrayList<Square> Column = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             //Column is constant but row is variable, to fetch all squares from each column in that row
-            Column.add(board[i][PieceOrigin.ReturnCoordinate().getFile()-1]);
+            Column.add(board[i][PieceOrigin.ReturnCoordinate().getFile() - 1]);
         }
         return Column;
+    }
+
+    public static String hashPassword(String password) {
+        //TODO hash password
+        return password;
+    }
+
+    public static boolean CompareHashed(String StoredPassword, String EnteredPassword) {
+        return hashPassword(EnteredPassword).equals(StoredPassword);
+    }
+
+    public static String SQLInjectionPrevent() {
+        return null;
+    }
+
+    public static boolean CheckValidLogin() {
+        return true;
     }
 }
