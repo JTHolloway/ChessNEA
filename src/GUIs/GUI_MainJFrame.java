@@ -2,7 +2,6 @@ package GUIs;
 
 import Game.Colour;
 import Game.GameType;
-import User.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +26,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
     private JLabel LogOutButton;
 
 
-    public GUI_MainJFrame(GameType GameType, Colour PlayerColour, User user) {
+    public GUI_MainJFrame() {
         Initialise();
     }
 

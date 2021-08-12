@@ -2,12 +2,16 @@ package GUIs;
 
 import LibaryFunctions.Repository;
 import LibaryFunctions.Utility;
+import User.User;
+import User.UserStats;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
+import java.util.Calendar;
 
 public class GUI_LoginScreen extends JFrame {
 
@@ -78,6 +82,139 @@ public class GUI_LoginScreen extends JFrame {
         JLabel CloseWindowButton = new JLabel("X", SwingConstants.CENTER);
         JLabel MinimiseWindowButton = new JLabel("-", SwingConstants.CENTER);
 
+        //Init Buttons and Mouse Listeners
+        JButton LOGIN = new JButton("Login");
+        LOGIN.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
+
+        JButton LOGIN_AS_GUEST = new JButton("Login as Guest");
+        LOGIN_AS_GUEST.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
+
+        JButton CREATE_ACCOUNT = new JButton("Create Account");
+        //region Create Account button Clicked
+        CREATE_ACCOUNT.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                Component[] Fields = {
+                        Create_UserIDTag,
+                        Create_Username,
+                        Create_Name,
+                        Create_Surname,
+                        Create_Email,
+                        Create_Password,
+                        Create_ConfirmPassword
+                };
+
+                String ErrorMsg = "";
+                boolean isEmpty = false;
+                boolean isValid = true;
+                for (Component component : Fields) {
+                    if (component instanceof JPasswordField) {
+                        if (String.valueOf(((JPasswordField) component).getPassword()).isEmpty()) {
+                            component.setBackground(new Color(220, 20, 60));
+                            isEmpty = true;
+                        } else {
+                            component.setBackground(new Color(109, 245, 50));
+                        }
+                    } else if (component instanceof JTextField) {
+                        if (((JTextField) component).getText().isEmpty()) {
+                            component.setBackground(new Color(220, 20, 60));
+                            isEmpty = true;
+                        } else {
+                            component.setBackground(new Color(109, 245, 50));
+                        }
+                    }
+                }
+
+
+                if (Utility.CheckValidLogin(Create_UserIDTag.getText(),
+                        Create_Username.getText(),
+                        Create_Email.getText(),
+                        Create_Name.getText(),
+                        Create_Surname.getText(),
+                        String.valueOf(Create_Password.getPassword()),
+                        String.valueOf(Create_ConfirmPassword.getPassword()))) {
+                    Date Today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+
+                    //Create new User and set to current User
+                    Repository.setCurrentUser(
+                            new User(Create_UserIDTag.getText(),
+                                    Create_Username.getText(),
+                                    Create_Email.getText(),
+                                    Create_Name.getText(),
+                                    Create_Surname.getText(),
+                                    Create_CountryBox.getSelectedItem().toString(),
+                                    new UserStats(
+                                            "Novice",
+                                            1000,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            Today,
+                                            Today
+                                    )
+                            ));
+
+                    Repository.AddUser(String.valueOf(Create_Password.getPassword()), Create_CountryBox.getSelectedIndex() + 1);
+                    new GUI_MainJFrame();
+                    This.dispose();
+
+
+                } else {
+                    isValid = false;
+
+                    if (isEmpty) {
+                        ErrorMsg += "Fill in all fields\n";
+                    }
+
+                    if (Utility.isEmailFormatValid(Create_Email.getText())) {
+                        Create_Email.setBackground(new Color(109, 245, 50));
+                    } else {
+                        Create_Email.setBackground(new Color(220, 20, 60));
+                        ErrorMsg += "Invalid Email\n";
+                    }
+
+                    if ((String.valueOf(Create_Password.getPassword()).equals(String.valueOf(Create_ConfirmPassword.getPassword()))) &&
+                            Utility.isNotBlankOrEmpty((String.valueOf(Create_Password.getPassword())))) {
+                        Create_Password.setBackground(new Color(109, 245, 50));
+                        Create_ConfirmPassword.setBackground(new Color(109, 245, 50));
+                    } else {
+                        Create_Password.setBackground(new Color(220, 20, 60));
+                        Create_ConfirmPassword.setBackground(new Color(220, 20, 60));
+                        ErrorMsg += "Passwords dont match\n";
+                    }
+
+                    if (Utility.isNotBlankOrEmpty(Create_UserIDTag.getText())
+                            && Utility.isUserIdAvailable(Create_UserIDTag.getText())) {
+                        if (Create_UserIDTag.getText().length() == 4) {
+                            Create_UserIDTag.setBackground(new Color(109, 245, 50));
+                        } else {
+                            Create_UserIDTag.setBackground(new Color(220, 20, 60));
+                            ErrorMsg += "Id Tag must be 4 characters\n";
+                        }
+                    } else {
+                        Create_UserIDTag.setBackground(new Color(220, 20, 60));
+                        ErrorMsg += "Id Tag Invalid or Taken\n";
+                    }
+
+                }
+                if (!isValid) {
+                    JOptionPane.showMessageDialog(This, ErrorMsg);
+                }
+            }
+        });
+        //endregion
 
         Component[] Components = {CreateAccountPanel, GuestAccountPanel, LoginPanel, Login_LoginLabel,
                 Guest_GuestLabel, Create_CreateAccountLabel, Login_UserIDTagLabel, Login_PasswordLabel,
@@ -85,7 +222,8 @@ public class GUI_LoginScreen extends JFrame {
                 Create_NameLabel, Create_SurnameLabel, Create_EmailLabel, Create_PasswordLabel,
                 Create_ConfirmPasswordLabel, Create_CountryLabel, Login_UserIDTag, Login_Password,
                 Login_Email, Guest_Username, Guest_Country, Create_UserIDTag, Create_Username, Create_Name,
-                Create_Surname, Create_Email, Create_Password, Create_ConfirmPassword, Create_CountryBox};
+                Create_Surname, Create_Email, Create_Password, Create_ConfirmPassword, Create_CountryBox, LOGIN,
+                LOGIN_AS_GUEST, CREATE_ACCOUNT};
 
         //Set Common attributes to each Component
         for (Component component : Components) {
@@ -219,6 +357,12 @@ public class GUI_LoginScreen extends JFrame {
         Create_ConfirmPassword.setLocation((int) (screenWidth * 0.14), (int) (CreateAccountPanel.getHeight() * 0.65));
         Create_CountryBox.setLocation((int) (screenWidth * 0.14), (int) (CreateAccountPanel.getHeight() * 0.725));
 
+        LOGIN.setLocation((int) (LoginPanel.getWidth() * 0.5) - (LOGIN.getWidth() / 2),
+                (int) (LoginPanel.getHeight() * 0.75));
+        LOGIN_AS_GUEST.setLocation((int) (GuestAccountPanel.getWidth() * 0.5) - (LOGIN.getWidth() / 2),
+                (int) (GuestAccountPanel.getHeight() * 0.75));
+        CREATE_ACCOUNT.setLocation((int) (CreateAccountPanel.getWidth() * 0.5) - (LOGIN.getWidth() / 2),
+                (int) (CreateAccountPanel.getHeight() * 0.85));
 
         //Add Components to Panels
         SidePanel.add(CloseWindowButton);
@@ -231,12 +375,14 @@ public class GUI_LoginScreen extends JFrame {
         LoginPanel.add(Login_UserIDTag);
         LoginPanel.add(Login_Password);
         LoginPanel.add(Login_Email);
+        LoginPanel.add(LOGIN);
 
         GuestAccountPanel.add(Guest_GuestLabel);
         GuestAccountPanel.add(Guest_UsernameLabel);
         GuestAccountPanel.add(Guest_CountryLabel);
         GuestAccountPanel.add(Guest_Username);
         GuestAccountPanel.add(Guest_Country);
+        GuestAccountPanel.add(LOGIN_AS_GUEST);
 
         CreateAccountPanel.add(Create_CreateAccountLabel);
         CreateAccountPanel.add(Create_UserIDTagLabel);
@@ -255,6 +401,7 @@ public class GUI_LoginScreen extends JFrame {
         CreateAccountPanel.add(Create_Password);
         CreateAccountPanel.add(Create_ConfirmPassword);
         CreateAccountPanel.add(Create_CountryBox);
+        CreateAccountPanel.add(CREATE_ACCOUNT);
 
         //Add Panels to Frame
         MainPanel.add(LoginPanel);
