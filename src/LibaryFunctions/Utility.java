@@ -2,6 +2,8 @@ package LibaryFunctions;
 
 import Game.Board.Square;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +44,25 @@ public class Utility {
         return Column;
     }
 
-    public static String hashPassword(String password) {
-        //TODO hash password
-        return password;
+    public static String hashPassword(String Password) {
+        try {
+            MessageDigest Encrypt = MessageDigest.getInstance("SHA256");
+
+            Encrypt.update(Password.getBytes());
+            byte[] Encryption = Encrypt.digest();
+
+            StringBuilder sb = new StringBuilder();
+            for (byte b : Encryption) {
+                sb.append(String.format("%02x", b));
+            }
+
+            return sb.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 
     public static boolean CompareHashed(String StoredPassword, String EnteredPassword) {
@@ -56,9 +74,41 @@ public class Utility {
         return null;
     }
 
-    //TODO
-    public static boolean CheckValidLogin() {
+    //TODO Parameters
+    public static boolean CheckValidLogin(String UserID, String Username, String Email, String Name,
+                                          String Surname, String Password, String ConfirmPassword) {
+        if (isNotBlankOrEmpty(UserID) && isUserIdAvailable(UserID) && UserID.length() == 4) {
+            if (isNotBlankOrEmpty(Username) &&
+                    isNotBlankOrEmpty(Email) &&
+                    isNotBlankOrEmpty(Name) &&
+                    isNotBlankOrEmpty(Surname) &&
+                    isNotBlankOrEmpty(Password) &&
+                    isNotBlankOrEmpty(ConfirmPassword)) {
+                if (Password.equals(ConfirmPassword)) {
+                    return isEmailFormatValid(Email);
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isUserIdAvailable(String UserID) {
+        for (String ID : Repository.getUserIds()) {
+            if (ID.equals(UserID)) return false;
+        }
         return true;
+    }
+
+    public static boolean isNotBlankOrEmpty(String string) {
+        return !string.isBlank() && !string.isEmpty();
+    }
+
+    //TODO review
+    public static boolean isEmailFormatValid(String email) {
+        String regex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
+        java.util.regex.Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     public static String[] ObjectArrayToStringArray(List<String> Array) {

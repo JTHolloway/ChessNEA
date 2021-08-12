@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
 
 public class Repository {
 
@@ -16,7 +18,7 @@ public class Repository {
 
     public static Connection getConnection() {
         try {
-            connection = DriverManager.getConnection("jdbc:ucanaccess:\\" + DatabaseLocation, "", "");
+            connection = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
             return connection;
         } catch (Exception e) {
             System.out.println("Error in the repository class: " + e);
@@ -27,6 +29,49 @@ public class Repository {
     public static User getCurrentUser() {
         return currentUser;
     }
+
+    public static void AddUser(String Password, int CountryIndex) {
+        //TODO
+        String sql;
+        try {
+            sql =
+                    "SELECT MAX(StatID) " +
+                            "AS idNum " +
+                            "FROM UserStats";
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+            rs.next();
+            int idValue = rs.getInt("idNum") + 1;
+
+            sql =
+                    "INSERT INTO User(UserID, Username, Password, Email, FirstName, LastName, Country) " +
+                            "VALUES (" + currentUser.getUserID() +
+                            ", " + currentUser.getUserName() +
+                            ", " + Utility.hashPassword(Password) +
+                            ", " + currentUser.getEmail() +
+                            ", " + currentUser.getName() +
+                            ", " + currentUser.getSurname() +
+                            ", " + CountryIndex +
+                            ")";
+
+            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+
+            sql =
+                    "INSERT INTO UserStats(StatID, UserStats.UserID, JoinDate, LastPlayDate) " +
+                            "VALUES (" + idValue +
+                            ", " + currentUser.getUserID() +
+                            ", " + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                            ", " + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                            ")";
+
+            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+
+            rs.close();
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+        }
+    }
+
 
     //TODO fix getCurrentUsersFriends()
 //    public static ArrayList<User> getCurrentUsersFriends() {
@@ -82,6 +127,26 @@ public class Repository {
             System.out.println("Error in the repository class: " + e);
         }
         return Countries;
+    }
+
+    public static List<String> getUserIds() {
+        List<String> UserId = new ArrayList<String>();
+
+        try {
+
+            String sql = "SELECT User.UserID " +
+                    "FROM User";
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+
+            while (rs.next()) {
+                UserId.add(rs.getString("UserID"));
+            }
+            rs.close();
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+        }
+        return UserId;
     }
 
     public static void setCurrentUser(User currentUser) {
