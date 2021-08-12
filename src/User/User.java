@@ -4,13 +4,13 @@ import javax.swing.*;
 
 public class User {
 
-    private String UserID;
+    private final String UserID;
     private String UserName;
     private String Email;
     private String Name;
     private String Surname;
     private String Country;
-    private UserStats Statistics;
+    private final UserStats Statistics;
     private ImageIcon ProfilePicture;
 
     /**
@@ -35,13 +35,26 @@ public class User {
         ProfilePicture = profilePicture;
     }
 
+    public User(String userID, String userName, String email, String name, String surname, String country, UserStats statistics) {
+        UserID = userID;
+        UserName = userName;
+        Email = email;
+        Name = name;
+        Surname = surname;
+        Country = country;
+        Statistics = statistics;
+        //get default profile picture from database
+    }
+
     /*Setter Methods for each Variable (Except UserID or Statistics)*/
     public void setUserName(String userName) {
         UserName = userName;
     }
+
     public void setEmail(String email) {
         Email = email;
     }
+
     public void setName(String name) {
         Name = name;
     }
