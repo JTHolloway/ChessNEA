@@ -31,42 +31,29 @@ public class Repository {
     }
 
     public static void AddUser(String Password, int CountryIndex) {
-        //TODO
         String sql;
         try {
             sql =
-                    "SELECT MAX(StatID) " +
-                            "AS idNum " +
-                            "FROM UserStats";
-            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
-            rs.next();
-            int idValue = rs.getInt("idNum") + 1;
-
-            sql =
                     "INSERT INTO User(UserID, Username, Password, Email, FirstName, LastName, Country) " +
-                            "VALUES (" + currentUser.getUserID() +
-                            ", " + currentUser.getUserName() +
-                            ", " + Utility.hashPassword(Password) +
-                            ", " + currentUser.getEmail() +
-                            ", " + currentUser.getName() +
-                            ", " + currentUser.getSurname() +
-                            ", " + CountryIndex +
+                            "VALUES ('" + currentUser.getUserID() +
+                            "' , '" + currentUser.getUserName() +
+                            "' , '" + Utility.hashPassword(Password) +
+                            "' , '" + currentUser.getEmail() +
+                            "' , '" + currentUser.getName() +
+                            "' , '" + currentUser.getSurname() +
+                            "' , " + CountryIndex +
                             ")";
-
             ExecuteSQL.executeUpdateQuery(getConnection(), sql);
 
             sql =
-                    "INSERT INTO UserStats(StatID, UserStats.UserID, JoinDate, LastPlayDate) " +
-                            "VALUES (" + idValue +
-                            ", " + currentUser.getUserID() +
-                            ", " + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
-                            ", " + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
-                            ")";
-
+                    "INSERT INTO UserStats(UserID, JoinDate, LastPlayDate) " +
+                            "VALUES ('" + currentUser.getUserID() +
+                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                            "')";
             ExecuteSQL.executeUpdateQuery(getConnection(), sql);
-
-            rs.close();
             connection.close();
+
         } catch (Exception e) {
             System.out.println("Error in the repository class: " + e);
         }

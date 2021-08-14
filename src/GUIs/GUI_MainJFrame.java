@@ -334,7 +334,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         LogOutButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO create new login panel
+                new GUI_LoginScreen();
                 MainWindow.dispose();
             }
 
