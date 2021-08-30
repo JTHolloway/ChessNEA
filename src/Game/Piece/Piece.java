@@ -5,7 +5,7 @@ import Game.Board.Square;
 import Game.Colour;
 import Game.Coordinate;
 import Game.Move.Move;
-import Game.Piece.Pieces.Pawn;
+import LibaryFunctions.Repository;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -28,6 +28,13 @@ public abstract class Piece {
         this.PieceCoordinate = PieceCoordinate;
         this.colour = colour;
         this.type = type;
+        pieceImage = Repository.ReturnPieceImage("SELECT Pieces.PieceImage " +
+                "FROM Pieces " +
+                "WHERE Pieces.Description = '" + colour + " " + type + "'", colour.toString(), type.toString());
+
+        System.out.println("SELECT Pieces.PieceImage " +
+                "FROM Pieces " +
+                "WHERE Pieces.Description = '" + colour + " " + type + "'");
     }
 
     /**

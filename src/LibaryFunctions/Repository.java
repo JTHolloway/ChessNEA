@@ -1,13 +1,19 @@
 package LibaryFunctions;
 
+import GUIs.GUI_BoardPanel;
 import User.User;
+import User.UserStats;
 
+import javax.swing.*;
+import java.awt.*;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 
 public class Repository {
@@ -38,7 +44,7 @@ public class Repository {
                             "VALUES ('" + currentUser.getUserID() +
                             "' , '" + currentUser.getUserName() +
                             "' , '" + Utility.hashPassword(Password) +
-                            "' , '" + currentUser.getEmail() +
+                            "' , '" + currentUser.getEmail().toLowerCase(Locale.ROOT) +
                             "' , '" + currentUser.getName() +
                             "' , '" + currentUser.getSurname() +
                             "' , " + CountryIndex +
@@ -116,6 +122,97 @@ public class Repository {
         return Countries;
     }
 
+    public static boolean UserFound(String UserID, String Email, String Password) {
+        try {
+
+            String sql = "SELECT User.UserID, User.Email, User.Password " +
+                    "FROM User " +
+                    "WHERE User.UserID = '" + UserID + "' AND User.Email = '" + Email.toLowerCase(Locale.ROOT) + "' AND User.Password = '" + Utility.hashPassword(Password) + "'";
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+
+            if (rs.next()) {
+                return true;
+            }
+
+            rs.close();
+            connection.close();
+
+            return false;
+
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+            return false;
+        }
+    }
+
+    public static void Login(String UserID) {
+        try {
+            String sql = "SELECT User.*, Country.CountryName, ProfilePictures.Picture " +
+                    "FROM User, Country, ProfilePictures " +
+                    "WHERE User.UserID = '" + UserID + "' AND Country.CountryID = User.Country " +
+                    "AND ProfilePictures.ID = User.ProfilePicture";
+            System.out.println(sql);
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+
+            System.out.println("it worked");
+
+            if (rs.next()) {
+                byte[] byteArray = rs.getBytes("Picture");
+                ImageIcon image = new ImageIcon(byteArray);
+
+                setCurrentUser(new User(
+                        rs.getString("UserID"),
+                        rs.getString("Username"),
+                        rs.getString("Email"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName"),
+                        rs.getString("CountryName"),
+                        getUserStats(UserID),
+                        image
+                ));
+            }
+            rs.close();
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+        }
+    }
+
+    private static UserStats getUserStats(String UserID) {
+        try {
+            Date Today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+            String sql = "SELECT UserStats.UserID, UserStats.ELO, Rank.Rank, UserStats.JoinDate, UserStats.GamesPlayed, " +
+                    "UserStats.Wins, UserStats.Losses, UserStats.Draws, UserStats.LastPlayDate " +
+                    "FROM UserStats, Rank " +
+                    "WHERE UserStats.UserID = '" + UserID + "' AND Rank.RankID = UserStats.RankID";
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+
+            System.out.println(sql);
+
+            UserStats stats = null;
+            if (rs.next()) {
+                stats = (new UserStats(
+                        rs.getString("Rank.Rank"),
+                        rs.getInt("UserStats.ELO"),
+                        rs.getInt("UserStats.GamesPlayed"),
+                        rs.getInt("UserStats.Wins"),
+                        rs.getInt("UserStats.Losses"),
+                        rs.getInt("UserStats.Draws"),
+                        rs.getDate("UserStats.JoinDate"),
+                        Today
+                ));
+            }
+            rs.close();
+            connection.close();
+
+            return stats;
+
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+            return null;
+        }
+    }
+
     public static List<String> getUserIds() {
         List<String> UserId = new ArrayList<String>();
 
@@ -134,6 +231,33 @@ public class Repository {
             System.out.println("Error in the repository class: " + e);
         }
         return UserId;
+    }
+
+    //TODO fix getting image from database
+    public static ImageIcon ReturnPieceImage(String SQL_Query, String Colour, String Type) {
+        try {
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), SQL_Query);
+
+            rs.next();
+
+            Type = Type.substring(0, 1).toUpperCase(Locale.ROOT) + Type.substring(1).toLowerCase(Locale.ROOT);
+
+            System.out.println(Colour.charAt(0) + Type + ".png");
+            ImageIcon TempImage = new ImageIcon(rs.getClass().getResource(Colour.charAt(0) + Type + ".png"));
+
+            Image image = TempImage.getImage();
+            Image ScaledImage = image.getScaledInstance((GUI_BoardPanel.WIDTH) / 8, (GUI_BoardPanel.HEIGHT) / 8, Image.SCALE_SMOOTH);
+
+            rs.close();
+            connection.close();
+
+            return new ImageIcon(ScaledImage);
+
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+        }
+
+        return null;
     }
 
     public static void setCurrentUser(User currentUser) {

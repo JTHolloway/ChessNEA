@@ -7,8 +7,6 @@ import Game.Piece.Piece;
 import Game.Piece.PieceType;
 import Game.Piece.Pieces.*;
 
-import javax.print.attribute.standard.Destination;
-
 public class Board {
     
     private final Square[][] BoardArray = new Square[8][8];
@@ -166,7 +164,7 @@ public class Board {
                     System.out.print(" ");
                 }
             }
-            System.out.println("");
+            System.out.println();
         }
     }
 }

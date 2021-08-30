@@ -87,7 +87,21 @@ public class GUI_LoginScreen extends JFrame {
         LOGIN.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                String ErrorMsg = "";
 
+                if (!(Utility.isNotBlankOrEmpty(Login_UserIDTag.getText()) && Utility.isNotBlankOrEmpty(Login_Email.getText()) && Utility.isNotBlankOrEmpty(String.valueOf(Login_Password.getPassword())))) {
+                    ErrorMsg += "Fill in all fields\n";
+                }
+                if (Utility.CheckValidLogin(Login_UserIDTag.getText(), Login_Email.getText(), String.valueOf(Login_Password.getPassword()))) {
+                    Repository.Login(Login_UserIDTag.getText());
+
+                    new GUI_MainJFrame();
+                    This.dispose();
+
+                } else {
+                    ErrorMsg += "Invalid Details\n";
+                    JOptionPane.showMessageDialog(This, ErrorMsg);
+                }
             }
         });
 
@@ -137,7 +151,7 @@ public class GUI_LoginScreen extends JFrame {
                 }
 
 
-                if (Utility.CheckValidLogin(Create_UserIDTag.getText(),
+                if (Utility.CheckValidNewUser(Create_UserIDTag.getText(),
                         Create_Username.getText(),
                         Create_Email.getText(),
                         Create_Name.getText(),
@@ -410,7 +424,5 @@ public class GUI_LoginScreen extends JFrame {
         MainPanel.add(SidePanel);
 
         This.getContentPane().add(MainPanel);
-
-
     }
 }

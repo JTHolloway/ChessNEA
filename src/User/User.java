@@ -15,26 +15,15 @@ public class User {
 
     /**
      * Constructor for a User
-     * @param userID A Unique User Defined 4-digit Identification key
-     * @param userName A non-unique User Defined User name
-     * @param email The Users unique email address
-     * @param name The users first name
-     * @param surname The users last name
-     * @param country The users country/location
+     *
+     * @param userID     A Unique User Defined 4-digit Identification key
+     * @param userName   A non-unique User Defined User name
+     * @param email      The Users unique email address
+     * @param name       The users first name
+     * @param surname    The users last name
+     * @param country    The users country/location
      * @param statistics An object of UserStats class, Containing further player details (such as join date)
-     * @param profilePicture An Image of a user chosen profile picture
      */
-    public User(String userID, String userName, String email, String name, String surname, String country, UserStats statistics, ImageIcon profilePicture) {
-        UserID = userID;
-        UserName = userName;
-        Email = email;
-        Name = name;
-        Surname = surname;
-        Country = country;
-        Statistics = statistics;
-        ProfilePicture = profilePicture;
-    }
-
     public User(String userID, String userName, String email, String name, String surname, String country, UserStats statistics) {
         UserID = userID;
         UserName = userName;
@@ -44,6 +33,28 @@ public class User {
         Country = country;
         Statistics = statistics;
         //get default profile picture from database
+    }
+
+    /**
+     * Constructor for a User
+     *
+     * @param userID     A Unique User Defined 4-digit Identification key
+     * @param userName   A non-unique User Defined User name
+     * @param email      The Users unique email address
+     * @param name       The users first name
+     * @param surname    The users last name
+     * @param country    The users country/location
+     * @param statistics An object of UserStats class, Containing further player details (such as join date)
+     */
+    public User(String userID, String userName, String email, String name, String surname, String country, UserStats statistics, ImageIcon ProfilePic) {
+        UserID = userID;
+        UserName = userName;
+        Email = email;
+        Name = name;
+        Surname = surname;
+        Country = country;
+        Statistics = statistics;
+        ProfilePicture = ProfilePic;
     }
 
     /*Setter Methods for each Variable (Except UserID or Statistics)*/

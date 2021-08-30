@@ -65,18 +65,14 @@ public class Utility {
         return "";
     }
 
-    public static boolean CompareHashed(String StoredPassword, String EnteredPassword) {
-        return hashPassword(EnteredPassword).equals(StoredPassword);
-    }
-
     //TODO
     public static String SQLInjectionPrevent() {
         return null;
     }
 
     //TODO Parameters
-    public static boolean CheckValidLogin(String UserID, String Username, String Email, String Name,
-                                          String Surname, String Password, String ConfirmPassword) {
+    public static boolean CheckValidNewUser(String UserID, String Username, String Email, String Name,
+                                            String Surname, String Password, String ConfirmPassword) {
         if (isNotBlankOrEmpty(UserID) && isUserIdAvailable(UserID) && UserID.length() == 4) {
             if (isNotBlankOrEmpty(Username) &&
                     isNotBlankOrEmpty(Email) &&
@@ -88,6 +84,13 @@ public class Utility {
                     return isEmailFormatValid(Email);
                 }
             }
+        }
+        return false;
+    }
+
+    public static boolean CheckValidLogin(String UserID, String Email, String Password) {
+        if (isNotBlankOrEmpty(UserID) && isNotBlankOrEmpty(Email) && isNotBlankOrEmpty(Password)) {
+            return Repository.UserFound(UserID, Email, Password);
         }
         return false;
     }

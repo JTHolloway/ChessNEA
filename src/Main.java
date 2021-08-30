@@ -1,4 +1,4 @@
-import GUIs.GUI_LoginScreen;
+import GUIs.GUI_MainJFrame;
 import User.User;
 import User.UserStats;
 
@@ -11,10 +11,10 @@ public class Main
 
         UserStats userStatsTest = new UserStats("pro", 1000, 10, 5, 5, 0, new java.sql.Date(Calendar.getInstance().getTime().getTime()),
                 new java.sql.Date(Calendar.getInstance().getTime().getTime()));
-        User me = new User("1", "James123", "get", "james", "Holloway", "UK", userStatsTest, null);
+        User me = new User("1", "James123", "get", "james", "Holloway", "UK", userStatsTest);
 
-        //new GUI_MainJFrame(GameType.LOCAL_MULTIPLAYER, Colour.WHITE, me);
-        new GUI_LoginScreen();
+        new GUI_MainJFrame();
+        //new GUI_LoginScreen();
 
 //        Square e4 = new Square.EmptySquare(5,4);
 //        e4 = new Square.OccupiedSquare(5,4,new Pawn(new Coordinate(5,4),Colour.WHITE,PieceType.PAWN));

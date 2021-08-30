@@ -1,7 +1,6 @@
 package Game.Move;
 
 import Game.Board.Square;
-import Game.Coordinate;
 import Game.Piece.Piece;
 
 public abstract class Move
