@@ -2,7 +2,9 @@ package Game.Piece;
 
 public enum PieceType {
 
-    //Enumeration Used to declare Piece types which wont change
+    /**
+     * Declaration of final Piece types
+     */
     KING,
     QUEEN,
     ROOK,

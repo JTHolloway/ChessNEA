@@ -5,11 +5,17 @@ import java.awt.*;
 
 public class GUI_LearnPanel extends JPanel {
 
+    /**
+     * Constructor for learn JPanel
+     */
     public GUI_LearnPanel() {
         initComponents();
         this.setVisible(false);
     }
 
+    /**
+     * Initializes the components of the JPanel with each components properties.
+     */
     private void initComponents() {
         int ScreenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
         int ScreenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;

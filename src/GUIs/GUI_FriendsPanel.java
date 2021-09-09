@@ -15,11 +15,17 @@ public class GUI_FriendsPanel extends JPanel {
     private static JTable Results;
     private static JTable FriendsList;
 
+    /**
+     * Constructor for the Friends JPanel. Calls the initComponents() method
+     */
     public GUI_FriendsPanel() {
         //TODO fetch usernames from user table WHERE they are friends in the friendship table. Add them to list
         InitComponents();
     }
 
+    /**
+     * Updates the friends JTable to add their friends to the table
+     */
     public static void UpdateFriendsTable() {
         String[] ColumnNames = {"UserID", "User Name"};
         DefaultTableModel model = new DefaultTableModel(ColumnNames, 0);
@@ -27,10 +33,13 @@ public class GUI_FriendsPanel extends JPanel {
         model.addRow(ColumnNames);
 
         //TODO for loop to add userID and usernames of each friend to table
-        //String[] item = {"JH77", "Jeffman"};
+        //String[] item = {"JH77", "Username"};
         //model.addRow(item);
     }
 
+    /**
+     * Initializes the components of the JPanel with each components properties.
+     */
     private void InitComponents() {
         int ScreenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
         int ScreenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;

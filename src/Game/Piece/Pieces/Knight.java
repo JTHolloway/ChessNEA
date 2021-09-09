@@ -22,7 +22,6 @@ public class Knight extends Piece
     public Knight(final Coordinate coordinate, final Colour colour, final PieceType type)
     {
         super(coordinate, colour, type);
-        //TODO colour == Colour.WHITE ? (pieceImage = Database.getWhiteImage) : (pieceImage = Database.getBlackImage);
     }
     
     /**

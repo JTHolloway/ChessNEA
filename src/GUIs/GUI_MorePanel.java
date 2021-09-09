@@ -11,12 +11,17 @@ public class GUI_MorePanel extends JPanel {
     private JLabel ProfilePanelButton;
     private JLabel LeaderBoardsPanelButton;
     private JLabel SettingsPanelButton;
-    private JSeparator SeparatorLine;
 
+    /**
+     * Constructor for the more JPanel
+     */
     public GUI_MorePanel() {
         InitComponents();
     }
 
+    /**
+     * Initializes the components of the JPanel with each components properties.
+     */
     private void InitComponents() {
         JPanel MorePanel = this;
 
@@ -33,7 +38,7 @@ public class GUI_MorePanel extends JPanel {
         ProfilePanelButton = new JLabel("\uD83D\uDC64 Profile  ", SwingConstants.RIGHT);
         LeaderBoardsPanelButton = new JLabel("\uD83C\uDFC6 Podium  ", SwingConstants.RIGHT);
         SettingsPanelButton = new JLabel("⚙ Settings  ", SwingConstants.RIGHT);
-        SeparatorLine = new JSeparator();
+        JSeparator separatorLine = new JSeparator();
         //endregion
 
         //region Setup Friends Panel Button
@@ -76,7 +81,7 @@ public class GUI_MorePanel extends JPanel {
         ProfilePanelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                //TODO profile panel
             }
 
             @Override
@@ -106,7 +111,7 @@ public class GUI_MorePanel extends JPanel {
         LeaderBoardsPanelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                //TODO leaderboard panel
             }
 
             @Override
@@ -136,7 +141,7 @@ public class GUI_MorePanel extends JPanel {
         SettingsPanelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                //TODO settings panel
             }
 
             @Override
@@ -157,8 +162,8 @@ public class GUI_MorePanel extends JPanel {
         //endregion
 
         //region Setup Separator
-        SeparatorLine.setBounds(0, (int) (this.getHeight() * 0.1), 5, (int) (this.getHeight() * 0.8));
-        SeparatorLine.setOrientation(SwingConstants.VERTICAL);
+        separatorLine.setBounds(0, (int) (this.getHeight() * 0.1), 5, (int) (this.getHeight() * 0.8));
+        separatorLine.setOrientation(SwingConstants.VERTICAL);
         //endregion
 
         //Add Components to Panel
@@ -166,7 +171,6 @@ public class GUI_MorePanel extends JPanel {
         this.add(ProfilePanelButton);
         this.add(LeaderBoardsPanelButton);
         this.add(SettingsPanelButton);
-        this.add(SeparatorLine);
+        this.add(separatorLine);
     }
-
 }

@@ -33,33 +33,45 @@ public abstract class Move
         boolean Capture;
         return null;
     }
-    
+
     /**
      * Returns the piece that was captured
-     * @return a Piece object of the captured piece
+     *
      * @return null if no piece was captured
      */
     public abstract Piece getCapturedPiece();
-    
+
+    /**
+     * @return a boolean value depending on weather it was a capturing move
+     */
     public abstract boolean wasCapture();
 
-    /*Getter methods for each member variable*/
+    /**
+     * @return the starting square of a piece before it has moved
+     */
     public Square getStartPosition() {
         return StartPosition;
     }
+
+    /**
+     * @return the destination square of the piece that was moved
+     */
     public Square getEndPosition() {
         return EndPosition;
     }
+
+    /**
+     * @return the piece that was moved
+     */
     public Piece getMovedPiece() {
         return MovedPiece;
     }
 
 
 //...............................................................................................................
-    
+
     /**
-     * Capturing move Inner class used to uniquely identify
-     * properties of a Capture
+     * Class for a Capturing move: A move in which an opponents piece was captured
      */
     public static class CapturingMove extends Move
     {
@@ -83,23 +95,23 @@ public abstract class Move
          * @return a Piece object of the captured piece
          */
         @Override
-        public Piece getCapturedPiece()
-        {
+        public Piece getCapturedPiece() {
             return CapturedPiece;
         }
-    
+
+        /**
+         * @return true for a capturing move
+         */
         @Override
-        public boolean wasCapture()
-        {
+        public boolean wasCapture() {
             return true;
         }
     }
-    
+
 //...............................................................................................................
-    
+
     /**
-     * Regular move Inner class used to uniquely identify
-     * properties of a move
+     * Class for a Regular move: A move in which no pieces are captured, the moving piece just changes position
      */
     public static class RegularMove extends Move
     {
@@ -118,26 +130,26 @@ public abstract class Move
          * @return null
          */
         @Override
-        public Piece getCapturedPiece()
-        {
+        public Piece getCapturedPiece() {
             return null;
         }
-    
+
+        /**
+         * @return false for a non-capturing move
+         */
         @Override
-        public boolean wasCapture()
-        {
+        public boolean wasCapture() {
             return false;
         }
     }
-    
-    
+
+
 //...............................................................................................................
-    
+
     /**
-     * En Passant move Inner class used to uniquely identify
-     * properties of an En Passant move
+     * Class for a EnPassant move: A move in which an opponents piece pawn was captured when the pawn was an EnPassant pawn
+     * @TODO Check if necessary
      */
-    //TODO Check if necessary
     public static class EnPassantMove extends Move
     {
         private final Piece CapturedPiece;
@@ -163,24 +175,27 @@ public abstract class Move
         
         /**
          * Returns the piece that was captured
-         * @return null
+         * @return the captured Pawn
          */
         @Override
-        public Piece getCapturedPiece()
-        {
+        public Piece getCapturedPiece() {
             return CapturedPiece;
         }
-        
+
+        /**
+         * @return true for all enPassant captures
+         */
         @Override
-        public boolean wasCapture()
-        {
+        public boolean wasCapture() {
             return true;
         }
-    
-        public Square getCapturedPieceLocation()
-        {
+
+        /**
+         * @return the square which the enPassant Pawn was on since during enPassant the captured piece is not on the destination square of the moving piece
+         */
+        public Square getCapturedPieceLocation() {
             return CapturedPieceLocation;
         }
     }
-    
+
 }

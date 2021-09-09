@@ -2,8 +2,6 @@ package Game.Board;
 
 import Game.Colour;
 import Game.Coordinate;
-import Game.Move.Move;
-import Game.Piece.Piece;
 import Game.Piece.PieceType;
 import Game.Piece.Pieces.*;
 
@@ -81,82 +79,60 @@ public class Board {
                 BoardArray[i][j] = new Square.EmptySquare(j+1, i+1);
             }
         }
-        
-        //TODO: Test, remove when no longer needed
-//        BoardArray[4][3] = new Square.OccupiedSquare(4,5,
-//                new Pawn(new Coordinate(4,5), Colour.WHITE, PieceType.PAWN));
-//        BoardArray[4][4] = new Square.OccupiedSquare(5,5,
-//                new Pawn(new Coordinate(5,5), Colour.BLACK, PieceType.PAWN));
-//        BoardArray[5][2] = new Square.OccupiedSquare(3,6,
-//                new Pawn(new Coordinate(3,6), Colour.BLACK, PieceType.PAWN));
-//        enPassantPawn = (Pawn) BoardArray[4][4].ReturnPiece();
-    
-        //BoardArray[2][1] = new Square.OccupiedSquare(2,3,
-            //    new Pawn(new Coordinate(2,3), Colour.BLACK, PieceType.PAWN));
-        //BoardArray[5][5] = new Square.OccupiedSquare(6,6,
-          //      new Pawn(new Coordinate(6,6), Colour.BLACK, PieceType.PAWN));
     }
-    
-    // TODO: 10/07/2021: complete and comment
-    public void UpdateBoard(final Move move)
-    {
-        Piece MovedPiece = move.getMovedPiece();
-        //Todo look for captures and remove captured pieces from board
-    }
+
     
     /**
      * Returns the square which matches the given coordinates
      * @param coordinate A coordinate object
      * @return a Square object in the board array
      */
-    public Square ReturnSquare(final Coordinate coordinate){
+    public Square ReturnSquare(final Coordinate coordinate) {
         int X_coordinate = coordinate.getFile();
         int Y_coordinate = coordinate.getRank();
-        
-        return BoardArray[Y_coordinate-1][X_coordinate-1];
+
+        return BoardArray[Y_coordinate - 1][X_coordinate - 1];
     }
-    
-    public void setEnPassantPawn(Pawn pawn){
-        this.enPassantPawn = pawn;
-    }
-    
-    public Pawn getEnPassantPawn(){
-        return enPassantPawn;
-    }
-    
-    public Square getEnPassantDestination(){
-        
-        try{
+
+    /**
+     * @return the destination square of the capturing piece when capturing an enPassant pawn
+     */
+    public Square getEnPassantDestination() {
+
+        try {
             int File = enPassantPawn.getPieceCoordinate().getFile();
             Coordinate Destination;
-            if (enPassantPawn.getColour() == Colour.WHITE){
+            if (enPassantPawn.getColour() == Colour.WHITE) {
                 Destination = new Coordinate(File, 3);
-            }
-            else{
+            } else {
                 Destination = new Coordinate(File, 6);
             }
             return Destination.GetSquareAt(BoardArray);
-            
-        } catch (NullPointerException exception){
+
+        } catch (NullPointerException exception) {
             System.out.println("EnPassant Pawn does not exist");
             return null;
         }
     }
-    
-    //Getter variable which returns the board array of squares
-    public Square[][] getBoardArray()
-    {
+
+    /**
+     * @return an Array of square objects (the board)
+     */
+    public Square[][] getBoardArray() {
         return BoardArray;
     }
-    
-    //TODO remove test method
-    public void PrintBoard(){
-        for (int i = 7; i >= 0; i--){
-            for (int j = 0; j <= 7; j++){
-                if (getBoardArray()[i][j].SquareOccupied()){
+
+    /**
+     * This method is a TEST which prints the board
+     * TODO remove test method
+     */
+    public void PrintBoard() {
+        for (int i = 7; i >= 0; i--) {
+            for (int j = 0; j <= 7; j++) {
+                if (getBoardArray()[i][j].SquareOccupied()) {
                     String s = getBoardArray()[i][j].ReturnPiece().getType().toString();
-                    s = s.substring(0,1);
-                    if (getBoardArray()[i][j].ReturnPiece().getColour() == Colour.BLACK){
+                    s = s.substring(0, 1);
+                    if (getBoardArray()[i][j].ReturnPiece().getColour() == Colour.BLACK) {
                         s = s.toLowerCase();
                     }
                     System.out.print(s);
@@ -166,5 +142,21 @@ public class Board {
             }
             System.out.println();
         }
+    }
+
+    /**
+     * @return a pawn object of the current enPassant Pawn
+     */
+    public Pawn getEnPassantPawn() {
+        return enPassantPawn;
+    }
+
+    /**
+     * Updates the current enPassant Pawn. Value can be null when no enPassant pawns are present
+     *
+     * @param pawn The pawn to be set as the enPassant pawn
+     */
+    public void setEnPassantPawn(Pawn pawn) {
+        this.enPassantPawn = pawn;
     }
 }

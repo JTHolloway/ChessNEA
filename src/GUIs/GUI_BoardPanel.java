@@ -14,6 +14,9 @@ public class GUI_BoardPanel extends JPanel {
 
     private static List<Tile> Tiles;
 
+    /**
+     * Constructor for the board JPanel
+     */
     public GUI_BoardPanel() {
         int Size = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height) * (0.89));
 
@@ -23,6 +26,9 @@ public class GUI_BoardPanel extends JPanel {
         InitialiseTiles();
     }
 
+    /**
+     * Initializes the board tiles to be displayed. Each tile is a JPanel which is displayed on the board JPanel
+     */
     private void InitialiseTiles() {
 
         Colour colour = Colour.BLACK;
@@ -62,12 +68,8 @@ public class GUI_BoardPanel extends JPanel {
         }
     }
 
-    //TODO init Pieces
-    private void InitialisePieces() {
-//        JLabel f = new JLabel("♛",SwingConstants.CENTER);
-//        f.setForeground(Color.WHITE);
-//        f.setSize(TileSize, TileSize);
-//        f.setFont(new Font("f", Font.PLAIN, TileSize));
-//        tile.add(f);
-    }
+    //TODO init Pieces and comment
+//   private void InitialisePieces() {
+//
+//    }
 }

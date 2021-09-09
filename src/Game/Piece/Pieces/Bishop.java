@@ -22,28 +22,25 @@ public class Bishop extends Piece
     public Bishop(Coordinate coordinate, Colour colour, PieceType type)
     {
         super(coordinate, colour, type);
-        //TODO colour == Colour.WHITE ? (pieceImage = Database.getWhiteImage) : (pieceImage = Database.getBlackImage);
     }
     
     /**
      * Takes a board object and calculates the available bishop moves so that
      * illegal moves cannot be made
      * Takes into account that check may be present on the board etc..
+     *
      * @param board An instance of the current board (which contains an array of squares)
      * @return a list of all available/legal moves (where move is a move object)
      */
     @Override
-    public List<Move> CalculateValidMoves(Board board)
-    {
+    public List<Move> CalculateValidMoves(final Board board) {
         //Find Diagonal moves
         List<Square> PositiveDiagonal = new ArrayList<>();
         List<Square> NegativeDiagonal = new ArrayList<>();
         Square[][] BoardArray = board.getBoardArray();
-        
-        for (Square[] Row : BoardArray)
-        {
-            for (Square square : Row)
-            {
+
+        for (Square[] Row : BoardArray) {
+            for (Square square : Row) {
                 Coordinate Destination = square.ReturnCoordinate();
                 int XDisplacement = getPieceCoordinate().getFile() - Destination.getFile();
                 int YDisplacement = getPieceCoordinate().getRank() - Destination.getRank();

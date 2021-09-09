@@ -114,10 +114,8 @@ public abstract class Piece {
             if (getPieceCoordinate().CompareCoordinates(square))
             {
                 ToBeRemoved.add(square);
-            }
-            else if (square.SquareOccupied())
-            {
-                if (square.ReturnPiece().getColour() == getColour()){
+            } else if (square.SquareOccupied()) {
+                if (square.ReturnPiece().getColour() == getColour()) {
                     ToBeRemoved.add(square);
                 }
             }
@@ -125,40 +123,65 @@ public abstract class Piece {
         PossibleDestinations.removeAll(ToBeRemoved);
         return PossibleDestinations;
     }
-    
+
+    /**
+     * Takes the possible destinations a piece can move to and converts these to move objects
+     *
+     * @param PossibleDestinations a List of squares which are available for the piece to move to
+     * @param Board                a 2-Dimensional square array to represent the board
+     * @return a List of valid moves
+     */
     //TODO: Decide weather this class belongs in the piece class
-    protected List<Move> DestinationsToMoves(final List<Square> PossibleDestinations, final Square[][] Board){
+    protected List<Move> DestinationsToMoves(final List<Square> PossibleDestinations, final Square[][] Board) {
         List<Move> Moves = new ArrayList<>();
         for (Square square : PossibleDestinations) {
-            if (square.SquareOccupied()){
+            if (square.SquareOccupied()) {
                 //Capturing move
                 Moves.add(new Move.CapturingMove(PieceCoordinate.GetSquareAt(Board), square, square.ReturnPiece()));
-            }else{
+            } else {
                 //General move
                 Moves.add(new Move.RegularMove(PieceCoordinate.GetSquareAt(Board), square));
             }
         }
         return Moves;
     }
-    
+
     //TODO find check, checked squares and checking piece
 
-    /*Getter methods for all member variables*/
+    /**
+     * @return a coordinate object of the pieces current coordinate
+     */
     public Coordinate getPieceCoordinate() {
         return PieceCoordinate;
     }
+
+    /**
+     * Setter method for Coordinate (a pieces coordinate can change but its type and colour cannot)
+     *
+     * @param pieceCoordinate The coordinate being assigned to the piece
+     */
+    public void setPieceCoordinate(Coordinate pieceCoordinate) {
+        this.PieceCoordinate = pieceCoordinate;
+    }
+
+    /**
+     * @return a colour referring to the colour of the piece. White/Black
+     */
     public Colour getColour() {
         return colour;
     }
+
+    /**
+     * @return the type of the piece. eg - rook
+     */
     public PieceType getType() {
         return type;
     }
+
+    /**
+     * @return an ImageIcon of the displayed piece image
+     */
     public ImageIcon getPieceImage() {
         return pieceImage;
-    }
-    
-    /*Setter method for Coordinate (a pieces coordinate can change but its type and colour cannot)*/
-    public void setPieceCoordinate(Coordinate pieceCoordinate) {
-        this.PieceCoordinate = pieceCoordinate;
     }
 }

@@ -23,7 +23,6 @@ public class Rook extends Piece
     public Rook(Coordinate coordinate, Colour colour, PieceType type)
     {
         super(coordinate, colour, type);
-        //TODO colour == Colour.WHITE ? (pieceImage = Database.getWhiteImage) : (pieceImage = Database.getBlackImage);
     }
     
     /**

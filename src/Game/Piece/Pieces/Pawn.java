@@ -22,7 +22,6 @@ public class Pawn extends Piece
     public Pawn(Coordinate coordinate, Colour colour, PieceType type)
     {
         super(coordinate, colour, type);
-        //TODO colour == Colour.WHITE ? (pieceImage = Database.getWhiteImage) : (pieceImage = Database.getBlackImage);
     }
     
     /**
@@ -112,48 +111,52 @@ public class Pawn extends Piece
     
         //TODO Look for check and remove any squares which don't remove check
     
-        return DestinationsToMoves(PossibleDestinations, BoardArray, board);
+        return DestinationsToMoves(PossibleDestinations, board);
         
     }
-    
+
     /**
-     * TODO finish comment
      * If a pawn can move twice, check that its path is not obstructed, if so, don't allow it to move twice.
-     * @param BoardArray
-     * @param PossibleDestinations
-     * @return
+     * Pawns can each only move twice on their first move.
+     *
+     * @param BoardArray           a 2-dimensional array of squares to represent the board
+     * @param PossibleDestinations a List of squares which the pawn can move to
+     * @return a List of square objects which the pawn can move to after checking weather it is eligible to move two spaces
      */
-    private List<Square> CheckDoubleMoveCollision(Square[][] BoardArray, List<Square> PossibleDestinations)
-    {
-        if ((getPieceCoordinate().getRank() == 2) || (getPieceCoordinate().getRank() == 7))
-        {
+    private List<Square> CheckDoubleMoveCollision(Square[][] BoardArray, List<Square> PossibleDestinations) {
+        //TODO remove test print statements
+        if ((getPieceCoordinate().getRank() == 2) || (getPieceCoordinate().getRank() == 7)) {
             if (BoardArray[2][getPieceCoordinate().getFile() - 1].SquareOccupied()){
                 if (!BoardArray[3][getPieceCoordinate().getFile() - 1].SquareOccupied()){
                     System.out.println(BoardArray[3][getPieceCoordinate().getFile() - 1].ReturnCoordinate().CoordinateToNotation());
                     PossibleDestinations.remove(BoardArray[3][getPieceCoordinate().getFile() - 1]);
                 }
-            }
-            else if (BoardArray[5][getPieceCoordinate().getFile() - 1].SquareOccupied()) {
+            } else if (BoardArray[5][getPieceCoordinate().getFile() - 1].SquareOccupied()) {
                 if (!BoardArray[4][getPieceCoordinate().getFile() - 1].SquareOccupied()) {
                     System.out.println(BoardArray[4][getPieceCoordinate().getFile() - 1].ReturnCoordinate().CoordinateToNotation());
                     PossibleDestinations.remove(BoardArray[4][getPieceCoordinate().getFile() - 1]);
                 }
             }
         }
-        
+
         return PossibleDestinations;
     }
-    
-    //TODO comment
-    private List<Move> DestinationsToMoves(final List<Square> PossibleDestinations, final Square[][] BoardArray, final Board board)
-    {
+
+    /**
+     * Takes the possible destinations a piece can move to and converts these to move objects
+     *
+     * @param PossibleDestinations a List of squares which are available for the piece to move to
+     * @param board                an instance of the board class to access the enPassant Pawn and boardArray
+     * @return a List of valid moves
+     */
+    private List<Move> DestinationsToMoves(final List<Square> PossibleDestinations, final Board board) {
         List<Move> Moves = new ArrayList<>();
-        
+        Square[][] BoardArray = board.getBoardArray();
+
         for (Square square : PossibleDestinations) {
-            if ((board.getEnPassantPawn() != null) && (board.getEnPassantDestination().ReturnCoordinate().CompareCoordinates(square)))
-            {
+            if ((board.getEnPassantPawn() != null) && (board.getEnPassantDestination().ReturnCoordinate().CompareCoordinates(square))) {
                 Square EnPassantDestination = board.getEnPassantDestination();
-        
+
                 if (square.ReturnCoordinate().CompareCoordinates(EnPassantDestination)){
                     //En Passant Move
                     Moves.add(new Move.EnPassantMove(PieceCoordinate.GetSquareAt(BoardArray), square, board.getEnPassantPawn(),
@@ -190,10 +193,10 @@ public class Pawn extends Piece
             }
         }
     }
-    
+
     /**
      * The Pawn is much different from the other pieces, Unlike other pieces such as the rook where any of its destinations
-     * is being checked, The Pawn instead only checks the squares in front and diagonal to itself, So the
+     * is being checked, The Pawn instead only checks the squares in front-diagonal to itself, So the
      * 'CalculateValidMoves()' method cannot be used to find checked squares, because the forwards straight
      * move is not a checking move.
      * @return A list of squares Forwards and Diagonal to the Pawn

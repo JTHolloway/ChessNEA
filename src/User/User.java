@@ -14,7 +14,7 @@ public class User {
     private ImageIcon ProfilePicture;
 
     /**
-     * Constructor for a User
+     * Constructor for a new User with no profile picture
      *
      * @param userID     A Unique User Defined 4-digit Identification key
      * @param userName   A non-unique User Defined User name
@@ -36,7 +36,7 @@ public class User {
     }
 
     /**
-     * Constructor for a User
+     * Constructor for an existing User which has a profile picture
      *
      * @param userID     A Unique User Defined 4-digit Identification key
      * @param userName   A non-unique User Defined User name
@@ -61,11 +61,9 @@ public class User {
     public void setUserName(String userName) {
         UserName = userName;
     }
-
     public void setEmail(String email) {
         Email = email;
     }
-
     public void setName(String name) {
         Name = name;
     }

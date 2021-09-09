@@ -17,11 +17,17 @@ public class GUI_LoginScreen extends JFrame {
 
     private static JFrame This;
 
+    /**
+     * Constructor for a login screen
+     */
     public GUI_LoginScreen() {
         InitialiseComponents();
         This.setVisible(true);
     }
 
+    /**
+     * Initializes the components of the Login JPanel with each components properties.
+     */
     public void InitialiseComponents() {
         This = this;  //Done so that 'this' can be used when doing action listeners
 
@@ -109,7 +115,7 @@ public class GUI_LoginScreen extends JFrame {
         LOGIN_AS_GUEST.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                //TODO Guest login
             }
         });
 

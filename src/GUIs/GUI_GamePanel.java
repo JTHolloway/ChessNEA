@@ -13,15 +13,27 @@ public class GUI_GamePanel extends JPanel {
     private static Game game;
     private static GUI_BoardPanel boardPanel;
 
+    /**
+     * Constructor for Game JPanel which contains the board panel
+     *
+     * @param GameType     GameType Object for the type of game, Eg - VersesComputer
+     * @param PlayerColour The starting colour chosen by the player
+     */
     public GUI_GamePanel(GameType GameType, Colour PlayerColour) {
         game = new Game(GameType, PlayerColour, Repository.getCurrentUser());
         InitComponents();
     }
 
+    /**
+     * @return the Game object
+     */
     public static Game getGame() {
         return game;
     }
 
+    /**
+     * Initializes the components of the JPanel with each components properties.
+     */
     private void InitComponents() {
         boardPanel = new GUI_BoardPanel();
 

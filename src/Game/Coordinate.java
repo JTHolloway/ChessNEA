@@ -67,10 +67,16 @@ public class Coordinate {
         return XDisplacement == 0 && YDisplacement == 0;    //Coordinates are the same
     }
 
-    //Getter methods for file and rank coordinates
+    /**
+     * @return an integer of the X-Coordinate
+     */
     public int getFile() {
         return File;
     }
+
+    /**
+     * @return an integer of the  Y-Coordinate
+     */
     public int getRank() {
         return Rank;
     }

@@ -25,11 +25,36 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
     private JLabel MoreButton;
     private JLabel LogOutButton;
 
-
+    /**
+     * Constructor for the MainMenu, Calls the initialise method
+     */
     public GUI_MainJFrame() {
         Initialise();
     }
 
+    /**
+     * When method is called it sets the friends panel as visible and fills the table with the users friends.
+     * This method is called when the friendList button is pressed on the More Panel. This method is called from the GUI_MorePanel Class.
+     */
+    public static void FriendsPanelClicked() {
+        GUI_FriendsPanel.UpdateFriendsTable();
+
+        if (!FriendsPanel.isVisible()) {
+            FriendsPanel.setVisible(true);
+            AnalysisPanel.setVisible(false);
+            learnPanel.setVisible(false);
+
+            if (gamePanel != null) {
+                gamePanel.setVisible(false);
+            }
+            MorePanel.setVisible(false);
+            //TODO set other panels visibility to false
+        }
+    }
+
+    /**
+     * Initializes the JFrame and adds each component and JPanel.
+     */
     private void Initialise() {
         MainWindow = this;
 
@@ -334,6 +359,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         LogOutButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                //TODO call a logout method which sets the current user to null and saves the current users details into the database.
                 new GUI_LoginScreen();
                 MainWindow.dispose();
             }
@@ -372,21 +398,5 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         //endregion
 
         this.setVisible(true);
-    }
-
-    public static void FriendsPanelClicked() {
-        GUI_FriendsPanel.UpdateFriendsTable();
-
-        if (!FriendsPanel.isVisible()) {
-            FriendsPanel.setVisible(true);
-            AnalysisPanel.setVisible(false);
-            learnPanel.setVisible(false);
-
-            if (gamePanel != null) {
-                gamePanel.setVisible(false);
-            }
-            MorePanel.setVisible(false);
-            //TODO set other panels visibility to false
-        }
     }
 }

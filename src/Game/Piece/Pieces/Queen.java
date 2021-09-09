@@ -23,7 +23,6 @@ public class Queen extends Piece
     public Queen(Coordinate coordinate, Colour colour, PieceType type)
     {
         super(coordinate, colour, type);
-        //TODO colour == Colour.WHITE ? (pieceImage = Database.getWhiteImage) : (pieceImage = Database.getBlackImage);
     }
     
     /**

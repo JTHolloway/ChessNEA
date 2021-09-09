@@ -22,6 +22,11 @@ public class Repository {
     private static Connection connection;
     private static User currentUser;
 
+    /**
+     * gets a connection to the database so that SQL queries can be communicated
+     *
+     * @return a connection to the database
+     */
     public static Connection getConnection() {
         try {
             connection = DriverManager.getConnection("jdbc:ucanaccess://" + DatabaseLocation, "", "");
@@ -32,41 +37,24 @@ public class Repository {
         return null;
     }
 
+    /**
+     * @return the user which is currently logged in.
+     */
     public static User getCurrentUser() {
         return currentUser;
     }
 
-    public static void AddUser(String Password, int CountryIndex) {
-        String sql;
-        try {
-            sql =
-                    "INSERT INTO User(UserID, Username, Password, Email, FirstName, LastName, Country) " +
-                            "VALUES ('" + currentUser.getUserID() +
-                            "' , '" + currentUser.getUserName() +
-                            "' , '" + Utility.hashPassword(Password) +
-                            "' , '" + currentUser.getEmail().toLowerCase(Locale.ROOT) +
-                            "' , '" + currentUser.getName() +
-                            "' , '" + currentUser.getSurname() +
-                            "' , " + CountryIndex +
-                            ")";
-            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
-
-            sql =
-                    "INSERT INTO UserStats(UserID, JoinDate, LastPlayDate) " +
-                            "VALUES ('" + currentUser.getUserID() +
-                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
-                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
-                            "')";
-            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
-            connection.close();
-
-        } catch (Exception e) {
-            System.out.println("Error in the repository class: " + e);
-        }
+    /**
+     * Sets the current user which is logged in
+     *
+     * @param currentUser The User to be allocated as the CurrentUser
+     */
+    public static void setCurrentUser(User currentUser) {
+        Repository.currentUser = currentUser;
     }
 
 
-    //TODO fix getCurrentUsersFriends()
+    //TODO fix getCurrentUsersFriends() and comment
 //    public static ArrayList<User> getCurrentUsersFriends() {
 //        User friend = null;
 //        ArrayList<User> friends = new ArrayList<User>();
@@ -102,8 +90,46 @@ public class Repository {
 //        return friends;
 //    }
 
+    /**
+     * Adds a new user to the database after they have created an account
+     *
+     * @param Password     New users un-hashed password
+     * @param CountryIndex The Country Index which uniquely identifies the database record containing the users country
+     */
+    public static void AddUser(String Password, int CountryIndex) {
+        String sql;
+        try {
+            sql =
+                    "INSERT INTO User(UserID, Username, Password, Email, FirstName, LastName, Country) " +
+                            "VALUES ('" + currentUser.getUserID() +
+                            "' , '" + currentUser.getUserName() +
+                            "' , '" + Utility.hashPassword(Password) +
+                            "' , '" + currentUser.getEmail().toLowerCase(Locale.ROOT) +
+                            "' , '" + currentUser.getName() +
+                            "' , '" + currentUser.getSurname() +
+                            "' , " + CountryIndex +
+                            ")";
+            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+
+            sql =
+                    "INSERT INTO UserStats(UserID, JoinDate, LastPlayDate) " +
+                            "VALUES ('" + currentUser.getUserID() +
+                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                            "')";
+            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+            connection.close();
+
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+        }
+    }
+
+    /**
+     * @return a list of countries from the database to display on create account screen
+     */
     public static List<String> getCountriesFromDatabase() {
-        List<String> Countries = new ArrayList<String>();
+        List<String> Countries = new ArrayList<>();
 
         try {
 
@@ -122,6 +148,16 @@ public class Repository {
         return Countries;
     }
 
+    //TODO FIX LOGIN: Currently freezes the program
+
+    /**
+     * Search for user in the database before logging them in
+     *
+     * @param UserID   The users unique UserID tag
+     * @param Email    The users email
+     * @param Password Un-hashed entered password
+     * @return a boolean true/false depending on weather that user was found
+     */
     public static boolean UserFound(String UserID, String Email, String Password) {
         try {
 
@@ -145,6 +181,12 @@ public class Repository {
         }
     }
 
+    /**
+     * Once user has been validated this method is called which creates a new user object
+     * by fetching relevant data from the database
+     *
+     * @param UserID uniquely identifies the record which contains the user in the database
+     */
     public static void Login(String UserID) {
         try {
             String sql = "SELECT User.*, Country.CountryName, ProfilePictures.Picture " +
@@ -178,6 +220,12 @@ public class Repository {
         }
     }
 
+    /**
+     * Fetches data from the UserStats table within the database
+     *
+     * @param UserID Foreign Key which uniquely identifies the record which contains the user in the database
+     * @return a UserStats object containing information about the user
+     */
     private static UserStats getUserStats(String UserID) {
         try {
             Date Today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
@@ -213,8 +261,13 @@ public class Repository {
         }
     }
 
+    //TODO fix getting image from database
+
+    /**
+     * @return a List containing all UserIds assigned to each user
+     */
     public static List<String> getUserIds() {
-        List<String> UserId = new ArrayList<String>();
+        List<String> UserId = new ArrayList<>();
 
         try {
 
@@ -233,7 +286,14 @@ public class Repository {
         return UserId;
     }
 
-    //TODO fix getting image from database
+    /**
+     * This method fetches the png piece image from the database and converts it to a scaled ImageIcon
+     *
+     * @param SQL_Query The SQL to be executed which is unique to each piece
+     * @param Colour    The colour of the piece to identify its name in the database, eg - white
+     * @param Type      The type of piece to identify its name in thew database, eg - rook
+     * @return an ImageIcon of the piece image
+     */
     public static ImageIcon ReturnPieceImage(String SQL_Query, String Colour, String Type) {
         try {
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), SQL_Query);
@@ -258,9 +318,5 @@ public class Repository {
         }
 
         return null;
-    }
-
-    public static void setCurrentUser(User currentUser) {
-        Repository.currentUser = currentUser;
     }
 }

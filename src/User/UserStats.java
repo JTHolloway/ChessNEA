@@ -9,8 +9,8 @@ public class UserStats {
     private int Games;
     private int Wins;
     private int Losses;
-    private int Draws;
-    private Date JoinDate;
+    private final int Draws;
+    private final Date JoinDate;
     private Date LastOnline;
 
     /**

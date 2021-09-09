@@ -12,25 +12,23 @@ import Game.Piece.PieceType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class King extends Piece
-{
-    private boolean isChecked;
-    private boolean hasMoved;
-    private CastlingAvailability castlingAvailability;
-    
+public class King extends Piece {
+    private final boolean isChecked;
+    private final boolean hasMoved;
+    private final CastlingAvailability castlingAvailability;
+
     /**
      * Constructor for a king piece
+     *
      * @param coordinate A coordinate object identifying the tile coordinate of the piece
-     * @param colour The colour of a piece
-     * @param type The piece type which is inheriting from the piece class (King, Queen Bishop etc..)
+     * @param colour     The colour of a piece
+     * @param type       The piece type which is inheriting from the piece class (King, Queen Bishop etc..)
      */
-    public King(Coordinate coordinate, Colour colour, PieceType type)
-    {
+    public King(Coordinate coordinate, Colour colour, PieceType type) {
         super(coordinate, colour, type);
         this.isChecked = false;
         this.hasMoved = false;
         this.castlingAvailability = CastlingAvailability.Both;
-        //TODO colour == Colour.WHITE ? (pieceImage = Database.getWhiteImage) : (pieceImage = Database.getBlackImage);
     }
     
     /**
