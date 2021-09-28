@@ -61,15 +61,19 @@ public class User {
     public void setUserName(String userName) {
         UserName = userName;
     }
+
     public void setEmail(String email) {
         Email = email;
     }
+
     public void setName(String name) {
         Name = name;
     }
+
     public void setSurname(String surname) {
         Surname = surname;
     }
+
     public void setCountry(String country) {
         Country = country;
     }
@@ -78,21 +82,27 @@ public class User {
     public String getUserID() {
         return UserID;
     }
+
     public String getUserName() {
         return UserName;
     }
+
     public String getEmail() {
         return Email;
     }
+
     public String getName() {
         return Name;
     }
+
     public String getSurname() {
         return Surname;
     }
+
     public String getCountry() {
         return Country;
     }
+
     public UserStats getStatistics() {
         return Statistics;
     }

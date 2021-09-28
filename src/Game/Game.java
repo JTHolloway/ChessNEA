@@ -28,22 +28,20 @@ public class Game {
                 this.whitePlayer = new Player.Human(Colour.WHITE, null);
                 this.blackPlayer = new Player.Human(Colour.BLACK, user);
             }
-        }
-        else
-        {
-            if (SelectedColour == Colour.WHITE){
+        } else {
+            if (SelectedColour == Colour.WHITE) {
                 this.whitePlayer = new Player.Human(Colour.WHITE, user);
                 this.blackPlayer = new Player.Computer(Colour.BLACK);
-            }else {
+            } else {
                 this.whitePlayer = new Player.Computer(Colour.WHITE);
                 this.blackPlayer = new Player.Human(Colour.BLACK, user);
             }
         }
-        
+
         PlayerToMove = whitePlayer;
-        
+
     }
-    
+
     //TODO remove. this is a test
     public Game() {
         this.board = new Board();
@@ -84,7 +82,7 @@ public class Game {
                 new Square.OccupiedSquare(DestinationX, DestinationY, move.getMovedPiece());
         move.getMovedPiece().setPieceCoordinate(move.getEndPosition().ReturnCoordinate());
 
-        //todo if move was a capture then remopve captured peice from squyare
+        //todo if move was a capture then remove captured piece from square
 
         //TODO remove test
         System.out.println("\n");

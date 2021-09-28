@@ -55,11 +55,12 @@ public class GUI_BoardPanel extends JPanel {
                 tile.setBounds((j - 1) * (TileSize), this.getSize().height - (i * TileSize), TileSize, TileSize);
                 tile.setLayout(null);
 
-                JLabel PieceIcon = new JLabel();
-                PieceIcon.setSize(TileSize, TileSize);
-                PieceIcon.setIcon(tile.returnPiece().getPieceImage());
+                //TODO add pieces
+//                JLabel PieceIcon = new JLabel();
+//                PieceIcon.setSize(TileSize, TileSize);
+//                PieceIcon.setIcon(tile.returnPiece().getPieceImage());
 
-                tile.add(PieceIcon);
+//                tile.add(PieceIcon);
 
                 this.add(tile);
                 Tiles.add(tile);

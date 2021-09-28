@@ -167,6 +167,8 @@ public class Repository {
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
 
             if (rs.next()) {
+                rs.close();
+                connection.close();
                 return true;
             }
 

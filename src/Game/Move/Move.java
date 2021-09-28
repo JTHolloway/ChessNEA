@@ -3,8 +3,7 @@ package Game.Move;
 import Game.Board.Square;
 import Game.Piece.Piece;
 
-public abstract class Move
-{
+public abstract class Move {
 
     protected final Square StartPosition;
     protected final Square EndPosition;
@@ -12,11 +11,11 @@ public abstract class Move
 
     /**
      * Constructor for a move
+     *
      * @param startPosition Origin Square of piece
-     * @param endPosition Destination Square of piece
+     * @param endPosition   Destination Square of piece
      */
-    public Move(final Square startPosition, final Square endPosition)
-    {
+    public Move(final Square startPosition, final Square endPosition) {
         StartPosition = startPosition;
         EndPosition = endPosition;
         MovedPiece = StartPosition.ReturnPiece();
@@ -24,11 +23,11 @@ public abstract class Move
 
     /**
      * Converts a move to algebraic chess Notation
+     *
      * @return a String in chess notation
      * @// TODO: 13/07/2021 ToMoveNotation() method
      */
-    public String ToMoveNotation()
-    {
+    public String ToMoveNotation() {
         boolean Unambiguous;
         boolean Capture;
         return null;
@@ -73,25 +72,25 @@ public abstract class Move
     /**
      * Class for a Capturing move: A move in which an opponents piece was captured
      */
-    public static class CapturingMove extends Move
-    {
+    public static class CapturingMove extends Move {
 
         private final Piece CapturedPiece;
 
         /**
          * Constructor for a Capturing move. Calls super class constructor
+         *
          * @param startPosition Origin Square of piece
          * @param endPosition   Destination Square of piece
          * @param capturedPiece The piece object that was captured
          */
-        public CapturingMove(final Square startPosition, final Square endPosition, final Piece capturedPiece)
-        {
+        public CapturingMove(final Square startPosition, final Square endPosition, final Piece capturedPiece) {
             super(startPosition, endPosition);
             CapturedPiece = capturedPiece;
         }
 
         /**
          * Returns the piece that was captured
+         *
          * @return a Piece object of the captured piece
          */
         @Override
@@ -113,20 +112,20 @@ public abstract class Move
     /**
      * Class for a Regular move: A move in which no pieces are captured, the moving piece just changes position
      */
-    public static class RegularMove extends Move
-    {
+    public static class RegularMove extends Move {
         /**
          * Constructor for a Regular move. Calls super class constructor
+         *
          * @param startPosition Origin Square of piece
          * @param endPosition   Destination Square of piece
          */
-        public RegularMove(final Square startPosition, final Square endPosition)
-        {
+        public RegularMove(final Square startPosition, final Square endPosition) {
             super(startPosition, endPosition);
         }
-    
+
         /**
          * Returns the piece that was captured (If a piece was captured)
+         *
          * @return null
          */
         @Override
@@ -148,33 +147,34 @@ public abstract class Move
 
     /**
      * Class for a EnPassant move: A move in which an opponents piece pawn was captured when the pawn was an EnPassant pawn
+     *
      * @TODO Check if necessary
      */
-    public static class EnPassantMove extends Move
-    {
+    public static class EnPassantMove extends Move {
         private final Piece CapturedPiece;
         private final Square CapturedPieceLocation;
-        
+
         /**
          * Constructor for a En Passant move. Calls super class constructor
-         * @param startPosition Origin Square of piece
-         * @param endPosition   Destination Square of piece
-         * @param capturedPiece The piece object that was captured
+         *
+         * @param startPosition         Origin Square of piece
+         * @param endPosition           Destination Square of piece
+         * @param capturedPiece         The piece object that was captured
          * @param capturedPieceLocation The location of the captured piece (since, unlike a capturing move, the captured piece and
          *                              destination of the moving piece are not the same square)
          */
         public EnPassantMove(final Square startPosition,
                              final Square endPosition,
                              final Piece capturedPiece,
-                             final Square capturedPieceLocation)
-        {
+                             final Square capturedPieceLocation) {
             super(startPosition, endPosition);
             this.CapturedPiece = capturedPiece;
             this.CapturedPieceLocation = capturedPieceLocation;
         }
-        
+
         /**
          * Returns the piece that was captured
+         *
          * @return the captured Pawn
          */
         @Override

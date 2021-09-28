@@ -196,7 +196,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                 } else {
                     playerColour = Colour.WHITE;
                 }
-                System.out.println(type.toString() + " " + playerColour.toString());
+                System.out.println(type + " " + playerColour);
 
                 gamePanel = new GUI_GamePanel(type, playerColour);
                 gamePanel.setVisible(false);

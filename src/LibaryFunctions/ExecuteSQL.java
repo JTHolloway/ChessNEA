@@ -18,6 +18,7 @@ public class ExecuteSQL {
         try {
             Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = stmt.executeQuery(query);
+            stmt.close();
 
             return rs;
         } catch (Exception e) {

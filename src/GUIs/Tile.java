@@ -67,7 +67,7 @@ public abstract class Tile extends JPanel {
     }
 
 
-    public static class EmptyTile extends Tile{
+    public static class EmptyTile extends Tile {
 
         public EmptyTile(final Coordinate coordinate, final Colour colour) {
             super(coordinate, colour);
