@@ -82,4 +82,10 @@ public class Bishop extends Piece {
         return "B";
     }
 
+    /**
+     * @return Returns the Unicode character of the piece type.
+     */
+    public String ReturnPieceIcon() {
+        return "♝";
+    }
 }
