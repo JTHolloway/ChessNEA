@@ -77,5 +77,12 @@ public class King extends Piece {
         return "K";
     }
 
+    /**
+     * @return Returns the Unicode character of the piece type.
+     */
+    public String ReturnPieceIcon() {
+        return "♚";
+    }
+
     //TODO Check, CheckMate and StaleMate handling
 }

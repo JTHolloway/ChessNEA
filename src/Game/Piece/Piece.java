@@ -5,9 +5,7 @@ import Game.Board.Square;
 import Game.Colour;
 import Game.Coordinate;
 import Game.Move.Move;
-import LibaryFunctions.Repository;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,32 +14,23 @@ public abstract class Piece {
     protected Coordinate PieceCoordinate;
     protected final Colour colour;
     protected final PieceType type;
-    protected ImageIcon pieceImage;
 
     /**
      * Constructor for a piece
      *
      * @param PieceCoordinate A coordinate object identifying the tile coordinate of the piece
      * @param colour          The colour of a piece
-     * @param type            The piece type which is inheriting from the piece class (King, Queen Bishop etc..)
+     * @param type            The piece type which is inheriting from the piece class (King, Queen Bishop etc...)
      */
     public Piece(Coordinate PieceCoordinate, Colour colour, PieceType type) {
         this.PieceCoordinate = PieceCoordinate;
         this.colour = colour;
         this.type = type;
-        //TODO fetch image
-//        pieceImage = Repository.ReturnPieceImage("SELECT Pieces.PieceImage " +
-//                "FROM Pieces " +
-//                "WHERE Pieces.Description = '" + colour + " " + type + "'", colour.toString(), type.toString());
-//
-//        System.out.println("SELECT Pieces.PieceImage " +
-//                "FROM Pieces " +
-//                "WHERE Pieces.Description = '" + colour + " " + type + "'");
     }
 
     /**
      * Takes a board object and calculates the available moves of the current piece
-     * Takes into account that check may be present on the board etc..
+     * Takes into account that check may be present on the board etc...
      *
      * @param board An instance of the current board (which contains an array of squares)
      * @return a list of all available/legal moves (where move is a move object)
@@ -51,9 +40,11 @@ public abstract class Piece {
     /**
      * Converts the type of piece to its Notation equivalent
      *
-     * @return a String with the type notation (eg. Queen = Q)
+     * @return a String with the type notation (e.g. Queen = Q)
      */
     public abstract String PieceTypeToNotation();
+
+    public abstract String ReturnPieceIcon();
 
     /**
      * Checks to make sure all possible destinations can be accessed by checking if other pieces obstruct the path
@@ -74,7 +65,7 @@ public abstract class Piece {
             }
         }
 
-        //Loop back to find nearest path obstruction backwards
+        //Loop back to find the nearest path obstruction backwards
         int BackIndex = -1;
         for (int i = PiecePositionIndex; i >= 0; i--) {
             Square square = OneDimensionalArray.get(i);
@@ -86,7 +77,7 @@ public abstract class Piece {
             }
         }
 
-        //Loop through to find nearest path obstruction Forwards
+        //Loop through to find the nearest path obstruction Forwards
         int FrontIndex = -1;
         for (int i = PiecePositionIndex; i < OneDimensionalArray.size(); i++) {
             Square square = OneDimensionalArray.get(i);
@@ -177,12 +168,5 @@ public abstract class Piece {
      */
     public PieceType getType() {
         return type;
-    }
-
-    /**
-     * @return an ImageIcon of the displayed piece image
-     */
-    public ImageIcon getPieceImage() {
-        return pieceImage;
     }
 }

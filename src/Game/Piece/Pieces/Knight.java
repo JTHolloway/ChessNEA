@@ -70,4 +70,12 @@ public class Knight extends Piece {
     public String PieceTypeToNotation() {
         return "N";
     }
+
+    /**
+     * @return Returns the Unicode character of the piece type.
+     */
+    @Override
+    public String ReturnPieceIcon() {
+        return "♞";
+    }
 }

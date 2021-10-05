@@ -232,6 +232,14 @@ public class Pawn extends Piece {
         return "";
     }
 
+    /**
+     * @return Returns the Unicode character of the piece type.
+     */
+    @Override
+    public String ReturnPieceIcon() {
+        return "♟";
+    }
+
     //TODO pawn promotion handling
     //TODO double move handling
 }

@@ -65,4 +65,11 @@ public class Rook extends Piece {
         return "R";
     }
 
+    /**
+     * @return Returns the Unicode character of the piece type.
+     */
+    @Override
+    public String ReturnPieceIcon() {
+        return "♜";
+    }
 }
