@@ -17,7 +17,7 @@ public abstract class Piece {
     protected final Colour colour;
     protected final PieceType type;
     protected ImageIcon pieceImage;
-
+//f
     /**
      * Constructor for a piece
      *
