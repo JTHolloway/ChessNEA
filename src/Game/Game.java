@@ -5,6 +5,10 @@ import Game.Board.Square;
 import Game.Move.Move;
 import User.User;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Game {
     private final Player whitePlayer, blackPlayer;
     private final Board board;
@@ -88,6 +92,18 @@ public class Game {
         System.out.println("\n");
         board.PrintBoard();
     }
+
+    /**
+     * Finds all squares being checked by pieces of a given colour.
+     * @param CheckingPieceColour The colour of the pieces that you want to find the checked square of. Meaning if you want to check whether the black king is in check, this value
+     *                            would be Colour.WHITE because only white pieces can check a black king.
+     * @return A list of squares in check by the given pieces
+     * @todo finish method
+     */
+    public List<Square> LocateCheckedSquares (Colour CheckingPieceColour){
+        List<Square> CheckedSquares = new ArrayList<>();
+    }
+
 
     /**
      * @return the board
