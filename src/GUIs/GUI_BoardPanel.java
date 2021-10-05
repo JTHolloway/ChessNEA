@@ -55,22 +55,45 @@ public class GUI_BoardPanel extends JPanel {
                 tile.setBounds((j - 1) * (TileSize), this.getSize().height - (i * TileSize), TileSize, TileSize);
                 tile.setLayout(null);
 
-                //TODO add pieces
-//                JLabel PieceIcon = new JLabel();
-//                PieceIcon.setSize(TileSize, TileSize);
-//                PieceIcon.setIcon(tile.returnPiece().getPieceImage());
-
-//                tile.add(PieceIcon);
+                //todo remove********************************************
+                JLabel PieceIcon = new JLabel();
+                PieceIcon.setSize(TileSize, TileSize);
+                if (tile.isOccupied()){
+                    if (tile.returnPiece().getColour() == Colour.WHITE){
+                        PieceIcon.setForeground(new Color(247, 229, 195));
+                    }else PieceIcon.setForeground(new Color(59, 40, 4));
+                    String Icon = tile.returnPiece().ReturnPieceIcon();
+                    PieceIcon.setText(Icon);
+                    PieceIcon.setFont(new Font("", Font.PLAIN, TileSize));
+                    tile.add(PieceIcon);
+                }
+                //todo***************************************************
 
                 this.add(tile);
+
                 Tiles.add(tile);
                 colour = Colour.GetOtherColour(colour);
             }
         }
     }
 
-    //TODO init Pieces and comment
-//   private void InitialisePieces() {
-//
-//    }
+   private void InitialisePieces() {
+       int TileSize = (this.getSize().height) / 8;
+
+       JLabel PieceIcon = new JLabel();
+       PieceIcon.setSize(TileSize, TileSize);
+       //tile.add(PieceIcon);
+
+       for (Tile tile : Tiles) {
+           if (tile.isOccupied()){
+               if (tile.colour == Colour.BLACK){
+                   PieceIcon.setForeground(new Color(234, 182, 118));
+               }else PieceIcon.setForeground(new Color(148, 85, 9));
+               String Icon = tile.returnPiece().ReturnPieceIcon();
+               PieceIcon.setText(Icon);
+               PieceIcon.setFont(new Font("", Font.PLAIN, TileSize));
+               tile.add(PieceIcon);
+           }
+       }
+    }
 }
