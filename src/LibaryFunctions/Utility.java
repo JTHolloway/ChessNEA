@@ -52,13 +52,13 @@ public class Utility {
      */
     public static String hashPassword(String Password) {
         try {
-            MessageDigest Encrypt = MessageDigest.getInstance("SHA256");
+            MessageDigest Hash = MessageDigest.getInstance("SHA256");
 
-            Encrypt.update(Password.getBytes());
-            byte[] Encryption = Encrypt.digest();
+            Hash.update(Password.getBytes());
+            byte[] Hashed = Hash.digest();
 
             StringBuilder sb = new StringBuilder();
-            for (byte b : Encryption) {
+            for (byte b : Hashed) {
                 sb.append(String.format("%02x", b));
             }
 
@@ -141,6 +141,7 @@ public class Utility {
      * @return true if the String is filled (Not empty or blank)
      */
     public static boolean isNotBlankOrEmpty(String string) {
+        //todo add blank
         return !string.isEmpty();
     }
 
@@ -150,7 +151,6 @@ public class Utility {
      * @param email The Users unique email address
      * @return true if the email is in a correct format
      */
-    //TODO regex is from the internet, check if this is allowed
     public static boolean isEmailFormatValid(String email) {
         String regex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
