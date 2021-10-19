@@ -102,6 +102,7 @@ public class Game {
      */
     public List<Square> LocateCheckedSquares (Colour CheckingPieceColour){
         List<Square> CheckedSquares = new ArrayList<>();
+        return null;
     }
 
 
