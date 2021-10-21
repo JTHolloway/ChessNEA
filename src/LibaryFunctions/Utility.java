@@ -2,6 +2,7 @@ package LibaryFunctions;
 
 import Game.Board.Square;
 import Game.Colour;
+import User.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
