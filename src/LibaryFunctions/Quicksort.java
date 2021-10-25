@@ -3,16 +3,13 @@ package LibaryFunctions;
 import User.User;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class Quicksort {
 
     public static void quicksort(List<User> unsortedList, boolean sortByELO) {
         quicksort(unsortedList, 0, unsortedList.size() - 1, sortByELO);
-    }
-
-    private static void quicksort(List<User> unsortedList, int lowerBound, int upperBound) {
-        quicksort(unsortedList, 0, unsortedList.size() - 1, true);
     }
 
     private static void quicksort(List<User> unsortedList, int lowerBound, int upperBound, boolean sortByELO) {
@@ -59,8 +56,8 @@ public class Quicksort {
     }
 
     private static boolean alphaNumericComparison(List<User> unsortedList, int lowerBound, int loopIterator) {
-        String usernameAtIterator = unsortedList.get(loopIterator).getUserName();
-        String usernameAtLowerBound = unsortedList.get(lowerBound).getUserName();
+        String usernameAtIterator = unsortedList.get(loopIterator).getUserName().toLowerCase(Locale.ROOT);
+        String usernameAtLowerBound = unsortedList.get(lowerBound).getUserName().toLowerCase(Locale.ROOT);
 
         int compare = usernameAtIterator.compareTo(usernameAtLowerBound);
         return compare < 0;

@@ -181,6 +181,45 @@ public class Repository {
         }
     }
 
+
+    /**
+     * Fetches all users from the database and creates objects of each user
+     *
+     * @return a List of user objects from the database
+     */
+    public static List<User> getUsers() {
+        try {
+            //TODO get userstats and user details in same method
+            String sql = "SELECT User.*, Country.CountryName, ProfilePictures.Picture " +
+                    "FROM User, Country, ProfilePictures " +
+                    "WHERE Country.CountryID = User.Country " +
+                    "AND ProfilePictures.ID = User.ProfilePicture";
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+
+            List<User> users = new ArrayList<User>();
+
+            while (rs.next()) {
+
+                users.add(new User(
+                        rs.getString("UserID"),
+                        rs.getString("Username"),
+                        rs.getString("Email"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName"),
+                        rs.getString("CountryName"),
+                        getUserStats(rs.getString("UserID"))
+                ));
+            }
+            rs.close();
+            connection.close();
+            return users;
+
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+            return new ArrayList<User>();
+        }
+    }
+
     /**
      * Once user has been validated this method is called which creates a new user object
      * by fetching relevant data from the database
@@ -232,8 +271,6 @@ public class Repository {
                     "WHERE UserStats.UserID = '" + UserID + "' AND Rank.RankID = UserStats.RankID";
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
 
-            System.out.println(sql);
-
             UserStats stats = null;
             if (rs.next()) {
                 stats = (new UserStats(
@@ -257,8 +294,6 @@ public class Repository {
             return null;
         }
     }
-
-    //TODO fix getting image from database
 
     /**
      * @return a List containing all UserIds assigned to each user
