@@ -148,8 +148,6 @@ public class Repository {
         return Countries;
     }
 
-    //TODO FIX LOGIN: Currently freezes the program
-
     /**
      * Search for user in the database before logging them in
      *
@@ -195,10 +193,7 @@ public class Repository {
                     "FROM User, Country, ProfilePictures " +
                     "WHERE User.UserID = '" + UserID + "' AND Country.CountryID = User.Country " +
                     "AND ProfilePictures.ID = User.ProfilePicture";
-            System.out.println(sql);
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
-
-            System.out.println("it worked");
 
             if (rs.next()) {
                 byte[] byteArray = rs.getBytes("Picture");
