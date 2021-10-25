@@ -154,14 +154,15 @@ public class Repository {
      * @param UserID   The users unique UserID tag
      * @param Email    The users email
      * @param Password Un-hashed entered password
-     * @return a boolean true/false depending on weather that user was found
+     * @return a boolean true/false depending on whether that user was found
      */
     public static boolean UserFound(String UserID, String Email, String Password) {
         try {
 
             String sql = "SELECT User.UserID, User.Email, User.Password " +
                     "FROM User " +
-                    "WHERE User.UserID = '" + UserID + "' AND User.Email = '" + Email.toLowerCase(Locale.ROOT) + "' AND User.Password = '" + Utility.hashPassword(Password) + "'";
+                    "WHERE User.UserID = '" + UserID + "' AND User.Email = '" + Email.toLowerCase(Locale.ROOT) +
+                    "' AND User.Password = '" + Utility.hashPassword(Password) + "'";
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
 
             if (rs.next()) {

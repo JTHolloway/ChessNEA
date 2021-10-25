@@ -1,8 +1,6 @@
 package LibaryFunctions;
 
 import Game.Board.Square;
-import Game.Colour;
-import User.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -73,11 +71,6 @@ public class Utility {
         return "";
     }
 
-    //TODO SQL prevention or remove this function entirely (If so remove from objectives list on NEA)
-    public static String SQLInjectionPrevent() {
-        return null;
-    }
-
     /**
      * Checks that all details entered by a new user are correct, Not-taken, and that all text fields are filled in
      *
@@ -90,7 +83,6 @@ public class Utility {
      * @param ConfirmPassword The users un-hashed confirmation password
      * @return a boolean of whether the new users details are all valid or not.
      */
-    //TODO check that email is unique
     public static boolean CheckValidNewUser(String UserID, String Username, String Email, String Name,
                                             String Surname, String Password, String ConfirmPassword) {
         if (isNotBlankOrEmpty(UserID) && isUserIdAvailable(UserID) && UserID.length() == 4) {
@@ -143,8 +135,7 @@ public class Utility {
      * @return true if the String is filled (Not empty or blank)
      */
     public static boolean isNotBlankOrEmpty(String string) {
-        //todo add blank
-        return !string.isEmpty();
+        return !string.isEmpty() && !string.isBlank();
     }
 
     /**
