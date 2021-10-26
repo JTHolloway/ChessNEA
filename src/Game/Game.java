@@ -6,7 +6,6 @@ import Game.Move.Move;
 import User.User;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Game {
@@ -112,4 +111,7 @@ public class Game {
     public Board getBoard() {
         return board;
     }
+
+
+    //todo call UpdateuserStats method in repository class after each game and update a players ELO
 }

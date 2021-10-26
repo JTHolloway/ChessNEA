@@ -2,6 +2,7 @@ package GUIs;
 
 import Game.Colour;
 import Game.GameType;
+import LibaryFunctions.Repository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -359,7 +360,8 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         LogOutButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO call a logout method which sets the current user to null and saves the current users details into the database.
+                Repository.updateUsersStats();
+                Repository.setCurrentUser(null);
                 new GUI_LoginScreen();
                 MainWindow.dispose();
             }
