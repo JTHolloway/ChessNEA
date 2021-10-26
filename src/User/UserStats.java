@@ -9,7 +9,7 @@ public class UserStats {
     private int Games;
     private int Wins;
     private int Losses;
-    private final int Draws;
+    private int Draws;
     private final Date JoinDate;
     private Date LastOnline;
 
@@ -89,5 +89,13 @@ public class UserStats {
 
     public Date getLastOnline() {
         return LastOnline;
+    }
+
+    public int getDraws() {
+        return Draws;
+    }
+
+    public void setDraws(int draws) {
+        Draws = draws;
     }
 }

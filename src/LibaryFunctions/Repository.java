@@ -236,8 +236,9 @@ public class Repository {
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
 
             if (rs.next()) {
-                byte[] byteArray = rs.getBytes("Picture");
-                ImageIcon image = new ImageIcon(byteArray);
+                //todo fetch profile image
+//                byte[] byteArray = rs.getBytes("Picture");
+//                ImageIcon image = new ImageIcon(byteArray);
 
                 setCurrentUser(new User(
                         rs.getString("UserID"),
@@ -246,8 +247,8 @@ public class Repository {
                         rs.getString("FirstName"),
                         rs.getString("LastName"),
                         rs.getString("CountryName"),
-                        getUserStats(UserID),
-                        image
+                        getUserStats(UserID)
+                        //,image
                 ));
             }
             rs.close();
@@ -293,6 +294,24 @@ public class Repository {
         } catch (Exception e) {
             System.out.println("Error in the repository class: " + e);
             return null;
+        }
+    }
+
+    public static void updateUsersStats() {
+        String sql;
+        Date Today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+        try {
+            sql =
+                    "UPDATE UserStats " +
+                            "SET ELO = " + currentUser.getStatistics().getELO() + ", " +
+                            "Wins = " + currentUser.getStatistics().getWins() + ", " +
+                            "Losses = " + currentUser.getStatistics().getLosses() + ", " +
+                            "Draws = " + currentUser.getStatistics().getDraws() + ", " +
+                            "LastPlayDate = '" + Today +
+                            "' WHERE UserID = '" + currentUser.getUserID() + "'";
+            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
         }
     }
 
