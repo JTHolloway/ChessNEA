@@ -1,6 +1,7 @@
 package LibaryFunctions;
 
 import Game.Board.Square;
+import Game.GameOutcome;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -173,11 +174,11 @@ public class Utility {
      * Updates the ELO of a player based on their current rank, opponents rank, and game outcome
      * @param ELO_of_Player The current ELO rank of the player which rank needs to be updated after a game
      * @param ELO_of_Opponent The ELO score of the opponent the player played against
-     * @param GameOutcome The outcome of the game, Such as a win, loss or draw. (Win = 1, Loss = 0, Draw = 0.5)
+     * @param gameOutcome The outcome of the game, Such as a win, loss or draw.
      * @return a rounded integer of the players new ELO, this could be less than or more than their original ELO
      * depending on the game outcome
      */
-    public static int CalculateNew_ELO(int ELO_of_Player, int ELO_of_Opponent, double GameOutcome) {
+    public static int CalculateNew_ELO(int ELO_of_Player, int ELO_of_Opponent, GameOutcome gameOutcome) {
 
         double ExpectedScore_Player = 1 / (1 + (Math.pow(10, (double)(ELO_of_Opponent - ELO_of_Player) / 400)));
         int K_Factor;
@@ -186,6 +187,6 @@ public class Utility {
         else if (ELO_of_Player > 2100) K_Factor = 24;
         else K_Factor = 32;
 
-        return (int) Math.round(ELO_of_Player + (K_Factor * (GameOutcome - ExpectedScore_Player)));
+        return (int) Math.round(ELO_of_Player + (K_Factor * (GameOutcome.valueOf(gameOutcome) - ExpectedScore_Player)));
     }
 }
