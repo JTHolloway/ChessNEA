@@ -6,10 +6,7 @@ import User.UserStats;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -297,19 +294,27 @@ public class Repository {
         }
     }
 
+    /**
+     * //todo comment
+     */
     public static void updateUsersStats() {
-        String sql;
         Date Today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
         try {
-            sql =
-                    "UPDATE UserStats " +
-                            "SET ELO = " + currentUser.getStatistics().getELO() + ", " +
-                            "Wins = " + currentUser.getStatistics().getWins() + ", " +
-                            "Losses = " + currentUser.getStatistics().getLosses() + ", " +
-                            "Draws = " + currentUser.getStatistics().getDraws() + ", " +
-                            "LastPlayDate = '" + Today +
-                            "' WHERE UserID = '" + currentUser.getUserID() + "'";
-            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+            PreparedStatement stmt = connection.prepareStatement("UPDATE UserStats " +
+                    "SET ELO = ?, " +
+                    "Wins = ?, " +
+                    "Losses = ?, " +
+                    "Draws = ?, " +
+                    "LastPlayDate = ? " +
+                    "WHERE UserID = ?");
+            stmt.setInt(1, currentUser.getStatistics().getELO());
+            stmt.setInt(2, currentUser.getStatistics().getWins());
+            stmt.setInt(3, currentUser.getStatistics().getLosses());
+            stmt.setInt(4, currentUser.getStatistics().getDraws());
+            stmt.setDate(5, Today);
+            stmt.setString(6, currentUser.getUserID());
+
+            ExecuteSQL.executeUpdateQuery(getConnection(), stmt);
         } catch (Exception e) {
             System.out.println("Error in the repository class: " + e);
         }

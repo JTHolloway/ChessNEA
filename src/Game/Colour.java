@@ -11,11 +11,11 @@ public enum Colour {
     /**
      * Gets the other colour that the one passed in. Used for allocating player colours.
      *
-     * @param c the Initial colour
+     * @param colour the Initial colour
      * @return the other colour which was not passed into the method
      */
-    public static Colour GetOtherColour(Colour c) {
-        if (c == WHITE) {
+    public static Colour GetOtherColour(Colour colour) {
+        if (colour == WHITE) {
             return BLACK;
         } else return WHITE;
     }
