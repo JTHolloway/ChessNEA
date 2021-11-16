@@ -46,7 +46,7 @@ public class Rook extends Piece {
         PossibleDestinations.addAll(Column);
         PossibleDestinations.addAll(Row);
 
-        //TODO Look for check and remove any squares which don't remove check
+        //TODO Look for check and remove any squares which don't remove check. Cannot move to a square containing a king
 
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class Quicksort {
+public final class Quicksort {
 
     /**
      * Calls the main quicksort method

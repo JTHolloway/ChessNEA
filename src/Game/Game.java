@@ -3,6 +3,8 @@ package Game;
 import Game.Board.Board;
 import Game.Board.Square;
 import Game.Move.Move;
+import Game.Piece.PieceType;
+import LibaryFunctions.Utility;
 import User.User;
 
 import java.util.ArrayList;
@@ -94,6 +96,7 @@ public class Game {
 
     /**
      * Finds all squares being checked by pieces of a given colour.
+     * The King can be checked from any diagonal, horizontal and vertical as well as on each L-Shape originating from the king (For knight checks)
      * @param CheckingPieceColour The colour of the pieces that you want to find the checked square of. Meaning if you want to check whether the black king is in check, this value
      *                            would be Colour.WHITE because only white pieces can check a black king.
      * @return A list of squares in check by the given pieces
@@ -101,7 +104,24 @@ public class Game {
      */
     public List<Square> LocateCheckedSquares (Colour CheckingPieceColour){
         List<Square> CheckedSquares = new ArrayList<>();
-        return null;
+
+        for (Square[] row : board.getBoardArray()){
+            for (Square square : row){
+                if (square.SquareOccupied()){
+                    if (square.ReturnPiece().getColour() == CheckingPieceColour){
+
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean isKingChecked(){
+
+    }
+
+    public boolean isKingCheckmated(){
+
     }
 
 
@@ -114,4 +134,48 @@ public class Game {
 
 
     //todo call UpdateuserStats method in repository class after each game and update a players ELO
+
+
+//
+//    Square kingLocation = null;
+//
+//    //Locate Checked King
+//    A: for (Square[] row : board.getBoardArray()){
+//        for (Square square : row){
+//            if (square.SquareOccupied()){
+//                if (square.ReturnPiece().getType() == PieceType.KING &&
+//                        square.ReturnPiece().getColour() == Colour.GetOtherColour(CheckingPieceColour)){
+//                    kingLocation = square;
+//                    break A;
+//                }
+//            }
+//        }
+//    }
+//
+//    //Locate opposing pieces on the same row
+//    List<Square> row = Utility.ArrayToRow(board.getBoardArray(), kingLocation);
+//        for (Square square : row){
+//        if (square.SquareOccupied()){
+//            if (square.ReturnPiece().getColour() == CheckingPieceColour && square.ReturnPiece().getType() != PieceType.PAWN){
+//                for (Move move : square.ReturnPiece().CalculateValidMoves(board)) {
+//                    CheckedSquares.add(move.getEndPosition());
+//                }
+//            }
+//        }
+//    }
+//
+//    //Locate opposing pieces on the same Column
+//    List<Square> column = Utility.ArrayToColumn(board.getBoardArray(), kingLocation);
+//        for (Square square : column){
+//        if (square.SquareOccupied()){
+//            if (square.ReturnPiece().getColour() == CheckingPieceColour && square.ReturnPiece().getType() != PieceType.PAWN){
+//                for (Move move : square.ReturnPiece().CalculateValidMoves(board)) {
+//                    CheckedSquares.add(move.getEndPosition());
+//                }
+//            }
+//        }
+//    }
+//
+//    //Locate opposing pieces on L-Shape Knight Paths
+
 }
