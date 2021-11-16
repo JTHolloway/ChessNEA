@@ -111,6 +111,12 @@ public class Game {
         int[] horizontalDirections = {-1, -1, -1, 0, 0, 1, 1, 1};
         int[] verticalDirections = {-1, 0, 1, -1, 1, -1, 0, 1};
 
+        boolean[] bishopAttackingCapabilities = {true, false, true, false, false, true, false, true};
+        boolean[] rookAttackingCapabilities = {false, true, false, true, true, false, true, false};
+
+        int file = ThreatenedSquare.ReturnCoordinate().getFile();
+        int rank = ThreatenedSquare.ReturnCoordinate().getRank();
+
         for (int i = 0; i < 8; i++){
 
         }
