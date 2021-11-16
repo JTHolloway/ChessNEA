@@ -108,6 +108,9 @@ public class Game {
     }
 
     public static boolean isThreatenedSquare(Colour ThreatenedColour, Square ThreatenedSquare){
+
+        boolean isThreatened = false;
+
         int[] horizontalDirections = {-1, -1, -1, 0, 0, 1, 1, 1};
         int[] verticalDirections = {-1, 0, 1, -1, 1, -1, 0, 1};
 
@@ -117,7 +120,7 @@ public class Game {
         int file = ThreatenedSquare.ReturnCoordinate().getFile();
         int rank = ThreatenedSquare.ReturnCoordinate().getRank();
 
-        for (int i = 0; i < 8; i++){
+        for (int DirectionIndex = 0; DirectionIndex < 8 && !isThreatened; DirectionIndex++){
 
         }
 
