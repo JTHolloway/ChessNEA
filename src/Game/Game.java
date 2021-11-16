@@ -100,20 +100,22 @@ public class Game {
      * @param CheckingPieceColour The colour of the pieces that you want to find the checked square of. Meaning if you want to check whether the black king is in check, this value
      *                            would be Colour.WHITE because only white pieces can check a black king.
      * @return A list of squares in check by the given pieces
-     * @todo finish method
+     * @todo finish method and redo comment
      */
     public List<Square> LocateCheckedSquares (Colour CheckingPieceColour){
         List<Square> CheckedSquares = new ArrayList<>();
 
-        for (Square[] row : board.getBoardArray()){
-            for (Square square : row){
-                if (square.SquareOccupied()){
-                    if (square.ReturnPiece().getColour() == CheckingPieceColour){
+    }
 
-                    }
-                }
-            }
+    public static boolean isThreatenedSquare(Colour ThreatenedColour, Square ThreatenedSquare){
+        int[] horizontalDirections = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] verticalDirections = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+        for (int i = 0; i < 8; i++){
+
         }
+
+
     }
 
     public boolean isKingChecked(){
