@@ -3,7 +3,9 @@ package Game;
 import Game.Board.Board;
 import Game.Board.Square;
 import Game.Move.Move;
+import Game.Piece.Piece;
 import Game.Piece.PieceType;
+import Game.Piece.Pieces.*;
 import LibaryFunctions.Utility;
 import User.User;
 
@@ -107,24 +109,85 @@ public class Game {
 
     }
 
-    public static boolean isThreatenedSquare(Colour ThreatenedColour, Square ThreatenedSquare){
+    /**
+     *
+     * @param ThreatenedColour
+     * @param ThreatenedSquare
+     * @return
+     */
+    public boolean isThreatenedSquare(Colour ThreatenedColour, Square ThreatenedSquare){
 
-        boolean isThreatened = false;
+        final int file = ThreatenedSquare.ReturnCoordinate().getFile() - 1;
+        final int rank = ThreatenedSquare.ReturnCoordinate().getRank() - 1;
 
-        int[] horizontalDirections = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int[] verticalDirections = {-1, 0, 1, -1, 1, -1, 0, 1};
+        //Knight checks
+        int[] knightHorizontalDirections = {-1, -2, -2, -1, 1, 2, 2, 1};
+        int[] knightVerticalDirections = {-2, -1, 1, 2, -2, -1, 1, 2};
 
-        boolean[] bishopAttackingCapabilities = {true, false, true, false, false, true, false, true};
-        boolean[] rookAttackingCapabilities = {false, true, false, true, true, false, true, false};
-
-        int file = ThreatenedSquare.ReturnCoordinate().getFile();
-        int rank = ThreatenedSquare.ReturnCoordinate().getRank();
-
-        for (int DirectionIndex = 0; DirectionIndex < 8 && !isThreatened; DirectionIndex++){
-
+        for (int DirectionIndex = 0; DirectionIndex < 8; DirectionIndex++){
+            //TODO Knight
         }
 
 
+        //Other Piece Checks
+        int[] regularHorizontalDirections = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] regularVerticalDirections = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+        for (int DirectionIndex = 0; DirectionIndex < 8; DirectionIndex++){
+            int currentFile = file;
+            int currentRank = rank;
+
+            int loop = 0;
+            while (currentFile >= 0 && currentFile <= 7 || currentRank >= 0 && currentRank <= 7){
+                currentFile = currentFile + regularHorizontalDirections[DirectionIndex];
+                currentRank = currentRank + regularVerticalDirections[DirectionIndex];
+
+                if (board.getBoardArray()[currentRank][currentFile].SquareOccupied()){
+                    Piece threateningPiece = board.getBoardArray()[currentRank][currentFile].ReturnPiece();
+
+                    if (threateningPiece.getColour() != ThreatenedColour)
+                    {
+                        //Queen, Bishop and Rook checks
+                        if (threateningPiece instanceof Queen){
+                            return true;
+
+                        } else if (threateningPiece instanceof Bishop){
+                            boolean[] bishopAttackingCapabilities = {true, false, true, false, false, true, false, true};
+                            if (bishopAttackingCapabilities[DirectionIndex]){
+                                return true;
+                            }
+
+                        }else if(threateningPiece instanceof Rook){
+                            boolean[] rookAttackingCapabilities = {false, true, false, true, true, false, true, false};
+                            if (rookAttackingCapabilities[DirectionIndex]){
+                                return true;
+                            }
+                        } else {
+
+                            /*
+                        King and Pawn checks:
+                        If loop = 0 then the current square being checked is directly adjacent to the origin (threatened) square
+                         */
+                            if (loop == 0){
+                                if (threateningPiece instanceof King){
+                                    return true;
+                                }
+                                else if (threateningPiece instanceof Pawn) {
+                                    boolean validDirection = threateningPiece.getColour() == Colour.BLACK;
+                                    boolean[] pawnAttackingCapabilities = {validDirection, false, validDirection, false, false,
+                                            !validDirection, false, !validDirection};
+                                    if (pawnAttackingCapabilities[DirectionIndex]){
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                loop++;
+            }
+        }
+        return false;
     }
 
     public boolean isKingChecked(){
@@ -132,6 +195,10 @@ public class Game {
     }
 
     public boolean isKingCheckmated(){
+
+    }
+
+    public boolean isStalemate(){
 
     }
 

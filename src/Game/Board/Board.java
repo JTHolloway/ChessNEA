@@ -22,6 +22,7 @@ public class Board {
     /**
      * Sets up a new board array and puts all pieces into their start locations
      * Creates all piece objects
+     * BoardArray[Y-Coord][X-Coord]
      */
     public void InitialiseBoard() {
         //Initialise White Special Pieces
