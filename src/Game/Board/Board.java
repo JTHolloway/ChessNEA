@@ -136,9 +136,9 @@ public class Board {
                     if (getBoardArray()[i][j].ReturnPiece().getColour() == Colour.BLACK) {
                         s = s.toLowerCase();
                     }
-                    System.out.print(s);
+                    System.out.print("["+s+"]");
                 } else {
-                    System.out.print(" ");
+                    System.out.print("[ ]");
                 }
             }
             System.out.println();

@@ -106,7 +106,7 @@ public class Game {
      */
     public List<Square> LocateCheckedSquares (Colour CheckingPieceColour){
         List<Square> CheckedSquares = new ArrayList<>();
-
+        return null;
     }
 
     /**
@@ -137,12 +137,16 @@ public class Game {
             int currentFile = file;
             int currentRank = rank;
 
-            int loop = 0;
+            int loop = -1;
             while (currentFile >= 0 && currentFile <= 7 || currentRank >= 0 && currentRank <= 7){
+                loop++;
                 currentFile = currentFile + regularHorizontalDirections[DirectionIndex];
                 currentRank = currentRank + regularVerticalDirections[DirectionIndex];
 
-                if (board.getBoardArray()[currentRank][currentFile].SquareOccupied()){
+                if (currentFile > 7 || currentFile < 0 || currentRank > 7 || currentRank < 0){
+                    break;
+                }
+                else if (board.getBoardArray()[currentRank][currentFile].SquareOccupied()){
                     Piece threateningPiece = board.getBoardArray()[currentRank][currentFile].ReturnPiece();
 
                     if (threateningPiece.getColour() != ThreatenedColour)
@@ -183,23 +187,23 @@ public class Game {
                             }
                         }
                     }
+                    break;
                 }
-                loop++;
             }
         }
         return false;
     }
 
     public boolean isKingChecked(){
-
+        return false;
     }
 
     public boolean isKingCheckmated(){
-
+        return false;
     }
 
     public boolean isStalemate(){
-
+        return false;
     }
 
 
