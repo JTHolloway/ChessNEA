@@ -199,11 +199,13 @@ public class Game {
 
     public boolean isKingCheckmated(Piece king){
         if (isKingChecked(king)){
-
+            return king.CalculateValidMoves(board).isEmpty();
         }
+        return false;
     }
 
     public boolean isStalemate(){
+        //todo user cannot make any moves whatsoever so results in a draw
         return false;
     }
 
