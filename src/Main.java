@@ -113,6 +113,26 @@ public class Main {
         }
         g.MakeMove(moves.get(0));
         System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8))));
+
+        System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+        moves = g.getBoard().ReturnSquare(new Coordinate(8, 2)).ReturnPiece().CalculateValidMoves(g.getBoard());
+        g.MakeMove(moves.get(0));
+        System.out.println("IS C4 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(3, 4))));
+
+        System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+        moves = g.getBoard().ReturnSquare(new Coordinate(2, 1)).ReturnPiece().CalculateValidMoves(g.getBoard());
+        g.MakeMove(moves.get(0));
+        System.out.println("IS A5 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(1, 5))));
+
+        System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+        moves = g.getBoard().ReturnSquare(new Coordinate(1, 3)).ReturnPiece().CalculateValidMoves(g.getBoard());
+        g.MakeMove(moves.get(1));
+        System.out.println("IS A5 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(1, 5))));
+
+        System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+        moves = g.getBoard().ReturnSquare(new Coordinate(2, 2)).ReturnPiece().CalculateValidMoves(g.getBoard());
+        g.MakeMove(moves.get(1));
+        System.out.println("IS A5 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(1, 5))));
     }
 
 }

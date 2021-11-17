@@ -97,19 +97,6 @@ public class Game {
     }
 
     /**
-     * Finds all squares being checked by pieces of a given colour.
-     * The King can be checked from any diagonal, horizontal and vertical as well as on each L-Shape originating from the king (For knight checks)
-     * @param CheckingPieceColour The colour of the pieces that you want to find the checked square of. Meaning if you want to check whether the black king is in check, this value
-     *                            would be Colour.WHITE because only white pieces can check a black king.
-     * @return A list of squares in check by the given pieces
-     * @todo finish method and redo comment
-     */
-    public List<Square> LocateCheckedSquares (Colour CheckingPieceColour){
-        List<Square> CheckedSquares = new ArrayList<>();
-        return null;
-    }
-
-    /**
      *
      * @param ThreatenedColour
      * @param ThreatenedSquare
@@ -125,7 +112,18 @@ public class Game {
         int[] knightVerticalDirections = {-2, -1, 1, 2, -2, -1, 1, 2};
 
         for (int DirectionIndex = 0; DirectionIndex < 8; DirectionIndex++){
-            //TODO Knight
+            int currentFile = file + knightHorizontalDirections[DirectionIndex];
+            int currentRank = rank + knightVerticalDirections[DirectionIndex];
+
+            if ((currentFile <= 7 && currentFile >= 0) && (currentRank <= 7 && currentRank >= 0)){
+                if (board.getBoardArray()[currentRank][currentFile].SquareOccupied())
+                {
+                    Piece threateningPiece = board.getBoardArray()[currentRank][currentFile].ReturnPiece();
+                    if(threateningPiece instanceof Knight && threateningPiece.getColour() != ThreatenedColour){
+                        return true;
+                    }
+                }
+            }
         }
 
 
@@ -138,7 +136,7 @@ public class Game {
             int currentRank = rank;
 
             int loop = -1;
-            while (currentFile >= 0 && currentFile <= 7 || currentRank >= 0 && currentRank <= 7){
+            while (loop < 8){
                 loop++;
                 currentFile = currentFile + regularHorizontalDirections[DirectionIndex];
                 currentRank = currentRank + regularVerticalDirections[DirectionIndex];
@@ -194,12 +192,15 @@ public class Game {
         return false;
     }
 
-    public boolean isKingChecked(){
-        return false;
+    //TODO comment and check whether it is suitable to store the location of the kings
+    public boolean isKingChecked(Piece king){
+        return isThreatenedSquare(king.getColour(), king.getPieceCoordinate().GetSquareAt(board.getBoardArray()));
     }
 
-    public boolean isKingCheckmated(){
-        return false;
+    public boolean isKingCheckmated(Piece king){
+        if (isKingChecked(king)){
+
+        }
     }
 
     public boolean isStalemate(){
@@ -218,7 +219,6 @@ public class Game {
     //todo call UpdateuserStats method in repository class after each game and update a players ELO
 
 
-//
 //    Square kingLocation = null;
 //
 //    //Locate Checked King
@@ -233,31 +233,4 @@ public class Game {
 //            }
 //        }
 //    }
-//
-//    //Locate opposing pieces on the same row
-//    List<Square> row = Utility.ArrayToRow(board.getBoardArray(), kingLocation);
-//        for (Square square : row){
-//        if (square.SquareOccupied()){
-//            if (square.ReturnPiece().getColour() == CheckingPieceColour && square.ReturnPiece().getType() != PieceType.PAWN){
-//                for (Move move : square.ReturnPiece().CalculateValidMoves(board)) {
-//                    CheckedSquares.add(move.getEndPosition());
-//                }
-//            }
-//        }
-//    }
-//
-//    //Locate opposing pieces on the same Column
-//    List<Square> column = Utility.ArrayToColumn(board.getBoardArray(), kingLocation);
-//        for (Square square : column){
-//        if (square.SquareOccupied()){
-//            if (square.ReturnPiece().getColour() == CheckingPieceColour && square.ReturnPiece().getType() != PieceType.PAWN){
-//                for (Move move : square.ReturnPiece().CalculateValidMoves(board)) {
-//                    CheckedSquares.add(move.getEndPosition());
-//                }
-//            }
-//        }
-//    }
-//
-//    //Locate opposing pieces on L-Shape Knight Paths
-
 }
