@@ -59,16 +59,16 @@ public class Main {
 
         System.out.println("\n");
         g.getBoard().PrintBoard();
-        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8))));
+        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8)), g.getBoard()));
 
         moves = g.getBoard().ReturnSquare(new Coordinate(5, 2)).ReturnPiece().CalculateValidMoves(g.getBoard());
         g.MakeMove(moves.get(1));
-        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8))));
+        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8)), g.getBoard()));
 
         System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
         moves = g.getBoard().ReturnSquare(new Coordinate(4, 1)).ReturnPiece().CalculateValidMoves(g.getBoard());
         g.MakeMove(moves.get(3));
-        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8))));
+        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8)), g.getBoard()));
 
         System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
 
@@ -86,18 +86,18 @@ public class Main {
         }
 
         g.MakeMove(moves.get(5));
-        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8))));
+        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8)), g.getBoard()));
 
 
         System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
         moves = g.getBoard().ReturnSquare(new Coordinate(5, 4)).ReturnPiece().CalculateValidMoves(g.getBoard());
         g.MakeMove(moves.get(0));
-        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8))));
+        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8)), g.getBoard()));
 
         System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
         moves = g.getBoard().ReturnSquare(new Coordinate(5, 5)).ReturnPiece().CalculateValidMoves(g.getBoard());
         g.MakeMove(moves.get(0));
-        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8))));
+        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8)), g.getBoard()));
 
         System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
         moves = g.getBoard().ReturnSquare(new Coordinate(5, 6)).ReturnPiece().CalculateValidMoves(g.getBoard());
@@ -112,27 +112,63 @@ public class Main {
             }
         }
         g.MakeMove(moves.get(0));
-        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8))));
+        System.out.println("IS BLACK CHECKED: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(5, 8)), g.getBoard()));
 
         System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
         moves = g.getBoard().ReturnSquare(new Coordinate(8, 2)).ReturnPiece().CalculateValidMoves(g.getBoard());
         g.MakeMove(moves.get(0));
-        System.out.println("IS C4 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(3, 4))));
+        System.out.println("IS C4 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(3, 4)), g.getBoard()));
 
         System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
         moves = g.getBoard().ReturnSquare(new Coordinate(2, 1)).ReturnPiece().CalculateValidMoves(g.getBoard());
         g.MakeMove(moves.get(0));
-        System.out.println("IS A5 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(1, 5))));
+        System.out.println("IS A5 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(1, 5)), g.getBoard()));
 
         System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
         moves = g.getBoard().ReturnSquare(new Coordinate(1, 3)).ReturnPiece().CalculateValidMoves(g.getBoard());
         g.MakeMove(moves.get(1));
-        System.out.println("IS A5 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(1, 5))));
+        System.out.println("IS A5 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(1, 5)), g.getBoard()));
 
         System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
         moves = g.getBoard().ReturnSquare(new Coordinate(2, 2)).ReturnPiece().CalculateValidMoves(g.getBoard());
         g.MakeMove(moves.get(1));
-        System.out.println("IS A5 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(1, 5))));
+        System.out.println("IS A5 a threat to black: " + g.isThreatenedSquare(Colour.BLACK, g.getBoard().ReturnSquare(new Coordinate(1, 5)), g.getBoard()));
+        System.out.println("Checked?: "+g.isKingChecked(Colour.BLACK));
+        System.out.println("Check Mate?: "+g.isKingCheckmated(Colour.BLACK));
+
+        System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+        moves = g.getBoard().ReturnSquare(new Coordinate(6, 7)).ReturnPiece().CalculateValidMoves(g.getBoard());
+        for (Move m : moves) {
+            if (m.wasCapture()) {
+                System.out.println(m.getMovedPiece().getColour() + " " + m.getMovedPiece().getType() + ", " + m.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
+                        m.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", " + m.getCapturedPiece().getType() + ", " + m.getCapturedPiece().getColour() + ", " +
+                        m.getCapturedPiece().getPieceCoordinate().CoordinateToNotation());
+            } else {
+                System.out.println(m.getMovedPiece().getColour() + " " + m.getMovedPiece().getType() + ", " + m.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
+                        m.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", NULL");
+            }
+        }
+        g.MakeMove(moves.get(4));
+        System.out.println("Checked?: "+g.isKingChecked(Colour.BLACK));
+        System.out.println("Check Mate?: "+g.isKingCheckmated(Colour.BLACK));
+
+        System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+        moves = g.getBoard().ReturnSquare(new Coordinate(3, 4)).ReturnPiece().CalculateValidMoves(g.getBoard());
+        for (Move m : moves) {
+            if (m.wasCapture()) {
+                System.out.println(m.getMovedPiece().getColour() + " " + m.getMovedPiece().getType() + ", " + m.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
+                        m.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", " + m.getCapturedPiece().getType() + ", " + m.getCapturedPiece().getColour() + ", " +
+                        m.getCapturedPiece().getPieceCoordinate().CoordinateToNotation());
+            } else {
+                System.out.println(m.getMovedPiece().getColour() + " " + m.getMovedPiece().getType() + ", " + m.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
+                        m.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", NULL");
+            }
+        }
+        g.MakeMove(moves.get(4));
+        System.out.println("Checked?: "+g.isKingChecked(Colour.BLACK));
+        System.out.println("Check Mate?: "+g.isKingCheckmated(Colour.BLACK));
+
+
     }
 
 }
