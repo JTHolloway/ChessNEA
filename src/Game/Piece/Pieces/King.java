@@ -5,6 +5,7 @@ import Game.Board.Square;
 import Game.CastlingAvailability;
 import Game.Colour;
 import Game.Coordinate;
+import Game.Game;
 import Game.Move.Move;
 import Game.Piece.Piece;
 import Game.Piece.PieceType;
@@ -61,8 +62,7 @@ public class King extends Piece {
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
-
-        //TODO look for checked squares (in board class). If a checked square is in the Destinations array then remove it.
+        PossibleDestinations.removeIf(square -> Game.isThreatenedSquare(this.colour, square, board));
 
         return DestinationsToMoves(PossibleDestinations, BoardArray);
     }

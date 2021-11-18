@@ -102,7 +102,7 @@ public class Game {
      * @param ThreatenedSquare
      * @return
      */
-    public boolean isThreatenedSquare(Colour ThreatenedColour, Square ThreatenedSquare){
+    public static boolean isThreatenedSquare(Colour ThreatenedColour, Square ThreatenedSquare, Board board){
 
         final int file = ThreatenedSquare.ReturnCoordinate().getFile() - 1;
         final int rank = ThreatenedSquare.ReturnCoordinate().getRank() - 1;
@@ -194,7 +194,7 @@ public class Game {
 
     //TODO comment and check whether it is suitable to store the location of the kings
     public boolean isKingChecked(Piece king){
-        return isThreatenedSquare(king.getColour(), king.getPieceCoordinate().GetSquareAt(board.getBoardArray()));
+        return isThreatenedSquare(king.getColour(), king.getPieceCoordinate().GetSquareAt(board.getBoardArray()), board);
     }
 
     public boolean isKingCheckmated(Piece king){
