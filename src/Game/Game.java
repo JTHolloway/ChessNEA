@@ -193,12 +193,14 @@ public class Game {
     }
 
     //TODO comment and check whether it is suitable to store the location of the kings
-    public boolean isKingChecked(Piece king){
+    public boolean isKingChecked(Colour colour){
+        Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
         return isThreatenedSquare(king.getColour(), king.getPieceCoordinate().GetSquareAt(board.getBoardArray()), board);
     }
 
-    public boolean isKingCheckmated(Piece king){
-        if (isKingChecked(king)){
+    public boolean isKingCheckmated(Colour colour){
+        Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
+        if (isKingChecked(colour)){
             return king.CalculateValidMoves(board).isEmpty();
         }
         return false;
