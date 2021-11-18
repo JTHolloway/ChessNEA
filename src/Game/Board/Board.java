@@ -2,6 +2,7 @@ package Game.Board;
 
 import Game.Colour;
 import Game.Coordinate;
+import Game.Piece.Piece;
 import Game.Piece.PieceType;
 import Game.Piece.Pieces.*;
 
@@ -9,6 +10,7 @@ public class Board {
 
     private final Square[][] BoardArray = new Square[8][8];
     private Pawn enPassantPawn;
+    private Piece[] Kings = new Piece[2];
 
     /**
      * Board constructor
@@ -42,6 +44,7 @@ public class Board {
                 new Knight(new Coordinate(7, 1), Colour.WHITE, PieceType.KNIGHT));
         BoardArray[0][7] = new Square.OccupiedSquare(8, 1,
                 new Rook(new Coordinate(8, 1), Colour.WHITE, PieceType.ROOK));
+        Kings[0] = BoardArray[0][4].ReturnPiece();
 
         //Initialise Black Special Pieces
         BoardArray[7][0] = new Square.OccupiedSquare(1, 8,
@@ -60,6 +63,7 @@ public class Board {
                 new Knight(new Coordinate(7, 8), Colour.BLACK, PieceType.KNIGHT));
         BoardArray[7][7] = new Square.OccupiedSquare(8, 8,
                 new Rook(new Coordinate(8, 8), Colour.BLACK, PieceType.ROOK));
+        Kings[1] = BoardArray[7][4].ReturnPiece();
 
         //Initialise Pawn Pieces
         for (int i = 0; i < 8; i++) {
@@ -159,5 +163,9 @@ public class Board {
      */
     public void setEnPassantPawn(Pawn pawn) {
         this.enPassantPawn = pawn;
+    }
+
+    public Piece[] getKings() {
+        return Kings;
     }
 }
