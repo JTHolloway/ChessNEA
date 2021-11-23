@@ -193,6 +193,8 @@ public class Game {
     }
 
     //TODO comment and check whether it is suitable to store the location of the kings
+    //If the king is in check then no need to check for stalemate.
+    // check checkmate -> check -> stalemate
     public boolean isKingChecked(Colour colour){
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
         return isThreatenedSquare(king.getColour(), king.getPieceCoordinate().GetSquareAt(board.getBoardArray()), board);
@@ -206,8 +208,27 @@ public class Game {
         return false;
     }
 
-    public boolean isStalemate(){
+    //if black is in stalemate then NO squares are threatened to white.
+    public boolean isStalemate(Colour colour){
         //todo user cannot make any moves whatsoever so results in a draw
+        Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
+        if (king.CalculateValidMoves(board).isEmpty() && !isKingChecked(colour)){
+            for (Square[] row : board.getBoardArray()){
+                for (Square square : row){
+                    if (square.SquareOccupied()){
+                        if (square.ReturnPiece().getColour() != colour && square.ReturnPiece().getType() != PieceType.KING){
+                            if (isThreatenedSquare(Colour.GetOtherColour(colour), square, board)){
+                                return false;
+                            }
+                        }
+                    }
+                    else if (isThreatenedSquare(Colour.GetOtherColour(colour), square, board)){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
         return false;
     }
 
