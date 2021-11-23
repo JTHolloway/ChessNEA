@@ -62,7 +62,7 @@ public class King extends Piece {
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
-        PossibleDestinations.removeIf(square -> Game.isThreatenedSquare(this.colour, square, board));
+        PossibleDestinations.removeIf(square -> Game.isThreatenedSquare(this.colour, square, board)); //Lambda Expression
 
         return DestinationsToMoves(PossibleDestinations, BoardArray);
     }
