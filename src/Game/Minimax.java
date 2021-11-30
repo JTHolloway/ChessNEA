@@ -1,4 +1,7 @@
 package Game;
 
-public class Minimax {
+public final class Minimax {
+
+    
+
 }

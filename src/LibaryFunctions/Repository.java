@@ -295,7 +295,7 @@ public class Repository {
     }
 
     /**
-     * //todo comment
+     * todo comment
      */
     public static void updateUsersStats() {
         Date Today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
@@ -341,39 +341,5 @@ public class Repository {
             System.out.println("Error in the repository class: " + e);
         }
         return UserId;
-    }
-
-    /**
-     * This method fetches the png piece image from the database and converts it to a scaled ImageIcon
-     *
-     * @param SQL_Query The SQL to be executed which is unique to each piece
-     * @param Colour    The colour of the piece to identify its name in the database, eg - white
-     * @param Type      The type of piece to identify its name in thew database, eg - rook
-     * @return an ImageIcon of the piece image
-     */
-    public static ImageIcon ReturnPieceImage(String SQL_Query, String Colour, String Type) {
-        try {
-            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), SQL_Query);
-
-            rs.next();
-
-            Type = Type.substring(0, 1).toUpperCase(Locale.ROOT) + Type.substring(1).toLowerCase(Locale.ROOT);
-
-            System.out.println(Colour.charAt(0) + Type + ".png");
-            ImageIcon TempImage = new ImageIcon(rs.getClass().getResource(Colour.charAt(0) + Type + ".png"));
-
-            Image image = TempImage.getImage();
-            Image ScaledImage = image.getScaledInstance((GUI_BoardPanel.WIDTH) / 8, (GUI_BoardPanel.HEIGHT) / 8, Image.SCALE_SMOOTH);
-
-            rs.close();
-            connection.close();
-
-            return new ImageIcon(ScaledImage);
-
-        } catch (Exception e) {
-            System.out.println("Error in the repository class: " + e);
-        }
-
-        return null;
     }
 }

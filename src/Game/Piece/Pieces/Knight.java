@@ -17,7 +17,7 @@ public class Knight extends Piece {
      *
      * @param coordinate A coordinate object identifying the tile coordinate of the piece
      * @param colour     The colour of a piece
-     * @param type       The piece type which is inheriting from the piece class (King, Queen Bishop etc..)
+     * @param type       The piece type which is inheriting from the piece class (King, Queen Bishop etc...)
      */
     public Knight(final Coordinate coordinate, final Colour colour, final PieceType type) {
         super(coordinate, colour, type);
@@ -26,7 +26,7 @@ public class Knight extends Piece {
     /**
      * Takes a board object and calculates the available Knight moves so that
      * illegal moves cannot be made
-     * Takes into account that check may be present on the board etc..
+     * Takes into account that check may be present on the board etc...
      *
      * @param board An instance of the current board (which contains an array of squares)
      * @return a list of all available/legal moves (where move is a move object)

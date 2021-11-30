@@ -212,18 +212,15 @@ public class Game {
     public boolean isStalemate(Colour colour){
         //todo user cannot make any moves whatsoever so results in a draw
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
-        if (king.CalculateValidMoves(board).isEmpty() && !isKingChecked(colour)){
+        if (king.CalculateValidMoves(board).isEmpty() && !isKingChecked(colour)) {
             for (Square[] row : board.getBoardArray()){
                 for (Square square : row){
                     if (square.SquareOccupied()){
-                        if (square.ReturnPiece().getColour() != colour && square.ReturnPiece().getType() != PieceType.KING){
-                            if (isThreatenedSquare(Colour.GetOtherColour(colour), square, board)){
+                        if (square.ReturnPiece().getColour() == colour){
+                            if (!square.ReturnPiece().CalculateValidMoves(board).isEmpty()){
                                 return false;
                             }
                         }
-                    }
-                    else if (isThreatenedSquare(Colour.GetOtherColour(colour), square, board)){
-                        return false;
                     }
                 }
             }
@@ -242,20 +239,4 @@ public class Game {
 
 
     //todo call UpdateuserStats method in repository class after each game and update a players ELO
-
-
-//    Square kingLocation = null;
-//
-//    //Locate Checked King
-//    A: for (Square[] row : board.getBoardArray()){
-//        for (Square square : row){
-//            if (square.SquareOccupied()){
-//                if (square.ReturnPiece().getType() == PieceType.KING &&
-//                        square.ReturnPiece().getColour() == Colour.GetOtherColour(CheckingPieceColour)){
-//                    kingLocation = square;
-//                    break A;
-//                }
-//            }
-//        }
-//    }
 }
