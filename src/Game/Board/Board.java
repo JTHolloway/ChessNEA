@@ -6,11 +6,16 @@ import Game.Piece.Piece;
 import Game.Piece.PieceType;
 import Game.Piece.Pieces.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
 
     private final Square[][] BoardArray = new Square[8][8];
     private Pawn enPassantPawn;
     private Piece[] Kings = new Piece[2];
+    private List<Square> WhitePieces;
+    private List<Piece> BlackPieces = new ArrayList<Piece>();
 
     /**
      * Board constructor
@@ -45,6 +50,9 @@ public class Board {
         BoardArray[0][7] = new Square.OccupiedSquare(8, 1,
                 new Rook(new Coordinate(8, 1), Colour.WHITE, PieceType.ROOK));
         Kings[0] = BoardArray[0][4].ReturnPiece();
+        for (){
+
+        }
 
         //Initialise Black Special Pieces
         BoardArray[7][0] = new Square.OccupiedSquare(1, 8,
@@ -71,10 +79,12 @@ public class Board {
             //White Pawns
             BoardArray[1][i] = new Square.OccupiedSquare(i + 1, 2,
                     new Pawn(new Coordinate(i + 1, 2), Colour.WHITE, PieceType.PAWN));
+            WhitePieces.add(BoardArray[1][i]);
 
             //Black Pawns
             BoardArray[6][i] = new Square.OccupiedSquare(i + 1, 7,
                     new Pawn(new Coordinate(i + 1, 7), Colour.BLACK, PieceType.PAWN));
+            WhitePieces.add(BoardArray[6][i]);
         }
 
         //Initialise Empty Squares
