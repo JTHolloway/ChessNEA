@@ -1,5 +1,6 @@
 package Game.Board;
 
+import Game.CastlingAvailability;
 import Game.Colour;
 import Game.Coordinate;
 import Game.Piece.Piece;
@@ -13,9 +14,9 @@ public class Board {
 
     private final Square[][] BoardArray = new Square[8][8];
     private Pawn enPassantPawn;
-    private Piece[] Kings = new Piece[2];
-    private List<Square> WhitePieces;
-    private List<Piece> BlackPieces = new ArrayList<Piece>();
+    private final Piece[] Kings = new Piece[2];
+    private List<Piece> WhitePieces = new ArrayList<>();
+    private List<Piece> BlackPieces = new ArrayList<>();
 
     /**
      * Board constructor
@@ -34,7 +35,7 @@ public class Board {
     public void InitialiseBoard() {
         //Initialise White Special Pieces
         BoardArray[0][0] = new Square.OccupiedSquare(1, 1,
-                new Rook(new Coordinate(1, 1), Colour.WHITE, PieceType.ROOK));
+                new Rook(new Coordinate(1, 1), Colour.WHITE, PieceType.ROOK, CastlingAvailability.QUEEN_SIDE));
         BoardArray[0][1] = new Square.OccupiedSquare(2, 1,
                 new Knight(new Coordinate(2, 1), Colour.WHITE, PieceType.KNIGHT));
         BoardArray[0][2] = new Square.OccupiedSquare(3, 1,
@@ -48,15 +49,15 @@ public class Board {
         BoardArray[0][6] = new Square.OccupiedSquare(7, 1,
                 new Knight(new Coordinate(7, 1), Colour.WHITE, PieceType.KNIGHT));
         BoardArray[0][7] = new Square.OccupiedSquare(8, 1,
-                new Rook(new Coordinate(8, 1), Colour.WHITE, PieceType.ROOK));
+                new Rook(new Coordinate(8, 1), Colour.WHITE, PieceType.ROOK, CastlingAvailability.KING_SIDE));
         Kings[0] = BoardArray[0][4].ReturnPiece();
-        for (){
-
+        for (int i = 0; i < 8; i++) {
+            WhitePieces.add(BoardArray[0][i].ReturnPiece());
         }
 
         //Initialise Black Special Pieces
         BoardArray[7][0] = new Square.OccupiedSquare(1, 8,
-                new Rook(new Coordinate(1, 8), Colour.BLACK, PieceType.ROOK));
+                new Rook(new Coordinate(1, 8), Colour.BLACK, PieceType.ROOK, CastlingAvailability.QUEEN_SIDE));
         BoardArray[7][1] = new Square.OccupiedSquare(2, 8,
                 new Knight(new Coordinate(2, 8), Colour.BLACK, PieceType.KNIGHT));
         BoardArray[7][2] = new Square.OccupiedSquare(3, 8,
@@ -70,8 +71,11 @@ public class Board {
         BoardArray[7][6] = new Square.OccupiedSquare(7, 8,
                 new Knight(new Coordinate(7, 8), Colour.BLACK, PieceType.KNIGHT));
         BoardArray[7][7] = new Square.OccupiedSquare(8, 8,
-                new Rook(new Coordinate(8, 8), Colour.BLACK, PieceType.ROOK));
+                new Rook(new Coordinate(8, 8), Colour.BLACK, PieceType.ROOK, CastlingAvailability.KING_SIDE));
         Kings[1] = BoardArray[7][4].ReturnPiece();
+        for (int i = 0; i < 8; i++) {
+            BlackPieces.add(BoardArray[7][i].ReturnPiece());
+        }
 
         //Initialise Pawn Pieces
         for (int i = 0; i < 8; i++) {
@@ -79,12 +83,12 @@ public class Board {
             //White Pawns
             BoardArray[1][i] = new Square.OccupiedSquare(i + 1, 2,
                     new Pawn(new Coordinate(i + 1, 2), Colour.WHITE, PieceType.PAWN));
-            WhitePieces.add(BoardArray[1][i]);
+            WhitePieces.add(BoardArray[1][i].ReturnPiece());
 
             //Black Pawns
             BoardArray[6][i] = new Square.OccupiedSquare(i + 1, 7,
                     new Pawn(new Coordinate(i + 1, 7), Colour.BLACK, PieceType.PAWN));
-            WhitePieces.add(BoardArray[6][i]);
+            BlackPieces.add(BoardArray[6][i].ReturnPiece());
         }
 
         //Initialise Empty Squares
@@ -177,5 +181,21 @@ public class Board {
 
     public Piece[] getKings() {
         return Kings;
+    }
+
+    public List<Piece> getWhitePieces() {
+        return WhitePieces;
+    }
+
+    public void setWhitePieces(List<Piece> whitePieces) {
+        WhitePieces = new ArrayList<>(whitePieces);
+    }
+
+    public List<Piece> getBlackPieces() {
+        return BlackPieces;
+    }
+
+    public void setBlackPieces(List<Piece> blackPieces) {
+        BlackPieces = new ArrayList<>(blackPieces);
     }
 }

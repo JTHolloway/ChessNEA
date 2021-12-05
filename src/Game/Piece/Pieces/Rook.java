@@ -2,6 +2,7 @@ package Game.Piece.Pieces;
 
 import Game.Board.Board;
 import Game.Board.Square;
+import Game.CastlingAvailability;
 import Game.Colour;
 import Game.Coordinate;
 import Game.Move.Move;
@@ -13,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Rook extends Piece {
+
+    private final CastlingAvailability castlingAvailability;
+
     /**
      * Constructor for a rook piece
      *
@@ -20,8 +24,9 @@ public class Rook extends Piece {
      * @param colour     The colour of a piece
      * @param type       The piece type which is inheriting from the piece class (King, Queen Bishop etc..)
      */
-    public Rook(Coordinate coordinate, Colour colour, PieceType type) {
+    public Rook(Coordinate coordinate, Colour colour, PieceType type, CastlingAvailability castlingAvailability) {
         super(coordinate, colour, type);
+        this.castlingAvailability = castlingAvailability;
     }
 
     /**
@@ -71,5 +76,9 @@ public class Rook extends Piece {
     @Override
     public String ReturnPieceIcon() {
         return "♜";
+    }
+
+    public CastlingAvailability getCastlingAvailability() {
+        return castlingAvailability;
     }
 }

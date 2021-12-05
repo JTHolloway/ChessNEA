@@ -14,9 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class King extends Piece {
-    private final boolean isChecked;
-    private final boolean hasMoved;
-    private final CastlingAvailability castlingAvailability;
+
+    private CastlingAvailability castlingAvailability;
 
     /**
      * Constructor for a king piece
@@ -27,8 +26,6 @@ public class King extends Piece {
      */
     public King(Coordinate coordinate, Colour colour, PieceType type) {
         super(coordinate, colour, type);
-        this.isChecked = false;
-        this.hasMoved = false;
         this.castlingAvailability = CastlingAvailability.BOTH;
     }
 
@@ -84,5 +81,14 @@ public class King extends Piece {
         return "♚";
     }
 
-    //TODO Check, CheckMate and StaleMate handling
+    public CastlingAvailability getCastlingAvailability() {
+        return castlingAvailability;
+    }
+
+    public void setCastlingAvailability(CastlingAvailability castlingAvailability) {
+        this.castlingAvailability = castlingAvailability;
+    }
+
+
+//TODO Check, CheckMate and StaleMate handling
 }

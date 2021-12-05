@@ -4,12 +4,9 @@ import Game.Board.Board;
 import Game.Board.Square;
 import Game.Move.Move;
 import Game.Piece.Piece;
-import Game.Piece.PieceType;
 import Game.Piece.Pieces.*;
-import LibaryFunctions.Utility;
 import User.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
@@ -89,7 +86,42 @@ public class Game {
                 new Square.OccupiedSquare(DestinationX, DestinationY, move.getMovedPiece());
         move.getMovedPiece().setPieceCoordinate(move.getEndPosition().ReturnCoordinate());
 
-        //todo if move was a capture then remove captured piece from square
+        if (move.getMovedPiece() instanceof Pawn) {
+            if (move.getMovedPiece().getColour() == Colour.WHITE && (OriginY - DestinationY == -2) && (OriginX - DestinationX == 0)) {
+                board.setEnPassantPawn((Pawn) move.getMovedPiece());
+            } else if (move.getMovedPiece().getColour() == Colour.BLACK && (OriginY - DestinationY == 2) && (OriginX - DestinationX == 0)) {
+                board.setEnPassantPawn((Pawn) move.getMovedPiece());
+            }
+        } else if (move.getMovedPiece() instanceof Rook) {
+            King king = (King) (move.getMovedPiece().getColour() == Colour.WHITE ? board.getKings()[0] : board.getKings()[1]);
+            if (king.getCastlingAvailability() == CastlingAvailability.BOTH) {
+                if (((Rook) move.getMovedPiece()).getCastlingAvailability() == CastlingAvailability.KING_SIDE) {
+                    king.setCastlingAvailability(CastlingAvailability.QUEEN_SIDE);
+                } else if (((Rook) move.getMovedPiece()).getCastlingAvailability() == CastlingAvailability.QUEEN_SIDE) {
+                    king.setCastlingAvailability(CastlingAvailability.KING_SIDE);
+                }
+            } else if (king.getCastlingAvailability() == CastlingAvailability.QUEEN_SIDE) {
+                if (((Rook) move.getMovedPiece()).getCastlingAvailability() == CastlingAvailability.QUEEN_SIDE) {
+                    king.setCastlingAvailability(CastlingAvailability.NEITHER);
+                }
+            } else if (king.getCastlingAvailability() == CastlingAvailability.KING_SIDE) {
+                if (((Rook) move.getMovedPiece()).getCastlingAvailability() == CastlingAvailability.KING_SIDE) {
+                    king.setCastlingAvailability(CastlingAvailability.NEITHER);
+                }
+            }
+        } else if (move.getMovedPiece() instanceof King) {
+            if (((King) move.getMovedPiece()).getCastlingAvailability() != CastlingAvailability.NEITHER) {
+                ((King) move.getMovedPiece()).setCastlingAvailability(CastlingAvailability.NEITHER);
+            }
+        }
+
+        if (move.wasCapture()) {
+            if (move.getCapturedPiece().getColour() == Colour.WHITE) {
+                board.getWhitePieces().remove(move.getCapturedPiece());
+            } else if (move.getCapturedPiece().getColour() == Colour.BLACK) {
+                board.getBlackPieces().remove(move.getCapturedPiece());
+            }
+        }
 
         //TODO remove test
         System.out.println("\n");
@@ -192,7 +224,6 @@ public class Game {
         return false;
     }
 
-    //TODO comment and check whether it is suitable to store the location of the kings
     //If the king is in check then no need to check for stalemate.
     // check checkmate -> check -> stalemate
     public boolean isKingChecked(Colour colour){
@@ -208,25 +239,22 @@ public class Game {
         return false;
     }
 
-    //if black is in stalemate then NO squares are threatened to white.
     public boolean isStalemate(Colour colour){
-        //todo user cannot make any moves whatsoever so results in a draw
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
         if (king.CalculateValidMoves(board).isEmpty() && !isKingChecked(colour)) {
-            for (Square[] row : board.getBoardArray()){
-                for (Square square : row){
-                    if (square.SquareOccupied()){
-                        if (square.ReturnPiece().getColour() == colour){
-                            if (!square.ReturnPiece().CalculateValidMoves(board).isEmpty()){
-                                return false;
-                            }
-                        }
-                    }
+            List<Piece> pieces = colour == Colour.WHITE ? board.getWhitePieces() : board.getBlackPieces();
+            for (Piece piece : pieces) {
+                if (!piece.CalculateValidMoves(board).isEmpty()) {
+                    return false;
                 }
             }
             return true;
         }
         return false;
+    }
+
+    public boolean isGameOver() {
+        return isKingCheckmated(Colour.WHITE) || isKingCheckmated(Colour.BLACK) || isStalemate(Colour.WHITE) || isStalemate(Colour.BLACK);
     }
 
 
