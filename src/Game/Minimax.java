@@ -41,8 +41,8 @@ public final class Minimax {
         if (maximizer) {
             int maxEvaluation = Integer.MIN_VALUE;
             for (Move currentNode : moves) {
-                game.MakeMove(currentNode); //todo make board a parameter??
                 //TODO maybe store board data here so the move can be reversed exactly??
+                game.MakeMove(currentNode); //todo make board a parameter??
                 int nodeEvaluation = minimaxTraversal(board, searchDepth - 1, alpha, beta, false, maximizingColour);
                 reverseMove(currentNode, board);
                 if (nodeEvaluation > maxEvaluation) {
@@ -56,7 +56,21 @@ public final class Minimax {
             }
             return maxEvaluation;
         } else {
-
+            int minEvaluation = Integer.MAX_VALUE;
+            for (Move currentNode : moves) {
+                game.MakeMove(currentNode); //todo make board a parameter??
+                int nodeEvaluation = minimaxTraversal(board, searchDepth - 1, alpha, beta, true, maximizingColour);
+                reverseMove(currentNode, board);
+                if (nodeEvaluation < minEvaluation) {
+                    minEvaluation = nodeEvaluation;
+                    currentBestMove = currentNode;
+                }
+                beta = Math.min(beta, nodeEvaluation);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+            return minEvaluation;
         }
     }
 
