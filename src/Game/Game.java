@@ -4,6 +4,7 @@ import Game.Board.Board;
 import Game.Board.Square;
 import Game.Move.Move;
 import Game.Piece.Piece;
+import Game.Piece.PieceType;
 import Game.Piece.Pieces.*;
 import User.User;
 
@@ -73,7 +74,7 @@ public class Game {
      * @param move a move object identifying the move to be made
      * @// TODO: 08/09/2021 make move in game class
      */
-    public void MakeMove(Move move) {
+    public static void MakeMove(Move move, Board board) {
         //todo move comes from player class
         int OriginX = move.getStartPosition().ReturnCoordinate().getFile();
         int OriginY = move.getStartPosition().ReturnCoordinate().getRank();
@@ -81,8 +82,8 @@ public class Game {
         int DestinationY = move.getEndPosition().ReturnCoordinate().getRank();
 
 
-        this.board.getBoardArray()[OriginY - 1][OriginX - 1] = new Square.EmptySquare(OriginX, OriginY);
-        this.board.getBoardArray()[DestinationY - 1][DestinationX - 1] =
+        board.getBoardArray()[OriginY - 1][OriginX - 1] = new Square.EmptySquare(OriginX, OriginY);
+        board.getBoardArray()[DestinationY - 1][DestinationX - 1] =
                 new Square.OccupiedSquare(DestinationX, DestinationY, move.getMovedPiece());
         move.getMovedPiece().setPieceCoordinate(move.getEndPosition().ReturnCoordinate());
 
@@ -91,6 +92,8 @@ public class Game {
                 board.setEnPassantPawn((Pawn) move.getMovedPiece());
             } else if (move.getMovedPiece().getColour() == Colour.BLACK && (OriginY - DestinationY == 2) && (OriginX - DestinationX == 0)) {
                 board.setEnPassantPawn((Pawn) move.getMovedPiece());
+            } else {
+                board.setEnPassantPawn(null);
             }
         } else if (move.getMovedPiece() instanceof Rook) {
             King king = (King) (move.getMovedPiece().getColour() == Colour.WHITE ? board.getKings()[0] : board.getKings()[1]);
@@ -115,6 +118,11 @@ public class Game {
             }
         }
 
+        //Unset en-passant pawn if a double pawn move didnt happen
+        if (move.getMovedPiece().getType() != PieceType.PAWN) {
+            board.setEnPassantPawn(null);
+        }
+
         if (move.wasCapture()) {
             if (move.getCapturedPiece().getColour() == Colour.WHITE) {
                 board.getWhitePieces().remove(move.getCapturedPiece());
@@ -124,17 +132,40 @@ public class Game {
         }
 
         //TODO remove test
-        System.out.println("\n");
-        board.PrintBoard();
+        //System.out.println("\n");
+        //board.PrintBoard();
+    }
+
+    public static void reverseMove(Move move, Board board) {
+        int OriginX = move.getStartPosition().ReturnCoordinate().getFile();
+        int OriginY = move.getStartPosition().ReturnCoordinate().getRank();
+        int DestinationX = move.getEndPosition().ReturnCoordinate().getFile();
+        int DestinationY = move.getEndPosition().ReturnCoordinate().getRank();
+
+        //Moves the piece back to where it started
+        board.getBoardArray()[OriginY - 1][OriginX - 1] =
+                new Square.OccupiedSquare(OriginX, OriginY, move.getMovedPiece());
+        move.getMovedPiece().setPieceCoordinate(move.getStartPosition().ReturnCoordinate());
+
+        //Puts any captured piece back to where it started and removes the other piece from that square
+        if (move.wasCapture()) {
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] = new Square.OccupiedSquare(DestinationX, DestinationY, move.getCapturedPiece());
+            if (move.getCapturedPiece().getColour() == Colour.WHITE) {
+                board.getWhitePieces().add(move.getCapturedPiece());
+            } else if (move.getCapturedPiece().getColour() == Colour.BLACK) {
+                board.getBlackPieces().add(move.getCapturedPiece());
+            }
+        } else {
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] = new Square.EmptySquare(DestinationX, DestinationY);
+        }
     }
 
     /**
-     *
      * @param ThreatenedColour
      * @param ThreatenedSquare
      * @return
      */
-    public static boolean isThreatenedSquare(Colour ThreatenedColour, Square ThreatenedSquare, Board board){
+    public static boolean isThreatenedSquare(Colour ThreatenedColour, Square ThreatenedSquare, Board board) {
 
         final int file = ThreatenedSquare.ReturnCoordinate().getFile() - 1;
         final int rank = ThreatenedSquare.ReturnCoordinate().getRank() - 1;
@@ -226,14 +257,14 @@ public class Game {
 
     //If the king is in check then no need to check for stalemate.
     // check checkmate -> check -> stalemate
-    public boolean isKingChecked(Colour colour){
+    public static boolean isKingChecked(Colour colour, Board board) {
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
         return isThreatenedSquare(king.getColour(), king.getPieceCoordinate().GetSquareAt(board.getBoardArray()), board);
     }
 
     public boolean isKingCheckmated(Colour colour){
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
-        if (isKingChecked(colour)){
+        if (isKingChecked(colour, board)) {
             return king.CalculateValidMoves(board).isEmpty();
         }
         return false;
@@ -241,7 +272,7 @@ public class Game {
 
     public boolean isStalemate(Colour colour){
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
-        if (king.CalculateValidMoves(board).isEmpty() && !isKingChecked(colour)) {
+        if (king.CalculateValidMoves(board).isEmpty() && !isKingChecked(colour, board)) {
             List<Piece> pieces = colour == Colour.WHITE ? board.getWhitePieces() : board.getBlackPieces();
             for (Piece piece : pieces) {
                 if (!piece.CalculateValidMoves(board).isEmpty()) {
@@ -256,7 +287,6 @@ public class Game {
     public boolean isGameOver() {
         return isKingCheckmated(Colour.WHITE) || isKingCheckmated(Colour.BLACK) || isStalemate(Colour.WHITE) || isStalemate(Colour.BLACK);
     }
-
 
     /**
      * @return the board
