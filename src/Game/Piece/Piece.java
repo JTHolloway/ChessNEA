@@ -4,7 +4,9 @@ import Game.Board.Board;
 import Game.Board.Square;
 import Game.Colour;
 import Game.Coordinate;
+import Game.Game;
 import Game.Move.Move;
+import Game.Piece.Pieces.King;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +109,7 @@ public abstract class Piece {
             if (getPieceCoordinate().CompareCoordinates(square)) {
                 ToBeRemoved.add(square);
             } else if (square.SquareOccupied()) {
-                if (square.ReturnPiece().getColour() == getColour()) {
+                if ((square.ReturnPiece().getColour() == getColour()) || (square.ReturnPiece() instanceof King)) {
                     ToBeRemoved.add(square);
                 }
             }
@@ -123,7 +125,6 @@ public abstract class Piece {
      * @param Board                a 2-Dimensional square array to represent the board
      * @return a List of valid moves
      */
-    //TODO: Decide weather this class belongs in the piece class
     protected List<Move> DestinationsToMoves(final List<Square> PossibleDestinations, final Square[][] Board) {
         List<Move> Moves = new ArrayList<>();
         for (Square square : PossibleDestinations) {
@@ -138,7 +139,23 @@ public abstract class Piece {
         return Moves;
     }
 
-    //TODO find check, checked squares and checking piece
+    protected List<Move> removeIllegalMoves(Board board, List<Move> moves) {
+        List<Move> illegalMoves = new ArrayList<>();
+
+        for (Move move : moves) {
+            Game.MakeMove(move, board);
+            //TODO reverse move properly by storing data that may change
+            if (Game.isKingChecked(this.colour, board)) {
+                Game.reverseMove(move, board);
+                illegalMoves.add(move);
+
+            } else {
+                Game.reverseMove(move, board);
+            }
+        }
+        moves.removeAll(illegalMoves);
+        return moves;
+    }
 
     /**
      * @return a coordinate object of the pieces current coordinate
