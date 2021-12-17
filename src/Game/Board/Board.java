@@ -149,12 +149,16 @@ public class Board {
         for (int i = 7; i >= 0; i--) {
             for (int j = 0; j <= 7; j++) {
                 if (getBoardArray()[i][j].SquareOccupied()) {
-                    String s = getBoardArray()[i][j].ReturnPiece().getType().toString();
-                    s = s.substring(0, 1);
+                    String s;
+                    if (getBoardArray()[i][j].ReturnPiece().getType() != PieceType.PAWN) {
+                        s = getBoardArray()[i][j].ReturnPiece().PieceTypeToNotation();
+                    } else {
+                        s = "P";
+                    }
                     if (getBoardArray()[i][j].ReturnPiece().getColour() == Colour.BLACK) {
                         s = s.toLowerCase();
                     }
-                    System.out.print("["+s+"]");
+                    System.out.print("[" + s + "]");
                 } else {
                     System.out.print("[ ]");
                 }
