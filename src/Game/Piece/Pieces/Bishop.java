@@ -62,14 +62,12 @@ public class Bishop extends Piece {
 
         List<Square> PossibleDestinations = PositiveDiagonal;
         PossibleDestinations.addAll(NegativeDiagonal);
-
-        //TODO Look for check and remove any squares which don't remove check
         
         /*Remove Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
 
-        return DestinationsToMoves(PossibleDestinations, BoardArray);
+        return removeIllegalMoves(board, DestinationsToMoves(PossibleDestinations, BoardArray));
     }
 
     /**
