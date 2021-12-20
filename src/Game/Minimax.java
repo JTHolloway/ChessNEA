@@ -34,24 +34,35 @@ public final class Minimax {
 
     public double minimaxTraversal(Board currentPosition, int searchDepth, double alpha, double beta, boolean maximizer, Colour maximizingColour) {
         temp++;
+        //System.out.println("");
         if (searchDepth == 0 || game.isGameOver()) {
             return evaluateBranch(currentPosition, maximizingColour);
         }
         List<Move> moves = getChildren(currentPosition, maximizer, maximizingColour);
-        Random r = new Random();
-        currentBestMove = moves.get(r.nextInt(moves.size() - 1));
+        try {
+            if (moves.get(0).getMovedPiece().getColour() == maximizingColour) {
+                Random r = new Random();
+                currentBestMove = moves.get(r.nextInt(moves.size()));
+            }
+        } catch (Exception exception) {
+            System.err.println(exception);
+            return evaluateBranch(currentPosition, maximizingColour);
+        }
+
 
         if (maximizer) {
             double maxEvaluation = Double.NEGATIVE_INFINITY;
             for (Move currentNode : moves) {
                 //TODO maybe store board data here so the move can be reversed exactly??
                 Game.MakeMove(currentNode, currentPosition);
+                //game.getBoard().PrintBoard(); //todo Remove
+                //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
                 double nodeEvaluation = minimaxTraversal(currentPosition, searchDepth - 1, alpha, beta, false, maximizingColour);
-                System.out.println("Node Evaluation: " + nodeEvaluation);
+                //System.out.println("Node Evaluation: " + nodeEvaluation);
                 Game.reverseMove(currentNode, currentPosition);
                 if (nodeEvaluation > maxEvaluation) {
                     maxEvaluation = nodeEvaluation;
-                    System.out.println("Highest");
+                    //System.out.println("Highest");
                     if (currentNode.getMovedPiece().getColour() == maximizingColour) {
                         currentBestMove = currentNode;
                     }
@@ -66,12 +77,14 @@ public final class Minimax {
             double minEvaluation = Double.POSITIVE_INFINITY;
             for (Move currentNode : moves) {
                 Game.MakeMove(currentNode, currentPosition);
+                //game.getBoard().PrintBoard(); //todo remove
+                //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
                 double nodeEvaluation = minimaxTraversal(currentPosition, searchDepth - 1, alpha, beta, true, maximizingColour);
-                System.out.println("min Node evaluation: " + nodeEvaluation);
+                //System.out.println("min Node evaluation: " + nodeEvaluation);
                 Game.reverseMove(currentNode, currentPosition);
                 if (nodeEvaluation < minEvaluation) {
                     minEvaluation = nodeEvaluation;
-                    System.out.println("Lowest");
+                    //System.out.println("Lowest");
                     if (currentNode.getMovedPiece().getColour() == maximizingColour) {
                         currentBestMove = currentNode;
                     }
@@ -163,8 +176,8 @@ public final class Minimax {
                     noOfBlackPiecesOfType++;
                 }
             }
-            System.out.println("No. of black " + pieceValueReference[index] + "'s = " + noOfBlackPiecesOfType);
-            System.out.println("No. of white " + pieceValueReference[index] + "'s = " + noOfWhitePiecesOfType);
+//            System.out.println("No. of black " + pieceValueReference[index] + "'s = " + noOfBlackPiecesOfType);
+//            System.out.println("No. of white " + pieceValueReference[index] + "'s = " + noOfWhitePiecesOfType);
 
             materialScore += pieceValues[index] * (noOfWhitePiecesOfType - noOfBlackPiecesOfType);
         }
@@ -178,7 +191,7 @@ public final class Minimax {
         }
         materialScore += pieceValues[0] * (blackChecked - whiteChecked);
 
-        System.out.println("material score: " + materialScore);
+        //System.out.println("material score: " + materialScore);
 
         //todo Decrease score based on whether doubled, blocked or isolated pawns are present.
 
@@ -189,7 +202,7 @@ public final class Minimax {
         int whiteMobility = getChildren(board, true, Colour.WHITE).size();
         int blackMobility = getChildren(board, true, Colour.BLACK).size();
 
-        System.out.println("Black Mobility: " + blackMobility + ", White mobility: " + whiteMobility + ", Mobility Score = " + (0.05 * (whiteMobility - blackMobility)));
+        //System.out.println("Black Mobility: " + blackMobility + ", White mobility: " + whiteMobility + ", Mobility Score = " + (0.05 * (whiteMobility - blackMobility)));
         //todo maybe decrease score based on trapped pieces / forks / skewers
 
         return 0.05 * (whiteMobility - blackMobility);
