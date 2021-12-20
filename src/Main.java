@@ -23,14 +23,18 @@ public class Main {
 
         MinimaxMove(g, Colour.WHITE);
         MinimaxMove(g, Colour.BLACK);
-        MinimaxMove(g, Colour.WHITE);
-        MinimaxMove(g, Colour.BLACK);
+        for (int i = 0; i < 29; i++) {
+            if (g.isGameOver()) break;
+            MinimaxMove(g, Colour.WHITE);
+            if (g.isGameOver()) break;
+            MinimaxMove(g, Colour.BLACK);
+        }
     }
 
 
     public static void MinimaxMove(Game g, Colour colour) {
         Minimax x = new Minimax(g);
-        x.minimaxTraversal(g.getBoard(), 4, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, true, colour);
+        x.minimaxTraversal(g.getBoard(), 3, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, true, colour);
         Move m = x.getCurrentBestMove();
         if (m == null) {
             System.out.println("No moves, Checkmate. Or wrong players turn");
@@ -44,17 +48,26 @@ public class Main {
                         m.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", NULL");
             }
         }
+
+        findMobilityOfPiece(g, m.getMovedPiece().getPieceCoordinate());
         Game.MakeMove(m, g.getBoard());
 
         g.getBoard().PrintBoard();
+        if (Game.isKingChecked(Colour.GetOtherColour(colour), g.getBoard())) {
+            System.out.println(colour + " Checks " + Colour.GetOtherColour(colour));
+        }
+        if (g.isKingCheckmated(Colour.GetOtherColour(colour))) {
+            System.out.println(colour + " Checkmates " + Colour.GetOtherColour(colour));
+        }
+
         System.out.println("\n");
     }
 
 
-    public static void findMobilityOfPiece(Game g) {
-        List<Move> moves = g.getBoard().ReturnSquare(new Coordinate(6, 1)).ReturnPiece().CalculateValidMoves(g.getBoard());
-        System.out.println("Mobility of " + g.getBoard().ReturnSquare(new Coordinate(6, 1)).ReturnPiece().getColour() + " " +
-                g.getBoard().ReturnSquare(new Coordinate(6, 1)).ReturnPiece().getType() + " at " + g.getBoard().ReturnSquare(new Coordinate(6, 1)).ReturnCoordinate().CoordinateToNotation() +
+    public static void findMobilityOfPiece(Game g, Coordinate c) {
+        List<Move> moves = g.getBoard().ReturnSquare(c).ReturnPiece().CalculateValidMoves(g.getBoard());
+        System.out.println("Mobility of " + g.getBoard().ReturnSquare(c).ReturnPiece().getColour() + " " +
+                g.getBoard().ReturnSquare(c).ReturnPiece().getType() + " at " + g.getBoard().ReturnSquare(c).ReturnCoordinate().CoordinateToNotation() +
                 ": " + moves.size());
 
         for (Move move : moves) {
