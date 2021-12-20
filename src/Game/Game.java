@@ -267,7 +267,8 @@ public class Game {
         List<Piece> pieces = colour == Colour.WHITE ? board.getWhitePieces() : board.getBlackPieces();
         if (isKingChecked(colour, board) && king.CalculateValidMoves(board).isEmpty()) {
             for (Piece piece : pieces) {
-                for (Move move : piece.CalculateValidMoves(board)) {
+                List<Move> moves = piece.CalculateValidMoves(board);
+                for (Move move : moves) {
                     MakeMove(move, board);
                     //TODO reverse move properly by storing data that may change
                     //If you can make a move which removes the king from check then its not checkmate
@@ -279,6 +280,7 @@ public class Game {
                     }
                 }
             }
+            return true;
         }
         return false;
     }
