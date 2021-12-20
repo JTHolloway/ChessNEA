@@ -174,7 +174,7 @@ public class Game {
         int[] knightHorizontalDirections = {-1, -2, -2, -1, 1, 2, 2, 1};
         int[] knightVerticalDirections = {-2, -1, 1, 2, -2, -1, 1, 2};
 
-        for (int DirectionIndex = 0; DirectionIndex < 8; DirectionIndex++){
+        for (int DirectionIndex = 0; DirectionIndex < 8; DirectionIndex++) {
             int currentFile = file + knightHorizontalDirections[DirectionIndex];
             int currentRank = rank + knightVerticalDirections[DirectionIndex];
 
@@ -238,10 +238,10 @@ public class Game {
                                     return true;
                                 }
                                 else if (threateningPiece instanceof Pawn) {
-                                    boolean validDirection = threateningPiece.getColour() == Colour.BLACK;
-                                    boolean[] pawnAttackingCapabilities = {validDirection, false, validDirection, false, false,
-                                            !validDirection, false, !validDirection};
-                                    if (pawnAttackingCapabilities[DirectionIndex]){
+                                    boolean validDirection = threateningPiece.getColour() == Colour.WHITE;
+                                    boolean[] pawnAttackingCapabilities = {validDirection, false, !validDirection, false, false,
+                                            validDirection, false, !validDirection};
+                                    if (pawnAttackingCapabilities[DirectionIndex]) {
                                         return true;
                                     }
                                 }
@@ -264,8 +264,21 @@ public class Game {
 
     public boolean isKingCheckmated(Colour colour){
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
-        if (isKingChecked(colour, board)) {
-            return king.CalculateValidMoves(board).isEmpty();
+        List<Piece> pieces = colour == Colour.WHITE ? board.getWhitePieces() : board.getBlackPieces();
+        if (isKingChecked(colour, board) && king.CalculateValidMoves(board).isEmpty()) {
+            for (Piece piece : pieces) {
+                for (Move move : piece.CalculateValidMoves(board)) {
+                    MakeMove(move, board);
+                    //TODO reverse move properly by storing data that may change
+                    //If you can make a move which removes the king from check then its not checkmate
+                    if (!isKingChecked(colour, board)) {
+                        reverseMove(move, board);
+                        return false;
+                    } else {
+                        reverseMove(move, board);
+                    }
+                }
+            }
         }
         return false;
     }
