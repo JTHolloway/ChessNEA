@@ -61,7 +61,8 @@ public class King extends Piece {
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
         PossibleDestinations.removeIf(square -> Game.isThreatenedSquare(this.colour, square, board)); //Lambda Expression
 
-        return DestinationsToMoves(PossibleDestinations, BoardArray);
+        return removeIllegalMoves(board, DestinationsToMoves(PossibleDestinations, BoardArray));
+
     }
 
     /**
