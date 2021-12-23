@@ -81,11 +81,68 @@ public class Game {
         int DestinationX = move.getEndPosition().ReturnCoordinate().getFile();
         int DestinationY = move.getEndPosition().ReturnCoordinate().getRank();
 
-
         board.getBoardArray()[OriginY - 1][OriginX - 1] = new Square.EmptySquare(OriginX, OriginY);
-        board.getBoardArray()[DestinationY - 1][DestinationX - 1] =
-                new Square.OccupiedSquare(DestinationX, DestinationY, move.getMovedPiece());
-        move.getMovedPiece().setPieceCoordinate(move.getEndPosition().ReturnCoordinate());
+
+        if (move instanceof Move.PawnPromotion) {
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] =
+                    new Square.OccupiedSquare(DestinationX, DestinationY, ((Move.PawnPromotion) move).getPromotionPiece());
+            if (((Move.PawnPromotion) move).getPromotionPiece().getColour() == Colour.WHITE) {
+                board.getWhitePieces().add(((Move.PawnPromotion) move).getPromotionPiece());
+                board.getWhitePieces().remove(move.getMovedPiece());
+
+            } else if (((Move.PawnPromotion) move).getPromotionPiece().getColour() == Colour.BLACK) {
+                board.getBlackPieces().add(((Move.PawnPromotion) move).getPromotionPiece());
+                board.getBlackPieces().remove(move.getMovedPiece());
+            }
+
+        } else if (move instanceof Move.PawnPromotionCapture) {
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] =
+                    new Square.OccupiedSquare(DestinationX, DestinationY, ((Move.PawnPromotionCapture) move).getPromotionPiece());
+            if (((Move.PawnPromotionCapture) move).getPromotionPiece().getColour() == Colour.WHITE) {
+                board.getWhitePieces().add(((Move.PawnPromotionCapture) move).getPromotionPiece());
+                board.getWhitePieces().remove(move.getMovedPiece());
+
+            } else if (((Move.PawnPromotionCapture) move).getPromotionPiece().getColour() == Colour.BLACK) {
+                board.getBlackPieces().add(((Move.PawnPromotionCapture) move).getPromotionPiece());
+                board.getBlackPieces().remove(move.getMovedPiece());
+            }
+
+        } else if (move instanceof Move.EnPassantMove) {
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] =
+                    new Square.OccupiedSquare(DestinationX, DestinationY, move.getMovedPiece());
+            move.getMovedPiece().setPieceCoordinate(move.getEndPosition().ReturnCoordinate());
+
+            //Return EnPassant pawn to square
+            board.getBoardArray()[((Move.EnPassantMove) move).getCapturedPieceLocation().ReturnCoordinate().getRank() - 1]
+                    [((Move.EnPassantMove) move).getCapturedPieceLocation().ReturnCoordinate().getFile() - 1] =
+                    new Square.EmptySquare(((Move.EnPassantMove) move).getCapturedPieceLocation().ReturnCoordinate().getRank(),
+                            ((Move.EnPassantMove) move).getCapturedPieceLocation().ReturnCoordinate().getFile());
+
+        } else if (move instanceof Move.CastlingMove) {
+            //Move King
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] =
+                    new Square.OccupiedSquare(DestinationX, DestinationY, move.getMovedPiece());
+            move.getMovedPiece().setPieceCoordinate(move.getEndPosition().ReturnCoordinate());
+
+            //Remove Rook from its origin
+            int rank = move.getMovedPiece().getColour() == Colour.WHITE ? 0 : 7;
+            if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.KING_SIDE) {
+                board.getBoardArray()[rank][7] = new Square.EmptySquare(8, rank + 1);
+            } else if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.QUEEN_SIDE) {
+                board.getBoardArray()[rank][0] = new Square.EmptySquare(1, rank + 1);
+            }
+
+            //Move Rook to its destination
+            board.getBoardArray()[((Move.CastlingMove) move).getRookDestination().getRank() - 1][((Move.CastlingMove) move).getRookDestination().getFile() - 1] =
+                    new Square.OccupiedSquare(((Move.CastlingMove) move).getRookDestination().getFile(), ((Move.CastlingMove) move).getRookDestination().getRank(), ((Move.CastlingMove) move).getCastledRook());
+            ((Move.CastlingMove) move).getCastledRook().setPieceCoordinate(((Move.CastlingMove) move).getRookDestination());
+
+        } else {
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] =
+                    new Square.OccupiedSquare(DestinationX, DestinationY, move.getMovedPiece());
+            move.getMovedPiece().setPieceCoordinate(move.getEndPosition().ReturnCoordinate());
+        }
+
 
         if (move.getMovedPiece() instanceof Pawn) {
             if (move.getMovedPiece().getColour() == Colour.WHITE && (OriginY - DestinationY == -2) && (OriginX - DestinationX == 0)) {
@@ -117,7 +174,6 @@ public class Game {
                 ((King) move.getMovedPiece()).setCastlingAvailability(CastlingAvailability.NEITHER);
             }
         }
-
         //Unset en-passant pawn if a double pawn move didnt happen
         if (move.getMovedPiece().getType() != PieceType.PAWN) {
             board.setEnPassantPawn(null);
@@ -130,13 +186,9 @@ public class Game {
                 board.getBlackPieces().remove(move.getCapturedPiece());
             }
         }
-
-        //TODO remove test
-        //System.out.println("\n");
-        //board.PrintBoard();
     }
 
-    public static void reverseMove(Move move, Board board) {
+    public static void reverseMove(Move move, Board board, CastlingAvailability castlingAvailability, Pawn enPassantPawn) {
         int OriginX = move.getStartPosition().ReturnCoordinate().getFile();
         int OriginY = move.getStartPosition().ReturnCoordinate().getRank();
         int DestinationX = move.getEndPosition().ReturnCoordinate().getFile();
@@ -148,16 +200,72 @@ public class Game {
         move.getMovedPiece().setPieceCoordinate(move.getStartPosition().ReturnCoordinate());
 
         //Puts any captured piece back to where it started and removes the other piece from that square
-        if (move.wasCapture()) {
+        if (move instanceof Move.EnPassantMove) {
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] = new Square.EmptySquare(DestinationX, DestinationY);
+            board.getBoardArray()[((Move.EnPassantMove) move).getCapturedPieceLocation().ReturnCoordinate().getRank() - 1]
+                    [((Move.EnPassantMove) move).getCapturedPieceLocation().ReturnCoordinate().getFile() - 1] =
+                    new Square.OccupiedSquare(((Move.EnPassantMove) move).getCapturedPieceLocation().ReturnCoordinate().getRank(),
+                            ((Move.EnPassantMove) move).getCapturedPieceLocation().ReturnCoordinate().getFile(), move.getCapturedPiece());
+
+            if (move.getCapturedPiece().getColour() == Colour.WHITE) {
+                board.getWhitePieces().add(move.getCapturedPiece());
+            } else if (move.getCapturedPiece().getColour() == Colour.BLACK) {
+                board.getBlackPieces().add(move.getCapturedPiece());
+            }
+            board.setEnPassantPawn((Pawn) move.getCapturedPiece());
+        } else if (move instanceof Move.CapturingMove) {
             board.getBoardArray()[DestinationY - 1][DestinationX - 1] = new Square.OccupiedSquare(DestinationX, DestinationY, move.getCapturedPiece());
             if (move.getCapturedPiece().getColour() == Colour.WHITE) {
                 board.getWhitePieces().add(move.getCapturedPiece());
             } else if (move.getCapturedPiece().getColour() == Colour.BLACK) {
                 board.getBlackPieces().add(move.getCapturedPiece());
             }
+        } else if (move instanceof Move.PawnPromotion) {
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] = new Square.EmptySquare(DestinationX, DestinationY);
+            if (((Move.PawnPromotion) move).getPromotionPiece().getColour() == Colour.WHITE) {
+                board.getWhitePieces().remove(((Move.PawnPromotion) move).getPromotionPiece());
+                board.getWhitePieces().add(move.getMovedPiece());
+
+            } else if (((Move.PawnPromotion) move).getPromotionPiece().getColour() == Colour.BLACK) {
+                board.getBlackPieces().remove(((Move.PawnPromotion) move).getPromotionPiece());
+                board.getBlackPieces().add(move.getMovedPiece());
+            }
+
+        } else if (move instanceof Move.PawnPromotionCapture) {
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] = new Square.OccupiedSquare(DestinationX, DestinationY, move.getCapturedPiece());
+            if (((Move.PawnPromotionCapture) move).getPromotionPiece().getColour() == Colour.WHITE) {
+                board.getWhitePieces().remove(((Move.PawnPromotionCapture) move).getPromotionPiece());
+                board.getWhitePieces().add(move.getMovedPiece());
+                board.getWhitePieces().add(move.getCapturedPiece());
+
+            } else if (((Move.PawnPromotionCapture) move).getPromotionPiece().getColour() == Colour.BLACK) {
+                board.getBlackPieces().remove(((Move.PawnPromotionCapture) move).getPromotionPiece());
+                board.getBlackPieces().add(move.getMovedPiece());
+                board.getBlackPieces().add(move.getCapturedPiece());
+            }
+
+        } else if (move instanceof Move.CastlingMove) {
+            board.getBoardArray()[((Move.CastlingMove) move).getRookDestination().getRank() - 1][((Move.CastlingMove) move).getRookDestination().getFile() - 1]
+                    = new Square.EmptySquare(((Move.CastlingMove) move).getRookDestination().getFile(), ((Move.CastlingMove) move).getRookDestination().getRank());
+
+            int rank = move.getMovedPiece().getColour() == Colour.WHITE ? 0 : 7;
+            if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.KING_SIDE) {
+                board.getBoardArray()[rank][7] = new Square.OccupiedSquare(8, rank + 1, ((Move.CastlingMove) move).getCastledRook());
+                ((Move.CastlingMove) move).getCastledRook().setPieceCoordinate(new Coordinate(8, rank + 1));
+            } else if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.QUEEN_SIDE) {
+                board.getBoardArray()[rank][0] = new Square.OccupiedSquare(1, rank + 1, ((Move.CastlingMove) move).getCastledRook());
+                ((Move.CastlingMove) move).getCastledRook().setPieceCoordinate(new Coordinate(1, rank + 1));
+            }
+
         } else {
             board.getBoardArray()[DestinationY - 1][DestinationX - 1] = new Square.EmptySquare(DestinationX, DestinationY);
         }
+
+        //Reset Castling Status
+        King king = (King) (move.getMovedPiece().getColour() == Colour.WHITE ? board.getKings()[0] : board.getKings()[1]);
+        king.setCastlingAvailability(castlingAvailability);
+
+        board.setEnPassantPawn(enPassantPawn);
     }
 
     /**
@@ -262,21 +370,25 @@ public class Game {
         return isThreatenedSquare(king.getColour(), king.getPieceCoordinate().GetSquareAt(board.getBoardArray()), board);
     }
 
-    public boolean isKingCheckmated(Colour colour){
-        Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
+    public boolean isKingCheckmated(Colour colour) {
+        King king = colour == Colour.WHITE ? (King) board.getKings()[0] : (King) board.getKings()[1];
         List<Piece> pieces = colour == Colour.WHITE ? board.getWhitePieces() : board.getBlackPieces();
+
+        final CastlingAvailability castlingAvailability = king.getCastlingAvailability();
+        final Pawn enPassantPawn = board.getEnPassantPawn();
+
         if (isKingChecked(colour, board) && king.CalculateValidMoves(board).isEmpty()) {
             for (Piece piece : pieces) {
                 List<Move> moves = piece.CalculateValidMoves(board);
                 for (Move move : moves) {
                     MakeMove(move, board);
-                    //TODO reverse move properly by storing data that may change
+
                     //If you can make a move which removes the king from check then its not checkmate
                     if (!isKingChecked(colour, board)) {
-                        reverseMove(move, board);
+                        reverseMove(move, board, castlingAvailability, enPassantPawn);
                         return false;
                     } else {
-                        reverseMove(move, board);
+                        reverseMove(move, board, castlingAvailability, enPassantPawn);
                     }
                 }
             }
