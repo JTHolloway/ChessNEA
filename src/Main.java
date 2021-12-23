@@ -34,7 +34,7 @@ public class Main {
 
     public static void MinimaxMove(Game g, Colour colour) {
         Minimax x = new Minimax(g);
-        x.minimaxTraversal(g.getBoard(), 3, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, true, colour);
+        x.minimaxTraversal(g.getBoard(), 1, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, true, colour);
         Move m = x.getCurrentBestMove();
         if (m == null) {
             System.out.println("No moves, Checkmate. Or wrong players turn");
