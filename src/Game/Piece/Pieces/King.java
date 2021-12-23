@@ -61,8 +61,42 @@ public class King extends Piece {
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
         PossibleDestinations.removeIf(square -> Game.isThreatenedSquare(this.colour, square, board)); //Lambda Expression
 
-        return removeIllegalMoves(board, DestinationsToMoves(PossibleDestinations, BoardArray));
+        //Castling
+        if (castlingAvailability == CastlingAvailability.QUEEN_SIDE || castlingAvailability == CastlingAvailability.BOTH) {
+            Square[][] boardArray = board.getBoardArray();
+            int rank = colour == Colour.WHITE ? 0 : 7;
+            if (boardArray[rank][0].SquareOccupied()) {
+                if (boardArray[rank][0].ReturnPiece() instanceof Rook
+                        && boardArray[rank][0].ReturnPiece().getColour() == colour
+                        && !boardArray[rank][1].SquareOccupied()
+                        && !boardArray[rank][2].SquareOccupied()
+                        && !boardArray[rank][3].SquareOccupied()
+                        && !Game.isKingChecked(colour, board)
+                        && !Game.isThreatenedSquare(colour, boardArray[rank][2], board)
+                        && !Game.isThreatenedSquare(colour, boardArray[rank][3], board)) {
 
+                    PossibleDestinations.add(boardArray[rank][2]);
+                }
+            }
+        }
+        if (castlingAvailability == CastlingAvailability.KING_SIDE || castlingAvailability == CastlingAvailability.BOTH) {
+            Square[][] boardArray = board.getBoardArray();
+            int rank = colour == Colour.WHITE ? 0 : 7;
+            if (boardArray[rank][7].SquareOccupied()) {
+                if (boardArray[rank][7].ReturnPiece() instanceof Rook
+                        && boardArray[rank][7].ReturnPiece().getColour() == colour
+                        && !boardArray[rank][6].SquareOccupied()
+                        && !boardArray[rank][5].SquareOccupied()
+                        && !Game.isKingChecked(colour, board)
+                        && !Game.isThreatenedSquare(colour, boardArray[rank][6], board)
+                        && !Game.isThreatenedSquare(colour, boardArray[rank][5], board)) {
+
+                    PossibleDestinations.add(boardArray[rank][6]);
+                }
+            }
+        }
+
+        return removeIllegalMoves(board, DestinationsToMoves(PossibleDestinations, BoardArray));
     }
 
     /**
@@ -89,7 +123,4 @@ public class King extends Piece {
     public void setCastlingAvailability(CastlingAvailability castlingAvailability) {
         this.castlingAvailability = castlingAvailability;
     }
-
-
-//TODO Check, CheckMate and StaleMate handling
 }

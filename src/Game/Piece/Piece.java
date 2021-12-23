@@ -2,11 +2,13 @@ package Game.Piece;
 
 import Game.Board.Board;
 import Game.Board.Square;
+import Game.CastlingAvailability;
 import Game.Colour;
 import Game.Coordinate;
 import Game.Game;
 import Game.Move.Move;
 import Game.Piece.Pieces.King;
+import Game.Piece.Pieces.Pawn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,12 +130,22 @@ public abstract class Piece {
     protected List<Move> DestinationsToMoves(final List<Square> PossibleDestinations, final Square[][] Board) {
         List<Move> Moves = new ArrayList<>();
         for (Square square : PossibleDestinations) {
-            if (square.SquareOccupied()) {
-                //Capturing move
-                Moves.add(new Move.CapturingMove(PieceCoordinate.GetSquareAt(Board), square, square.ReturnPiece()));
+            if ((type == PieceType.KING) && (PieceCoordinate.getFile() - square.ReturnCoordinate().getFile() == 2)) {
+                //Queen-side Castle
+                int rank = colour == Colour.WHITE ? 0 : 7;
+                Moves.add(new Move.CastlingMove(PieceCoordinate.GetSquareAt(Board), square, Board[rank][0].ReturnPiece(), CastlingAvailability.QUEEN_SIDE, Board[rank][3].ReturnCoordinate()));
+            } else if ((type == PieceType.KING) && (PieceCoordinate.getFile() - square.ReturnCoordinate().getFile() == -2)) {
+                //King-side Castle
+                int rank = colour == Colour.WHITE ? 0 : 7;
+                Moves.add(new Move.CastlingMove(PieceCoordinate.GetSquareAt(Board), square, Board[rank][7].ReturnPiece(), CastlingAvailability.KING_SIDE, Board[rank][5].ReturnCoordinate()));
             } else {
-                //General move
-                Moves.add(new Move.RegularMove(PieceCoordinate.GetSquareAt(Board), square));
+                if (square.SquareOccupied()) {
+                    //Capturing move
+                    Moves.add(new Move.CapturingMove(PieceCoordinate.GetSquareAt(Board), square, square.ReturnPiece()));
+                } else {
+                    //General move
+                    Moves.add(new Move.RegularMove(PieceCoordinate.GetSquareAt(Board), square));
+                }
             }
         }
         return Moves;
@@ -142,18 +154,23 @@ public abstract class Piece {
     protected List<Move> removeIllegalMoves(Board board, List<Move> moves) {
         List<Move> illegalMoves = new ArrayList<>();
 
-        for (Move move : moves) {
-            Game.MakeMove(move, board);
-            //TODO reverse move properly by storing data that may change
-            if (Game.isKingChecked(this.colour, board)) {
-                Game.reverseMove(move, board);
-                illegalMoves.add(move);
+        if (!moves.isEmpty() && moves.get(0).getMovedPiece() != null) {
+            King king = (moves.get(0).getMovedPiece().getColour() == Colour.WHITE) ? (King) board.getKings()[0] : (King) board.getKings()[1];
+            final CastlingAvailability castlingAvailability = king.getCastlingAvailability();
+            final Pawn enPassantPawn = board.getEnPassantPawn();
 
-            } else {
-                Game.reverseMove(move, board);
+            for (Move move : moves) {
+                Game.MakeMove(move, board);
+                if (Game.isKingChecked(this.colour, board)) {
+                    Game.reverseMove(move, board, castlingAvailability, enPassantPawn);
+                    illegalMoves.add(move);
+
+                } else {
+                    Game.reverseMove(move, board, castlingAvailability, enPassantPawn);
+                }
             }
+            moves.removeAll(illegalMoves);
         }
-        moves.removeAll(illegalMoves);
         return moves;
     }
 

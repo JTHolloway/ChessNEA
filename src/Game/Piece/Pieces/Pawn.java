@@ -2,6 +2,7 @@ package Game.Piece.Pieces;
 
 import Game.Board.Board;
 import Game.Board.Square;
+import Game.CastlingAvailability;
 import Game.Colour;
 import Game.Coordinate;
 import Game.Move.Move;
@@ -106,7 +107,7 @@ public class Pawn extends Piece {
 
         PossibleDestinations.removeAll(toBeRemoved);
 
-        return removeIllegalMoves(board, DestinationsToMoves(PossibleDestinations, BoardArray));
+        return removeIllegalMoves(board, DestinationsToMoves(PossibleDestinations, board));
     }
 
     /**
@@ -147,19 +148,42 @@ public class Pawn extends Piece {
 
         for (Square square : PossibleDestinations) {
             if ((board.getEnPassantPawn() != null) && (board.getEnPassantDestination().ReturnCoordinate().CompareCoordinates(square)) && (colour != board.getEnPassantPawn().colour)) {
-                Square EnPassantDestination = board.getEnPassantDestination();
+                //En Passant Move
+                Moves.add(new Move.EnPassantMove(PieceCoordinate.GetSquareAt(BoardArray), square, board.getEnPassantPawn(),
+                        board.getEnPassantPawn().PieceCoordinate.GetSquareAt(BoardArray)));
 
-                if (square.ReturnCoordinate().CompareCoordinates(EnPassantDestination)) {
-                    //En Passant Move
-                    Moves.add(new Move.EnPassantMove(PieceCoordinate.GetSquareAt(BoardArray), square, board.getEnPassantPawn(),
-                            board.getEnPassantPawn().PieceCoordinate.GetSquareAt(BoardArray)));
-                }
             } else if (square.SquareOccupied()) {
-                //Capturing move
-                Moves.add(new Move.CapturingMove(PieceCoordinate.GetSquareAt(BoardArray), square, square.ReturnPiece()));
+                if ((square.ReturnCoordinate().getRank() == 8 && colour == Colour.WHITE) || (square.ReturnCoordinate().getRank() == 1 && colour == Colour.BLACK)) {
+                    //Pawn Promotion Capture
+                    Moves.add(new Move.PawnPromotionCapture(PieceCoordinate.GetSquareAt(BoardArray), square,
+                            new Queen(square.ReturnCoordinate(), colour, PieceType.QUEEN), square.ReturnPiece()));
+                    Moves.add(new Move.PawnPromotionCapture(PieceCoordinate.GetSquareAt(BoardArray), square,
+                            new Rook(square.ReturnCoordinate(), colour, PieceType.ROOK, CastlingAvailability.NEITHER), square.ReturnPiece()));
+                    Moves.add(new Move.PawnPromotionCapture(PieceCoordinate.GetSquareAt(BoardArray), square,
+                            new Knight(square.ReturnCoordinate(), colour, PieceType.KNIGHT), square.ReturnPiece()));
+                    Moves.add(new Move.PawnPromotionCapture(PieceCoordinate.GetSquareAt(BoardArray), square,
+                            new Bishop(square.ReturnCoordinate(), colour, PieceType.BISHOP), square.ReturnPiece()));
+
+                } else {
+                    //Capturing move
+                    Moves.add(new Move.CapturingMove(PieceCoordinate.GetSquareAt(BoardArray), square, square.ReturnPiece()));
+                }
             } else {
-                //General move
-                Moves.add(new Move.RegularMove(PieceCoordinate.GetSquareAt(BoardArray), square));
+                if ((square.ReturnCoordinate().getRank() == 8 && colour == Colour.WHITE) || (square.ReturnCoordinate().getRank() == 1 && colour == Colour.BLACK)) {
+                    //Pawn Promotion
+                    Moves.add(new Move.PawnPromotion(PieceCoordinate.GetSquareAt(BoardArray), square,
+                            new Queen(square.ReturnCoordinate(), colour, PieceType.QUEEN)));
+                    Moves.add(new Move.PawnPromotion(PieceCoordinate.GetSquareAt(BoardArray), square,
+                            new Rook(square.ReturnCoordinate(), colour, PieceType.ROOK, CastlingAvailability.NEITHER)));
+                    Moves.add(new Move.PawnPromotion(PieceCoordinate.GetSquareAt(BoardArray), square,
+                            new Knight(square.ReturnCoordinate(), colour, PieceType.KNIGHT)));
+                    Moves.add(new Move.PawnPromotion(PieceCoordinate.GetSquareAt(BoardArray), square,
+                            new Bishop(square.ReturnCoordinate(), colour, PieceType.BISHOP)));
+
+                } else {
+                    //General move
+                    Moves.add(new Move.RegularMove(PieceCoordinate.GetSquareAt(BoardArray), square));
+                }
             }
         }
         return Moves;
