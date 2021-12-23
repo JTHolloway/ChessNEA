@@ -4,6 +4,8 @@ import Game.Board.Board;
 import Game.Move.Move;
 import Game.Piece.Piece;
 import Game.Piece.PieceType;
+import Game.Piece.Pieces.King;
+import Game.Piece.Pieces.Pawn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,22 +16,10 @@ public final class Minimax {
     private final Game game;
     private Move currentBestMove;
 
-//    private final CastlingAvailability blacksCastlingAvailability; //todo remove these variables
-//    private final CastlingAvailability whitesCastlingAvailability;
-//    private final Pawn enPassantPawn;
-//    private final ArrayList<Piece> whitePieces;
-//    private final ArrayList<Piece> blackPieces;
-
     private int temp = 0; // TODO remove
 
     public Minimax(Game game) {
         this.game = game;
-        //todo copies reference only?
-//        blacksCastlingAvailability = ((King) game.getBoard().getKings()[1]).getCastlingAvailability();
-//        whitesCastlingAvailability = ((King) game.getBoard().getKings()[0]).getCastlingAvailability();
-//        enPassantPawn = game.getBoard().getEnPassantPawn();
-//        whitePieces = new ArrayList<>(game.getBoard().getWhitePieces());
-//        blackPieces = new ArrayList<>(game.getBoard().getBlackPieces());
     }
 
     public double minimaxTraversal(Board currentPosition, int searchDepth, double alpha, double beta, boolean maximizer, Colour maximizingColour) {
@@ -39,30 +29,29 @@ public final class Minimax {
             return evaluateBranch(currentPosition, maximizingColour);
         }
         List<Move> moves = getChildren(currentPosition, maximizer, maximizingColour);
-        try {
-            if (moves.get(0).getMovedPiece().getColour() == maximizingColour) {
-                Random r = new Random();
-                currentBestMove = moves.get(r.nextInt(moves.size()));
-            }
-        } catch (Exception exception) {
-            System.err.println(exception);
-            return evaluateBranch(currentPosition, maximizingColour);
+        if (moves.get(0).getMovedPiece().getColour() == maximizingColour) {
+            Random r = new Random();
+            currentBestMove = moves.get(r.nextInt(moves.size()));
         }
 
+        //Get castling availability using XOR operator
+        King king = (maximizer ^ maximizingColour == Colour.WHITE) ? (King) currentPosition.getKings()[1] : (King) currentPosition.getKings()[0];
+        final CastlingAvailability castlingAvailability = king.getCastlingAvailability();
+
+        //Store Current EnPassant Pawn
+        final Pawn enPassantPawn = currentPosition.getEnPassantPawn();
 
         if (maximizer) {
             double maxEvaluation = Double.NEGATIVE_INFINITY;
             for (Move currentNode : moves) {
-                //TODO maybe store board data here so the move can be reversed exactly??
                 Game.MakeMove(currentNode, currentPosition);
                 //game.getBoard().PrintBoard(); //todo Remove
                 //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
                 double nodeEvaluation = minimaxTraversal(currentPosition, searchDepth - 1, alpha, beta, false, maximizingColour);
                 //System.out.println("Node Evaluation: " + nodeEvaluation);
-                Game.reverseMove(currentNode, currentPosition);
+                Game.reverseMove(currentNode, currentPosition, castlingAvailability, enPassantPawn);
                 if (nodeEvaluation > maxEvaluation) {
                     maxEvaluation = nodeEvaluation;
-                    //System.out.println("Highest");
                     if (currentNode.getMovedPiece().getColour() == maximizingColour) {
                         currentBestMove = currentNode;
                     }
@@ -81,10 +70,9 @@ public final class Minimax {
                 //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
                 double nodeEvaluation = minimaxTraversal(currentPosition, searchDepth - 1, alpha, beta, true, maximizingColour);
                 //System.out.println("min Node evaluation: " + nodeEvaluation);
-                Game.reverseMove(currentNode, currentPosition);
+                Game.reverseMove(currentNode, currentPosition, castlingAvailability, enPassantPawn);
                 if (nodeEvaluation < minEvaluation) {
                     minEvaluation = nodeEvaluation;
-                    //System.out.println("Lowest");
                     if (currentNode.getMovedPiece().getColour() == maximizingColour) {
                         currentBestMove = currentNode;
                     }
