@@ -1,11 +1,8 @@
 package LibaryFunctions;
 
-import GUIs.GUI_BoardPanel;
 import User.User;
 import User.UserStats;
 
-import javax.swing.*;
-import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -190,8 +187,7 @@ public class Repository {
             //TODO get userstats and user details in same method
             String sql = "SELECT User.*, Country.CountryName, ProfilePictures.Picture " +
                     "FROM User, Country, ProfilePictures " +
-                    "WHERE Country.CountryID = User.Country " +
-                    "AND ProfilePictures.ID = User.ProfilePicture";
+                    "WHERE Country.CountryID = User.Country";
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
 
             List<User> users = new ArrayList<User>();
@@ -228,15 +224,10 @@ public class Repository {
         try {
             String sql = "SELECT User.*, Country.CountryName, ProfilePictures.Picture " +
                     "FROM User, Country, ProfilePictures " +
-                    "WHERE User.UserID = '" + UserID + "' AND Country.CountryID = User.Country " +
-                    "AND ProfilePictures.ID = User.ProfilePicture";
+                    "WHERE User.UserID = '" + UserID + "' AND Country.CountryID = User.Country";
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
 
             if (rs.next()) {
-                //todo fetch profile image
-//                byte[] byteArray = rs.getBytes("Picture");
-//                ImageIcon image = new ImageIcon(byteArray);
-
                 setCurrentUser(new User(
                         rs.getString("UserID"),
                         rs.getString("Username"),
@@ -245,7 +236,6 @@ public class Repository {
                         rs.getString("LastName"),
                         rs.getString("CountryName"),
                         getUserStats(UserID)
-                        //,image
                 ));
             }
             rs.close();

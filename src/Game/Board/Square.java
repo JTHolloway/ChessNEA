@@ -5,7 +5,7 @@ import Game.Piece.Piece;
 
 public abstract class Square {
 
-    protected final Coordinate coordinate;
+    protected Coordinate coordinate;
 
     /**
      * Constructor for a Square object
@@ -18,6 +18,9 @@ public abstract class Square {
         coordinate = new Coordinate(XCoordinate, YCoordinate);
     }
 
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
 
     /**
      * Returns the squares coordinates

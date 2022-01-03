@@ -245,6 +245,7 @@ public class Game {
             }
 
         } else if (move instanceof Move.CastlingMove) {
+            board.getBoardArray()[DestinationY - 1][DestinationX - 1] = new Square.EmptySquare(DestinationX, DestinationY);
             board.getBoardArray()[((Move.CastlingMove) move).getRookDestination().getRank() - 1][((Move.CastlingMove) move).getRookDestination().getFile() - 1]
                     = new Square.EmptySquare(((Move.CastlingMove) move).getRookDestination().getFile(), ((Move.CastlingMove) move).getRookDestination().getRank());
 
@@ -265,6 +266,7 @@ public class Game {
         King king = (King) (move.getMovedPiece().getColour() == Colour.WHITE ? board.getKings()[0] : board.getKings()[1]);
         king.setCastlingAvailability(castlingAvailability);
 
+        //Reset EnPassant Pawn
         board.setEnPassantPawn(enPassantPawn);
     }
 

@@ -46,6 +46,12 @@ public class Coordinate {
     public Square GetSquareAt(Square[][] Board) {
         for (Square[] row : Board) {
             for (Square square : row) {
+                if (square.SquareOccupied()) {
+                    if (!square.ReturnPiece().getPieceCoordinate().CompareCoordinates(square)) {
+                        square.setCoordinate(square.ReturnPiece().getPieceCoordinate());
+                    }
+                }
+
                 if (CompareCoordinates(square)) {
                     return square;
                 }
@@ -63,7 +69,7 @@ public class Coordinate {
     public boolean CompareCoordinates(Square square) {
         int XDisplacement = Math.abs(square.ReturnCoordinate().getFile() - File);
         int YDisplacement = Math.abs(square.ReturnCoordinate().getRank() - Rank);
-        
+
         /*
            If displacement of square is 0 in comparison to coordinates then
            they are in the same location
