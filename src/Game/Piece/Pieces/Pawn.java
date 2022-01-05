@@ -119,7 +119,6 @@ public class Pawn extends Piece {
      * @return a List of square objects which the pawn can move to after checking whether it is eligible to move two spaces
      */
     private List<Square> CheckDoubleMoveCollision(Square[][] BoardArray, List<Square> PossibleDestinations) {
-        //TODO remove test print statements
         if ((getPieceCoordinate().getRank() == 2) || (getPieceCoordinate().getRank() == 7)) {
             if (BoardArray[2][getPieceCoordinate().getFile() - 1].SquareOccupied()) {
                 if (!BoardArray[3][getPieceCoordinate().getFile() - 1].SquareOccupied()) {
@@ -147,7 +146,8 @@ public class Pawn extends Piece {
         Square[][] BoardArray = board.getBoardArray();
 
         for (Square square : PossibleDestinations) {
-            if ((board.getEnPassantPawn() != null) && (board.getEnPassantDestination().ReturnCoordinate().CompareCoordinates(square)) && (colour != board.getEnPassantPawn().colour)) {
+            if ((board.getEnPassantPawn() != null) && (board.getEnPassantDestination().ReturnCoordinate().CompareCoordinates(square))
+                    && (colour != board.getEnPassantPawn().colour)) {
                 //En Passant Move
                 Moves.add(new Move.EnPassantMove(PieceCoordinate.GetSquareAt(BoardArray), square, board.getEnPassantPawn(),
                         board.getEnPassantPawn().PieceCoordinate.GetSquareAt(BoardArray)));

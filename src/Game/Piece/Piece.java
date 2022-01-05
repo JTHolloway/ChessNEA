@@ -133,11 +133,13 @@ public abstract class Piece {
             if ((type == PieceType.KING) && (PieceCoordinate.getFile() - square.ReturnCoordinate().getFile() == 2)) {
                 //Queen-side Castle
                 int rank = colour == Colour.WHITE ? 0 : 7;
-                Moves.add(new Move.CastlingMove(PieceCoordinate.GetSquareAt(Board), square, Board[rank][0].ReturnPiece(), CastlingAvailability.QUEEN_SIDE, Board[rank][3].ReturnCoordinate()));
+                Moves.add(new Move.CastlingMove(PieceCoordinate.GetSquareAt(Board), square, Board[rank][0].ReturnPiece(),
+                        CastlingAvailability.QUEEN_SIDE, Board[rank][3].ReturnCoordinate()));
             } else if ((type == PieceType.KING) && (PieceCoordinate.getFile() - square.ReturnCoordinate().getFile() == -2)) {
                 //King-side Castle
                 int rank = colour == Colour.WHITE ? 0 : 7;
-                Moves.add(new Move.CastlingMove(PieceCoordinate.GetSquareAt(Board), square, Board[rank][7].ReturnPiece(), CastlingAvailability.KING_SIDE, Board[rank][5].ReturnCoordinate()));
+                Moves.add(new Move.CastlingMove(PieceCoordinate.GetSquareAt(Board), square, Board[rank][7].ReturnPiece(),
+                        CastlingAvailability.KING_SIDE, Board[rank][5].ReturnCoordinate()));
             } else {
                 if (square.SquareOccupied()) {
                     //Capturing move

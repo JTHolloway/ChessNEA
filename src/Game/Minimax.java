@@ -45,11 +45,21 @@ public final class Minimax {
             double maxEvaluation = Double.NEGATIVE_INFINITY;
             for (Move currentNode : moves) {
                 Game.MakeMove(currentNode, currentPosition);
+
+                System.out.println("Move Made");
+                game.getBoard().PrintBoard();
+                System.out.println("");
+
                 //game.getBoard().PrintBoard(); //todo Remove
                 //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
                 double nodeEvaluation = minimaxTraversal(currentPosition, searchDepth - 1, alpha, beta, false, maximizingColour);
                 //System.out.println("Node Evaluation: " + nodeEvaluation);
                 Game.reverseMove(currentNode, currentPosition, castlingAvailability, enPassantPawn);
+
+                System.out.println("Move Reversed");
+                game.getBoard().PrintBoard();
+                System.out.println("");
+
                 if (nodeEvaluation > maxEvaluation) {
                     maxEvaluation = nodeEvaluation;
                     if (currentNode.getMovedPiece().getColour() == maximizingColour) {
@@ -66,11 +76,21 @@ public final class Minimax {
             double minEvaluation = Double.POSITIVE_INFINITY;
             for (Move currentNode : moves) {
                 Game.MakeMove(currentNode, currentPosition);
+
+                System.out.println("Move Made");
+                game.getBoard().PrintBoard();
+                System.out.println("");
+
                 //game.getBoard().PrintBoard(); //todo remove
                 //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
                 double nodeEvaluation = minimaxTraversal(currentPosition, searchDepth - 1, alpha, beta, true, maximizingColour);
                 //System.out.println("min Node evaluation: " + nodeEvaluation);
                 Game.reverseMove(currentNode, currentPosition, castlingAvailability, enPassantPawn);
+
+                System.out.println("Move Reversed");
+                game.getBoard().PrintBoard();
+                System.out.println("");
+
                 if (nodeEvaluation < minEvaluation) {
                     minEvaluation = nodeEvaluation;
                     if (currentNode.getMovedPiece().getColour() == maximizingColour) {
