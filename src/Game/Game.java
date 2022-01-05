@@ -367,11 +367,22 @@ public class Game {
 
     //If the king is in check then no need to check for stalemate.
     // check checkmate -> check -> stalemate
+    /**
+     * If the square which the king is on is a threatened square, then the king must be in check
+     * @param colour The colour of the king you want to determine is checked or not.
+     * @param board The board object associated with the current game
+     * @return true if the king is checked.
+     */
     public static boolean isKingChecked(Colour colour, Board board) {
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
         return isThreatenedSquare(king.getColour(), king.getPieceCoordinate().GetSquareAt(board.getBoardArray()), board);
     }
 
+    /**
+     * If the player is currently in check and cannot move out of check then the player is in checkmate.
+     * @param colour The colour of the king you want to determine is in checkmate
+     * @return true if king is checkmated
+     */
     public boolean isKingCheckmated(Colour colour) {
         King king = colour == Colour.WHITE ? (King) board.getKings()[0] : (King) board.getKings()[1];
         List<Piece> pieces = colour == Colour.WHITE ? board.getWhitePieces() : board.getBlackPieces();
@@ -399,6 +410,11 @@ public class Game {
         return false;
     }
 
+    /**
+     * If the king is not checkmated and the player has no available moves then the player is in stalemate
+     * @param colour The colour you want to determine is in Stalemate
+     * @return true if the player of that colour is stalemated
+     */
     public boolean isStalemate(Colour colour){
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
         if (king.CalculateValidMoves(board).isEmpty() && !isKingChecked(colour, board)) {
