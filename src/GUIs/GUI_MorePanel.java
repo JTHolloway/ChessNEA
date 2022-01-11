@@ -81,7 +81,7 @@ public class GUI_MorePanel extends JPanel {
         ProfilePanelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO profile panel
+                //todo do profile panel
             }
 
             @Override
@@ -111,7 +111,7 @@ public class GUI_MorePanel extends JPanel {
         LeaderBoardsPanelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO leaderboard panel
+                GUI_MainJFrame.PodiumPanelClicked();
             }
 
             @Override

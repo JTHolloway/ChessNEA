@@ -5,6 +5,7 @@ import LibaryFunctions.Repository;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -80,6 +81,8 @@ public class GUI_FriendsPanel extends JPanel {
         });
 
         //Search Results
+        Results.getTableHeader().setOpaque(false);
+        Results.getTableHeader().setBackground(Color.orange);
         Results.setBorder(new LineBorder(Color.BLACK, 2));
         Results.setBackground(Color.gray);
         Results.setForeground(Color.BLACK);
@@ -89,6 +92,8 @@ public class GUI_FriendsPanel extends JPanel {
         //TODO actionListener
 
         //Friend List
+        FriendsList.getTableHeader().setOpaque(false);
+        FriendsList.getTableHeader().setBackground(Color.orange);
         FriendsList.setBorder(new LineBorder(Color.BLACK, 2));
         FriendsList.setBackground(Color.gray);
         FriendsList.setForeground(Color.BLACK);

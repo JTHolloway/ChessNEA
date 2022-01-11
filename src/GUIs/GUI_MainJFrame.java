@@ -17,6 +17,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
     private static JPanel AnalysisPanel;
     private static JPanel MorePanel;
     private static JPanel FriendsPanel;
+    private static JPanel PodiumPanel;
 
     private JLabel CloseWindowButton;
     private JLabel MinimiseWindowButton;
@@ -42,8 +43,33 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
 
         if (!FriendsPanel.isVisible()) {
             FriendsPanel.setVisible(true);
-            AnalysisPanel.setVisible(false);
             learnPanel.setVisible(false);
+            AnalysisPanel.setVisible(false);
+            MorePanel.setVisible(false);
+            PodiumPanel.setVisible(true);
+
+            if (gamePanel != null) {
+                gamePanel.setVisible(false);
+            }
+            MorePanel.setVisible(false);
+            //TODO set other panels visibility to false
+        }
+    }
+
+    /**
+     * When method is called it sets the Podium panel as visible and fills the table with the users.
+     * This method is called when the Podium button is pressed on the More Panel. This method is called from the GUI_MorePanel Class.
+     */
+    public static void PodiumPanelClicked() {
+        GUI_PodiumPanel.UpdateCountryTable();
+        GUI_PodiumPanel.UpdateELOTable();
+
+        if (!PodiumPanel.isVisible()) {
+            learnPanel.setVisible(false);
+            AnalysisPanel.setVisible(false);
+            MorePanel.setVisible(false);
+            FriendsPanel.setVisible(false);
+            PodiumPanel.setVisible(true);
 
             if (gamePanel != null) {
                 gamePanel.setVisible(false);
@@ -65,6 +91,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         AnalysisPanel = new GUI_AnalysisPanel();
         MorePanel = new GUI_MorePanel();
         FriendsPanel = new GUI_FriendsPanel();
+        PodiumPanel = new GUI_PodiumPanel();
 
         CloseWindowButton = new JLabel();
         MinimiseWindowButton = new JLabel();
@@ -80,6 +107,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         AnalysisPanel.setVisible(false);
         FriendsPanel.setVisible(false);
         MorePanel.setVisible(false);
+        PodiumPanel.setVisible(false);
         //todo the rest
         //endregion
 
@@ -209,6 +237,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     AnalysisPanel.setVisible(false);
                     MorePanel.setVisible(false);
                     FriendsPanel.setVisible(false);
+                    PodiumPanel.setVisible(false);
                     //TODO set other panels visibility to false
                 }
             }
@@ -245,6 +274,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     AnalysisPanel.setVisible(false);
                     MorePanel.setVisible(false);
                     FriendsPanel.setVisible(false);
+                    PodiumPanel.setVisible(false);
 
                     if (gamePanel != null) {
                         gamePanel.setVisible(false);
@@ -284,6 +314,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     AnalysisPanel.setVisible(true);
                     learnPanel.setVisible(false);
                     MorePanel.setVisible(false);
+                    PodiumPanel.setVisible(false);
                     FriendsPanel.setVisible(false);
 
                     if (gamePanel != null) {
@@ -397,6 +428,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         this.getContentPane().add(learnPanel);
         this.getContentPane().add(FriendsPanel);
         this.getContentPane().add(MorePanel);
+        this.getContentPane().add(PodiumPanel);
         //endregion
 
         this.setVisible(true);
