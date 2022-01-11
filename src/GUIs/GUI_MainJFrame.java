@@ -61,8 +61,8 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
      * This method is called when the Podium button is pressed on the More Panel. This method is called from the GUI_MorePanel Class.
      */
     public static void PodiumPanelClicked() {
-        GUI_PodiumPanel.UpdateCountryTable();
         GUI_PodiumPanel.UpdateELOTable();
+        GUI_PodiumPanel.UpdateCountryTable();
 
         if (!PodiumPanel.isVisible()) {
             learnPanel.setVisible(false);
