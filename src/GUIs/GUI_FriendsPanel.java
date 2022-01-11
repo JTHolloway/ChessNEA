@@ -1,5 +1,7 @@
 package GUIs;
 
+import LibaryFunctions.Repository;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
@@ -19,8 +21,10 @@ public class GUI_FriendsPanel extends JPanel {
      * Constructor for the Friends JPanel. Calls the initComponents() method
      */
     public GUI_FriendsPanel() {
-        //TODO fetch usernames from user table WHERE they are friends in the friendship table. Add them to list
-        InitComponents();
+        if (Repository.getCurrentUser() != null){
+            Usernames = Repository.getCurrentUsersFriends();
+            InitComponents();
+        }
     }
 
     /**
@@ -32,9 +36,10 @@ public class GUI_FriendsPanel extends JPanel {
         FriendsList.setModel(model);
         model.addRow(ColumnNames);
 
-        //TODO for loop to add userID and usernames of each friend to table
-        //String[] item = {"JH77", "Username"};
-        //model.addRow(item);
+        for (String User : Usernames){
+            String[] data = (User.split(","));
+            model.addRow(data);
+        }
     }
 
     /**

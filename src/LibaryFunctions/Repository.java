@@ -47,42 +47,27 @@ public class Repository {
         Repository.currentUser = currentUser;
     }
 
+    public static ArrayList<String> getCurrentUsersFriends() {
+        ArrayList<String> friends = new ArrayList<>();
 
-    //TODO fix getCurrentUsersFriends() and comment
-//    public static ArrayList<User> getCurrentUsersFriends() {
-//        User friend = null;
-//        ArrayList<User> friends = new ArrayList<User>();
-//
-//        try {
-//
-//            String sql = "SELECT * " +
-//                    "FROM User, UserStats, Friendship, Country " +
-//                    "WHERE User.UserID = Friendship.FriendRequestRecipient " +
-//                    "AND UserStats.UserID = Friendship.FriendRequestRecipient" +
-//                    "AND Friendship.FriendRequester = '" + currentUser.getUserID() +
-//                    " AND Country.CountryID = User.Country " +
-//                    "AND Rank.RankID = UserStats.RankID";
-//            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
-//
-//            while (rs.next()) {
-//                UserStats userStats = new UserStats(rs.getString());
-//
-//                friend = new User(rs.getString("User.UserID"),
-//                        rs.getString("User.Username"),
-//                        rs.getString("User.Email"),
-//                        rs.getString("User.FirstName"),
-//                        rs.getString("User.LastName"),
-//                        rs.getString("Country.CountryName"));
-//                friends.add(friend);
-//            }
-//            rs.close();
-//            connection.close();
-//        } catch (Exception e) {
-//            System.out.println("Error in the repository class: " + e);
-//
-//        }
-//        return friends;
-//    }
+        try {
+            String sql = "SELECT User.Username, Friendship.FriendRequestRecipient " +
+                    "FROM User, Friendship " +
+                    "WHERE Friendship.FriendRequester = '" + currentUser.getUserID() + "' " +
+                    "AND User.UserID = Friendship.FriendRequestRecipient";
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+
+            while (rs.next()) {
+                friends.add(rs.getString("FriendRequestRecipient") + "," + rs.getString("Username"));
+            }
+            rs.close();
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+
+        }
+        return friends;
+    }
 
     /**
      * Adds a new user to the database after they have created an account
@@ -185,8 +170,8 @@ public class Repository {
     public static List<User> getUsers() {
         try {
             //TODO get userstats and user details in same method
-            String sql = "SELECT User.*, Country.CountryName, ProfilePictures.Picture " +
-                    "FROM User, Country, ProfilePictures " +
+            String sql = "SELECT User.*, Country.CountryName " +
+                    "FROM User, Country " +
                     "WHERE Country.CountryID = User.Country";
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
 
@@ -222,8 +207,8 @@ public class Repository {
      */
     public static void Login(String UserID) {
         try {
-            String sql = "SELECT User.*, Country.CountryName, ProfilePictures.Picture " +
-                    "FROM User, Country, ProfilePictures " +
+            String sql = "SELECT User.*, Country.CountryName " +
+                    "FROM User, Country " +
                     "WHERE User.UserID = '" + UserID + "' AND Country.CountryID = User.Country";
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
 
@@ -290,6 +275,7 @@ public class Repository {
     public static void updateUsersStats() {
         Date Today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
         try {
+            getConnection();
             PreparedStatement stmt = connection.prepareStatement("UPDATE UserStats " +
                     "SET ELO = ?, " +
                     "Wins = ?, " +
@@ -304,7 +290,8 @@ public class Repository {
             stmt.setDate(5, Today);
             stmt.setString(6, currentUser.getUserID());
 
-            ExecuteSQL.executeUpdateQuery(getConnection(), stmt);
+            ExecuteSQL.executeUpdateQuery(connection, stmt);
+            connection.close();
         } catch (Exception e) {
             System.out.println("Error in the repository class: " + e);
         }

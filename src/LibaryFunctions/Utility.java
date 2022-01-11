@@ -126,7 +126,7 @@ public class Utility {
         for (String ID : Repository.getUserIds()) {
             if (ID.equals(UserID)) return false;
         }
-        return true;
+        return ! UserID.contains("//");
     }
 
     /**
