@@ -141,6 +141,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         CloseWindowButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                Repository.updateUsersStats();
                 System.exit(0);
             }
 
