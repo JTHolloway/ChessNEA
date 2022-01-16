@@ -273,27 +273,29 @@ public class Repository {
      * todo comment
      */
     public static void updateUsersStats() {
-        Date Today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        try {
-            getConnection();
-            PreparedStatement stmt = connection.prepareStatement("UPDATE UserStats " +
-                    "SET ELO = ?, " +
-                    "Wins = ?, " +
-                    "Losses = ?, " +
-                    "Draws = ?, " +
-                    "LastPlayDate = ? " +
-                    "WHERE UserID = ?");
-            stmt.setInt(1, currentUser.getStatistics().getELO());
-            stmt.setInt(2, currentUser.getStatistics().getWins());
-            stmt.setInt(3, currentUser.getStatistics().getLosses());
-            stmt.setInt(4, currentUser.getStatistics().getDraws());
-            stmt.setDate(5, Today);
-            stmt.setString(6, currentUser.getUserID());
+        if (!currentUser.getUserID().equals("Guest")) {
+            Date Today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+            try {
+                getConnection();
+                PreparedStatement stmt = connection.prepareStatement("UPDATE UserStats " +
+                        "SET ELO = ?, " +
+                        "Wins = ?, " +
+                        "Losses = ?, " +
+                        "Draws = ?, " +
+                        "LastPlayDate = ? " +
+                        "WHERE UserID = ?");
+                stmt.setInt(1, currentUser.getStatistics().getELO());
+                stmt.setInt(2, currentUser.getStatistics().getWins());
+                stmt.setInt(3, currentUser.getStatistics().getLosses());
+                stmt.setInt(4, currentUser.getStatistics().getDraws());
+                stmt.setDate(5, Today);
+                stmt.setString(6, currentUser.getUserID());
 
-            ExecuteSQL.executeUpdateQuery(connection, stmt);
-            connection.close();
-        } catch (Exception e) {
-            System.out.println("Error in the repository class: " + e);
+                ExecuteSQL.executeUpdateQuery(connection, stmt);
+                connection.close();
+            } catch (Exception e) {
+                System.out.println("Error in the repository class: " + e);
+            }
         }
     }
 
