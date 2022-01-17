@@ -18,6 +18,7 @@ public class GUI_PodiumPanel extends JPanel {
     private static JTable CountryTable;
     private static JLabel WorldWide;
     private static JLabel Country;
+    private static JLabel Title;
 
     /**
      * Constructor for the Podium JPanel. Calls the initComponents() method
@@ -94,6 +95,12 @@ public class GUI_PodiumPanel extends JPanel {
         CountryTable = new JTable();
         WorldWide = new JLabel("World Wide", SwingConstants.CENTER);
         Country = new JLabel("Country", SwingConstants.CENTER);
+        Title = new JLabel("\uD83C\uDFC6 Leaderboards", SwingConstants.LEADING);
+
+        Title.setSize((int) (this.getWidth() * 0.45d), this.getHeight() / 22);
+        Title.setFont(new Font("", Font.PLAIN, this.getHeight() / 22));
+        Title.setForeground(new Color(197, 90, 17));
+        Title.setLocation((int) (this.getWidth() * 0.01d), (int) (this.getHeight() * 0.01d));
 
         WorldWide.setSize((int) (this.getWidth() * 0.45d), this.getHeight() / 26);
         WorldWide.setFont(new Font("", Font.PLAIN, this.getHeight() / 26));
@@ -125,5 +132,6 @@ public class GUI_PodiumPanel extends JPanel {
         this.add(CountryTable);
         this.add(WorldWide);
         this.add(Country);
+        this.add(Title);
     }
 }
