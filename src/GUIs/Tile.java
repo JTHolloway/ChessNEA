@@ -17,8 +17,6 @@ public final class Tile extends JPanel {
      */
     public Tile(final Square square) {
         this.square = square;
-
-
     }
 
     public Square getSquare() {

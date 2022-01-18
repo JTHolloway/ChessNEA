@@ -2,11 +2,8 @@ package GUIs;
 
 import Game.Board.Square;
 import Game.Colour;
-import Game.Coordinate;
 import Game.Game;
 import Game.Move.Move;
-import Game.Piece.Piece;
-import LibaryFunctions.Stack;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +33,7 @@ public class GUI_BoardPanel extends JPanel {
 
         GUI_GamePanel.getGame().getBoard().PrintBoard();
         Game.MakeMove(new Move.RegularMove(array[1][1], array[2][1]), GUI_GamePanel.getGame().getBoard());
-        System.out.println("");
+        System.out.println();
         GUI_GamePanel.getGame().getBoard().PrintBoard();
 
         InitialisePieces();
@@ -73,11 +70,12 @@ public class GUI_BoardPanel extends JPanel {
                 tile.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        //todo if selected square is not already equal to null then count it as a destination
+                        //todo if selected square is not already equal to null then count it as a destination, otherwise count as an origin
+                        //todo can only move a piece if selected square is occupied, of the colour of the player and it is the PLAYERS TURN
                         selectedSquare = finalTile.getSquare();
 
-                        if (selectedSquare.SquareOccupied()){
-                            if (selectedSquare.ReturnPiece().getColour() == game.getSelectedColour()){
+                        if (selectedSquare.SquareOccupied()) {
+                            if (selectedSquare.ReturnPiece().getColour() == game.getSelectedColour()) {
                                 selectedSquare.ReturnPiece().CalculateValidMoves(game.getBoard());
                             }
                         }
