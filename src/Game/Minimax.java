@@ -6,6 +6,7 @@ import Game.Piece.Piece;
 import Game.Piece.PieceType;
 import Game.Piece.Pieces.King;
 import Game.Piece.Pieces.Pawn;
+import LibaryFunctions.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public final class Minimax {
 
     private final Game game;
     private Move currentBestMove;
+    private int[] pieceValues;
 
     private int temp = 0; // TODO remove
 
@@ -22,7 +24,37 @@ public final class Minimax {
         this.game = game;
     }
 
-    public double minimaxTraversal(Board currentPosition, int searchDepth, double alpha, double beta, boolean maximizer, Colour maximizingColour) {
+    public Move getComputerMove(Colour computerColour) {
+        int depth = 0;
+        pieceValues = new int[]{200, 9, 5, 3, 3, 1};
+
+        if (Repository.getCurrentUser() == null) {
+            pieceValues = new int[]{200, 9, 5, 3, 3, 1};
+            depth = 3;
+        } else if (Repository.getCurrentUser().getStatistics().getELO() <= 800) {
+            pieceValues = new int[]{200, 4, 3, 2, 2, 1};
+            depth = 2;
+        } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1300) {
+            depth = 3;
+        } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1600) {
+            depth = 4;
+        } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1900) {
+            depth = 4;
+            pieceValues = new int[]{200, 11, 6, 3, 3, 1};
+        } else if (Repository.getCurrentUser().getStatistics().getELO() <= 2400) {
+            depth = 5;
+            pieceValues = new int[]{200, 11, 6, 3, 3, 1};
+        } else {
+            depth = 6;
+            pieceValues = new int[]{200, 11, 6, 3, 3, 1};
+        }
+
+        minimaxTraversal(game.getBoard(), depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, true, computerColour);
+
+        return currentBestMove;
+    }
+
+    private double minimaxTraversal(Board currentPosition, int searchDepth, double alpha, double beta, boolean maximizer, Colour maximizingColour) {
         temp++;
         //System.out.println("");
         if (searchDepth == 0 || game.isGameOver()) {
@@ -48,7 +80,7 @@ public final class Minimax {
 
                 System.out.println("Move Made");
                 game.getBoard().PrintBoard();
-                System.out.println("");
+                System.out.println();
 
                 //game.getBoard().PrintBoard(); //todo Remove
                 //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
@@ -58,7 +90,7 @@ public final class Minimax {
 
                 System.out.println("Move Reversed");
                 game.getBoard().PrintBoard();
-                System.out.println("");
+                System.out.println();
 
                 if (nodeEvaluation > maxEvaluation) {
                     maxEvaluation = nodeEvaluation;
@@ -79,7 +111,7 @@ public final class Minimax {
 
                 System.out.println("Move Made");
                 game.getBoard().PrintBoard();
-                System.out.println("");
+                System.out.println();
 
                 //game.getBoard().PrintBoard(); //todo remove
                 //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
@@ -89,7 +121,7 @@ public final class Minimax {
 
                 System.out.println("Move Reversed");
                 game.getBoard().PrintBoard();
-                System.out.println("");
+                System.out.println();
 
                 if (nodeEvaluation < minEvaluation) {
                     minEvaluation = nodeEvaluation;
@@ -124,7 +156,6 @@ public final class Minimax {
 
     private double evaluateBranch(Board board, Colour maximizingColour) {
         double branchValue = 0;
-        int[] pieceValues = {200, 9, 5, 3, 3, 1}; //todo can be edited later depending on difficulty
 
         if (game.isKingCheckmated(Colour.BLACK)) {
             branchValue = Double.POSITIVE_INFINITY;

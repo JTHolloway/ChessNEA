@@ -61,10 +61,10 @@ public class Coordinate {
     }
 
     /**
-     * Compares two coordinates to check they are equal
+     * Compares two coordinates to check if they are equal
      *
      * @param square The square being compared to the coordinate
-     * @return a boolean indicating true if the coordinates the the same
+     * @return a boolean indicating true if the coordinates are the same
      */
     public boolean CompareCoordinates(Square square) {
         int XDisplacement = Math.abs(square.ReturnCoordinate().getFile() - File);
