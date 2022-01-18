@@ -1,5 +1,6 @@
 package LibaryFunctions;
 
+import GUIs.Tile;
 import Game.Move.Move;
 
 import java.util.ArrayList;
@@ -7,28 +8,29 @@ import java.util.List;
 
 public class Stack {
 
-    private List<Move> stackList = new ArrayList<>();
+    private List<Tile> stackList = new ArrayList<>();
     private int topIndex;
 
     public Stack(){
         topIndex = -1;
     }
 
-    public void push (Move move){
-        stackList.add(move);
+    public void push (Tile tile){
+        stackList.add(tile);
         topIndex++;
     }
 
-    public Move pop (){
+    public Tile pop (){
        if (!isEmpty()){
-           Move poppedMove = stackList.get(topIndex);
+           Tile poppedTile = stackList.get(topIndex);
            stackList.remove(topIndex);
-           return poppedMove;
+           topIndex--;
+           return poppedTile;
 
        } else return null; //Stack UnderFLow
     }
 
-    public Move peek (){
+    public Tile peek (){
         if (!isEmpty()){
             return stackList.get(topIndex);
 

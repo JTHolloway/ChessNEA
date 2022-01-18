@@ -217,7 +217,6 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                 int result = JOptionPane.showConfirmDialog(null, Options, "Game Options", JOptionPane.DEFAULT_OPTION);
                 if (result == JOptionPane.OK_OPTION) {
                     if (gameType.getItemAt(gameType.getSelectedIndex()).equals("Local")) {
-                        //TODO maybe add a timer for local games
                         type = GameType.LOCAL_MULTIPLAYER;
                     }
                     if (colour.getItemAt(colour.getSelectedIndex()).equals("White")) {
@@ -226,7 +225,6 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                 } else {
                     playerColour = Colour.WHITE;
                 }
-                System.out.println(type + " " + playerColour);
 
                 gamePanel = new GUI_GamePanel(type, playerColour);
                 gamePanel.setVisible(false);

@@ -14,6 +14,7 @@ public class Game {
     private final Player whitePlayer, blackPlayer;
     private final Board board;
     private Player PlayerToMove;
+    private final Colour selectedColour;
 
     /**
      * Game Constructor
@@ -24,6 +25,7 @@ public class Game {
      */
     public Game(final GameType Gametype, final Colour SelectedColour, final User user) {
         this.board = new Board();
+        selectedColour = SelectedColour;
 
         if (Gametype == GameType.LOCAL_MULTIPLAYER) {
             if (SelectedColour == Colour.WHITE) {
@@ -52,6 +54,7 @@ public class Game {
         this.board = new Board();
         whitePlayer = null;
         blackPlayer = null;
+        selectedColour = Colour.WHITE;
     }
 
     //TODO IMPORTANT.... and comment
@@ -431,6 +434,10 @@ public class Game {
 
     public boolean isGameOver() {
         return isKingCheckmated(Colour.WHITE) || isKingCheckmated(Colour.BLACK) || isStalemate(Colour.WHITE) || isStalemate(Colour.BLACK);
+    }
+
+    public Colour getSelectedColour() {
+        return selectedColour;
     }
 
     /**

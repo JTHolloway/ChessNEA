@@ -11,7 +11,7 @@ import java.awt.*;
 public class GUI_GamePanel extends JPanel {
 
     private static Game game;
-    private static GUI_BoardPanel boardPanel;
+    private GUI_BoardPanel boardPanel;
 
     /**
      * Constructor for Game JPanel which contains the board panel

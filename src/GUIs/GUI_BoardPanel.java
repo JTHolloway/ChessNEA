@@ -1,18 +1,24 @@
 package GUIs;
 
+import Game.Board.Square;
 import Game.Colour;
 import Game.Coordinate;
 import Game.Game;
+import Game.Move.Move;
 import Game.Piece.Piece;
+import LibaryFunctions.Stack;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GUI_BoardPanel extends JPanel {
 
-    private static List<Tile> Tiles;
+    private List<Tile> Tiles;
+    private Square selectedSquare;
 
     /**
      * Constructor for the board JPanel
@@ -24,13 +30,22 @@ public class GUI_BoardPanel extends JPanel {
         this.setLayout(null);
 
         InitialiseTiles();
+        InitialisePieces();
+
+        Square[][] array = GUI_GamePanel.getGame().getBoard().getBoardArray();
+
+        GUI_GamePanel.getGame().getBoard().PrintBoard();
+        Game.MakeMove(new Move.RegularMove(array[1][1], array[2][1]), GUI_GamePanel.getGame().getBoard());
+        System.out.println("");
+        GUI_GamePanel.getGame().getBoard().PrintBoard();
+
+        InitialisePieces();
     }
 
     /**
      * Initializes the board tiles to be displayed. Each tile is a JPanel which is displayed on the board JPanel
      */
     private void InitialiseTiles() {
-
         Colour colour = Colour.BLACK;
         int TileSize = (this.getSize().height) / 8;
         Tile tile;
@@ -39,12 +54,7 @@ public class GUI_BoardPanel extends JPanel {
 
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
-                if (i == 1 || i == 2 || i == 7 || i == 8) {
-                    Piece pieceAtLocation = game.getBoard().getBoardArray()[i - 1][j - 1].ReturnPiece();
-                    tile = new Tile.OccupiedTile(new Coordinate(j, i), colour, pieceAtLocation);
-                } else {
-                    tile = new Tile.EmptyTile(new Coordinate(j, i), colour);
-                }
+                    tile = new Tile(game.getBoard().getBoardArray()[(7- (i - 1))][(7- (j - 1))]);
 
                 if (i % 2 != j % 2) {
                     tile.setBackground(new Color(234, 182, 118));
@@ -52,26 +62,30 @@ public class GUI_BoardPanel extends JPanel {
                     tile.setBackground(new Color(148, 85, 9));
                 }
 
-                tile.setBounds((j - 1) * (TileSize), this.getSize().height - (i * TileSize), TileSize, TileSize);
+                if (game.getSelectedColour() == Colour.WHITE){
+                    tile.setBounds((7 - (j - 1)) * (TileSize), this.getSize().height - ((8 - (i - 1)) * TileSize), TileSize, TileSize);
+                } else {
+                    tile.setBounds((j - 1) * (TileSize), this.getSize().height - (i * TileSize), TileSize, TileSize);
+                }
                 tile.setLayout(null);
 
-                //todo remove********************************************
-                JLabel PieceIcon = new JLabel();
-                PieceIcon.setSize(TileSize, TileSize);
-                if (tile.isOccupied()){
-                    if (tile.returnPiece().getColour() == Colour.WHITE){
-                        PieceIcon.setForeground(new Color(247, 229, 195));
-                    }else PieceIcon.setForeground(new Color(59, 40, 4));
-                    String Icon = tile.returnPiece().ReturnPieceIcon();
-                    PieceIcon.setText(Icon);
-                    PieceIcon.setFont(new Font("", Font.PLAIN, TileSize));
-                    tile.add(PieceIcon);
-                }
-                //todo***************************************************
+                Tile finalTile = tile;
+                tile.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        //todo if selected square is not already equal to null then count it as a destination
+                        selectedSquare = finalTile.getSquare();
 
-                this.add(tile);
+                        if (selectedSquare.SquareOccupied()){
+                            if (selectedSquare.ReturnPiece().getColour() == game.getSelectedColour()){
+                                selectedSquare.ReturnPiece().CalculateValidMoves(game.getBoard());
+                            }
+                        }
+                    }
+                });
 
                 Tiles.add(tile);
+                this.add(tile);
                 colour = Colour.GetOtherColour(colour);
             }
         }
@@ -80,20 +94,21 @@ public class GUI_BoardPanel extends JPanel {
    private void InitialisePieces() {
        int TileSize = (this.getSize().height) / 8;
 
-       JLabel PieceIcon = new JLabel();
-       PieceIcon.setSize(TileSize, TileSize);
-       //tile.add(PieceIcon);
-
        for (Tile tile : Tiles) {
-           if (tile.isOccupied()){
-               if (tile.colour == Colour.BLACK){
-                   PieceIcon.setForeground(new Color(234, 182, 118));
-               }else PieceIcon.setForeground(new Color(148, 85, 9));
-               String Icon = tile.returnPiece().ReturnPieceIcon();
+           JLabel PieceIcon = new JLabel();
+           PieceIcon.setSize(TileSize, TileSize);
+           if (tile.getSquare().SquareOccupied()){
+               if (tile.getSquare().ReturnPiece().getColour() == Colour.WHITE){
+                   PieceIcon.setForeground(new Color(247, 229, 195));
+               } else PieceIcon.setForeground(new Color(59, 40, 4));
+               String Icon = tile.getSquare().ReturnPiece().ReturnPieceIcon();
                PieceIcon.setText(Icon);
-               PieceIcon.setFont(new Font("", Font.PLAIN, TileSize));
-               tile.add(PieceIcon);
+           } else {
+               String Icon = "";
+               PieceIcon.setText(Icon);
            }
+           PieceIcon.setFont(new Font("", Font.PLAIN, TileSize));
+           tile.add(PieceIcon);
        }
     }
 }
