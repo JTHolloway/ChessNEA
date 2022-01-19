@@ -6,6 +6,8 @@ import Game.Game;
 import Game.Move.Move;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -29,14 +31,14 @@ public class GUI_BoardPanel extends JPanel {
         InitialiseTiles();
         InitialisePieces();
 
-        Square[][] array = GUI_GamePanel.getGame().getBoard().getBoardArray();
-
-        GUI_GamePanel.getGame().getBoard().PrintBoard();
-        Game.MakeMove(new Move.RegularMove(array[1][1], array[2][1]), GUI_GamePanel.getGame().getBoard());
-        System.out.println();
-        GUI_GamePanel.getGame().getBoard().PrintBoard();
-
-        InitialisePieces();
+//        Square[][] array = GUI_GamePanel.getGame().getBoard().getBoardArray();
+//
+//        GUI_GamePanel.getGame().getBoard().PrintBoard();
+//        Game.MakeMove(new Move.RegularMove(array[1][1], array[2][1]), GUI_GamePanel.getGame().getBoard());
+//        System.out.println();
+//        GUI_GamePanel.getGame().getBoard().PrintBoard();
+//
+//        InitialisePieces();
     }
 
     /**
@@ -67,6 +69,7 @@ public class GUI_BoardPanel extends JPanel {
                 tile.setLayout(null);
 
                 Tile finalTile = tile;
+                final Border[] previousBorder = new Border[1];
                 tile.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -76,9 +79,31 @@ public class GUI_BoardPanel extends JPanel {
 
                         if (selectedSquare.SquareOccupied()) {
                             if (selectedSquare.ReturnPiece().getColour() == game.getSelectedColour()) {
-                                selectedSquare.ReturnPiece().CalculateValidMoves(game.getBoard());
+                                List<Move> moves = selectedSquare.ReturnPiece().CalculateValidMoves(game.getBoard());
+                                for (Tile tile1 : Tiles) {
+                                    tile1.setBorder(null);
+                                }
+
+                                for (Move move : moves) {
+                                    for (Tile tile1 : Tiles) {
+                                        if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
+                                            tile1.setBorder(new LineBorder(Color.GREEN, 5));
+                                        }
+                                    }
+                                }
                             }
                         }
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        previousBorder[0] = finalTile.getBorder();
+                        finalTile.setBorder(new LineBorder(Color.RED, 3));
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        finalTile.setBorder(previousBorder[0]);
                     }
                 });
 
