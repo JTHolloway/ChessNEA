@@ -44,7 +44,7 @@ public class Pawn extends Piece {
                 int YDisplacement = getPieceCoordinate().getRank() - Destination.getRank();
                 
                 /*
-                The pawn always moves two 1 in forwards, or diagonal when capturing, Therefore the
+                The pawn always moves 1 in forwards, or diagonal when capturing, Therefore the
                 Y displacement is always 1 for white and -1 for black (because forward for white is backwards for black)
                 The absolute value of X Displacement is always <= 1,
                 because it can move a maximum of 1 square either side when capturing.
@@ -93,6 +93,10 @@ public class Pawn extends Piece {
         List<Square> toBeRemoved = new ArrayList<>();
         for (Square square : PossibleDestinations) {
             if (board.getEnPassantPawn() == null) {
+                if ((!square.SquareOccupied()) && getPieceCoordinate().getFile() != square.ReturnCoordinate().getFile()) {
+                    toBeRemoved.add(square);
+                }
+            } else if (square.ReturnCoordinate().CompareCoordinates(board.getEnPassantDestination()) && (colour == board.getEnPassantPawn().getColour())) {
                 if ((!square.SquareOccupied()) && getPieceCoordinate().getFile() != square.ReturnCoordinate().getFile()) {
                     toBeRemoved.add(square);
                 }
