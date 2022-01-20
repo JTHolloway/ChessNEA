@@ -78,9 +78,9 @@ public final class Minimax {
             for (Move currentNode : moves) {
                 Game.MakeMove(currentNode, currentPosition);
 
-                System.out.println("Move Made");
-                game.getBoard().PrintBoard();
-                System.out.println();
+//                System.out.println("Move Made");
+//                game.getBoard().PrintBoard();
+//                System.out.println();
 
                 //game.getBoard().PrintBoard(); //todo Remove
                 //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
@@ -88,9 +88,9 @@ public final class Minimax {
                 //System.out.println("Node Evaluation: " + nodeEvaluation);
                 Game.reverseMove(currentNode, currentPosition, castlingAvailability, enPassantPawn);
 
-                System.out.println("Move Reversed");
-                game.getBoard().PrintBoard();
-                System.out.println();
+//                System.out.println("Move Reversed");
+//                game.getBoard().PrintBoard();
+//                System.out.println();
 
                 if (nodeEvaluation > maxEvaluation) {
                     maxEvaluation = nodeEvaluation;
@@ -109,9 +109,9 @@ public final class Minimax {
             for (Move currentNode : moves) {
                 Game.MakeMove(currentNode, currentPosition);
 
-                System.out.println("Move Made");
-                game.getBoard().PrintBoard();
-                System.out.println();
+//                System.out.println("Move Made");
+//                game.getBoard().PrintBoard();
+//                System.out.println();
 
                 //game.getBoard().PrintBoard(); //todo remove
                 //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
@@ -119,9 +119,9 @@ public final class Minimax {
                 //System.out.println("min Node evaluation: " + nodeEvaluation);
                 Game.reverseMove(currentNode, currentPosition, castlingAvailability, enPassantPawn);
 
-                System.out.println("Move Reversed");
-                game.getBoard().PrintBoard();
-                System.out.println();
+//                System.out.println("Move Reversed");
+//                game.getBoard().PrintBoard();
+//                System.out.println();
 
                 if (nodeEvaluation < minEvaluation) {
                     minEvaluation = nodeEvaluation;
