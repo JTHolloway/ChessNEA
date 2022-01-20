@@ -30,7 +30,7 @@ public class GUI_BoardPanel extends JPanel {
         this.setLayout(null);
 
         InitialiseTiles();
-        InitialisePieces();
+
 //
 //        Square[][] array = GUI_GamePanel.getGame().getBoard().getBoardArray();
 //
@@ -58,7 +58,7 @@ public class GUI_BoardPanel extends JPanel {
 
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
-                tile = new Tile(game.getBoard().getBoardArray()[(7- (i - 1))][(7- (j - 1))]);
+                tile = new Tile(game.getBoard().getBoardArray()[(7 - (i - 1))][(7 - (j - 1))], TileSize);
 
                 if (i % 2 != j % 2) {
                     tile.setBackground(new Color(234, 182, 118));
@@ -66,12 +66,21 @@ public class GUI_BoardPanel extends JPanel {
                     tile.setBackground(new Color(148, 85, 9));
                 }
 
-                if (game.getSelectedColour() == Colour.WHITE){
+                if (game.getSelectedColour() == Colour.WHITE) {
                     tile.setBounds((7 - (j - 1)) * (TileSize), this.getSize().height - ((8 - (i - 1)) * TileSize), TileSize, TileSize);
                 } else {
                     tile.setBounds((j - 1) * (TileSize), this.getSize().height - (i * TileSize), TileSize, TileSize);
                 }
                 tile.setLayout(null);
+
+                if (tile.getSquare().SquareOccupied()) {
+                    if (tile.getSquare().ReturnPiece().getColour() == Colour.WHITE) {
+                        tile.getIcon().setForeground(new Color(247, 229, 195));
+                    } else tile.getIcon().setForeground(new Color(59, 40, 4));
+                    String Icon = tile.getSquare().ReturnPiece().ReturnPieceIcon();
+                    tile.getIcon().setText(Icon);
+                }
+                tile.getIcon().setFont(new Font("", Font.PLAIN, TileSize));
 
                 Tile finalTile = tile;
                 final Border[] previousBorder = new Border[1];
@@ -79,6 +88,7 @@ public class GUI_BoardPanel extends JPanel {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         //todo can only move a piece if it is the PLAYERS TURN
+                        //todo check if a pawn promotion desination occurs
 
                         if (selectedSquare == null) { //Selecting a square
                             SelectOriginSquare(finalTile, game);
@@ -88,6 +98,9 @@ public class GUI_BoardPanel extends JPanel {
                             boolean valid = SelectDestinationSquare(finalTile, game, moves);
 
                             if (valid) {
+                                //todo Update Board
+                                UpdateBoard();
+
                                 previousBorder[0] = null;
                                 for (Move move : moves) {
                                     for (Tile tile1 : Tiles) {
@@ -145,40 +158,36 @@ public class GUI_BoardPanel extends JPanel {
     private boolean SelectDestinationSquare(Tile finalTile, Game game, List<Move> moveList) {
         destinationSquare = finalTile.getSquare();
         boolean valid = false;
-        A:
+
         for (Move move : moveList) {
-            for (Tile tile1 : Tiles) {
                 if (move.getEndPosition().ReturnCoordinate().CompareCoordinates(destinationSquare)) {
                     valid = true;
                     Game.MakeMove(move, game.getBoard());
-                    //todo update board
+
                     System.out.println();
                     game.getBoard().PrintBoard();
-                    break A;
+
+                    break;
                 }
-            }
         }
         return valid;
     }
 
-    private void InitialisePieces() {
+    private void UpdateBoard() {
         int TileSize = (this.getSize().height) / 8;
-
         for (Tile tile : Tiles) {
-            JLabel PieceIcon = new JLabel();
-            PieceIcon.setSize(TileSize, TileSize);
+
             if (tile.getSquare().SquareOccupied()) {
                 if (tile.getSquare().ReturnPiece().getColour() == Colour.WHITE) {
-                    PieceIcon.setForeground(new Color(247, 229, 195));
-                } else PieceIcon.setForeground(new Color(59, 40, 4));
+                    tile.getIcon().setForeground(new Color(247, 229, 195));
+                } else tile.getIcon().setForeground(new Color(59, 40, 4));
+
                 String Icon = tile.getSquare().ReturnPiece().ReturnPieceIcon();
-               PieceIcon.setText(Icon);
-           } else {
-               String Icon = "";
-               PieceIcon.setText(Icon);
-           }
-           PieceIcon.setFont(new Font("", Font.PLAIN, TileSize));
-           tile.add(PieceIcon);
-       }
+                tile.getIcon().setText(Icon);
+            } else {
+                tile.getIcon().setText("");
+            }
+            tile.getIcon().setFont(new Font("", Font.PLAIN, TileSize));
+        }
     }
 }
