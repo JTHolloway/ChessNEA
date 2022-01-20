@@ -3,7 +3,10 @@ package GUIs;
 import Game.Board.Square;
 import Game.Colour;
 import Game.Game;
+import Game.GameType;
+import Game.Minimax;
 import Game.Move.Move;
+import LibaryFunctions.MultiThread;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -19,12 +22,14 @@ public class GUI_BoardPanel extends JPanel {
     private List<Tile> Tiles;
     private Square selectedSquare = null;
     private Square destinationSquare;
+    private final MultiThread multiThread;
 
     /**
      * Constructor for the board JPanel
      */
     public GUI_BoardPanel() {
         int Size = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height) * (0.89));
+        multiThread = new MultiThread(new Minimax(GUI_GamePanel.getGame()));
 
         this.setSize(Size, Size);
         this.setLayout(null);
@@ -87,34 +92,45 @@ public class GUI_BoardPanel extends JPanel {
                 tile.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        //todo can only move a piece if it is the PLAYERS TURN
                         //todo check if a pawn promotion desination occurs
 
-                        if (selectedSquare == null) { //Selecting a square
-                            SelectOriginSquare(finalTile, game);
+                        if ((game.getPlayerToMove().getPlayingColour() == game.getSelectedColour() && game.getGameType() == GameType.VERSES_COMPUTER)
+                                || (game.getGameType() == GameType.LOCAL_MULTIPLAYER)) {
+                            if (selectedSquare == null) { //Selecting a square
+                                SelectOriginSquare(finalTile, game);
 
-                        } else { //Selecting a destination
-                            List<Move> moves = selectedSquare.ReturnPiece().CalculateValidMoves(game.getBoard());
-                            boolean valid = SelectDestinationSquare(finalTile, game, moves);
+                            } else { //Selecting a destination
+                                List<Move> moves = selectedSquare.ReturnPiece().CalculateValidMoves(game.getBoard());
+                                boolean valid = SelectDestinationSquare(finalTile, game, moves);
 
-                            if (valid) {
-                                //todo Update Board
-                                UpdateBoard();
+                                if (valid) {
+                                    //todo Update Board
+                                    UpdateBoard();
 
-                                previousBorder[0] = null;
-                                for (Move move : moves) {
-                                    for (Tile tile1 : Tiles) {
-                                        if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
-                                            tile1.setBorder(null);
+                                    previousBorder[0] = null;
+                                    for (Move move : moves) {
+                                        for (Tile tile1 : Tiles) {
+                                            if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
+                                                tile1.setBorder(null);
+                                            }
                                         }
                                     }
+                                    destinationSquare = null;
+                                    selectedSquare = null;
+
+                                    game.UpdatePlayerToMove();
+                                    if (game.getGameType() == GameType.VERSES_COMPUTER) {
+                                        ComputerTurn();
+                                    }
+
+                                } else if ((finalTile.getSquare().SquareOccupied() && finalTile.getSquare().ReturnPiece().getColour() == game.getSelectedColour() && game.getGameType() == GameType.VERSES_COMPUTER)
+                                        || (finalTile.getSquare().SquareOccupied() && finalTile.getSquare().ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour() && game.getGameType() == GameType.LOCAL_MULTIPLAYER)) {
+                                    SelectOriginSquare(finalTile, game);
+                                    destinationSquare = null;
+                                    selectedSquare = null;
                                 }
-                            } else {
-                                SelectOriginSquare(finalTile, game);
                             }
-                            destinationSquare = null;
-                            selectedSquare = null;
-                        }
+                        } else System.out.println("not your turn");
                     }
 
                     @Override
@@ -134,12 +150,22 @@ public class GUI_BoardPanel extends JPanel {
                 colour = Colour.GetOtherColour(colour);
             }
         }
+
+        if (GUI_GamePanel.getGame().getGameType() == GameType.VERSES_COMPUTER && GUI_GamePanel.getGame().getSelectedColour() != Colour.WHITE) {
+            ComputerTurn();
+        }
+    }
+
+    private void ComputerTurn() {
+        Thread newThread = new Thread(multiThread);
+        newThread.start();
     }
 
     private void SelectOriginSquare(Tile finalTile, Game game) {
         selectedSquare = finalTile.getSquare();
         if (selectedSquare.SquareOccupied()) { //If the square is occupied
-            if (selectedSquare.ReturnPiece().getColour() == game.getSelectedColour()) { //then if the piece is the players piece DO..
+            if ((selectedSquare.ReturnPiece().getColour() == game.getSelectedColour() && game.getGameType() == GameType.VERSES_COMPUTER)
+                    || (selectedSquare.ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour() && game.getGameType() == GameType.LOCAL_MULTIPLAYER)) { //then if the piece is the players piece DO..
                 List<Move> moves = selectedSquare.ReturnPiece().CalculateValidMoves(game.getBoard());
                 for (Tile tile1 : Tiles) {
                     tile1.setBorder(null);
@@ -174,20 +200,17 @@ public class GUI_BoardPanel extends JPanel {
     }
 
     private void UpdateBoard() {
-        int TileSize = (this.getSize().height) / 8;
         for (Tile tile : Tiles) {
-
             if (tile.getSquare().SquareOccupied()) {
                 if (tile.getSquare().ReturnPiece().getColour() == Colour.WHITE) {
                     tile.getIcon().setForeground(new Color(247, 229, 195));
                 } else tile.getIcon().setForeground(new Color(59, 40, 4));
 
                 String Icon = tile.getSquare().ReturnPiece().ReturnPieceIcon();
-                tile.getIcon().setText(Icon);
+                tile.setIconText(Icon);
             } else {
-                tile.getIcon().setText("");
+                tile.setIconText("");
             }
-            tile.getIcon().setFont(new Font("", Font.PLAIN, TileSize));
         }
     }
 }

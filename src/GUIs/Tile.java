@@ -31,7 +31,8 @@ public final class Tile extends JPanel {
         return icon;
     }
 
-    public void setIcon(JLabel icon) {
-        this.add(icon);
+    public void setIconText(String text) {
+        icon.setText(text);
+        this.repaint();
     }
 }
