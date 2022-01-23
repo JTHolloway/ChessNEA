@@ -321,4 +321,33 @@ public class Repository {
         }
         return UserId;
     }
+
+    public static void AddGame(String Password, int CountryIndex) {
+        String sql;
+        try {
+            sql =
+                    "INSERT INTO User(UserID, Username, Password, Email, FirstName, LastName, Country) " +
+                            "VALUES ('" + currentUser.getUserID() +
+                            "' , '" + currentUser.getUserName() +
+                            "' , '" + Utility.hashPassword(Password) +
+                            "' , '" + currentUser.getEmail().toLowerCase(Locale.ROOT) +
+                            "' , '" + currentUser.getName() +
+                            "' , '" + currentUser.getSurname() +
+                            "' , " + CountryIndex +
+                            ")";
+            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+
+            sql =
+                    "INSERT INTO UserStats(UserID, JoinDate, LastPlayDate) " +
+                            "VALUES ('" + currentUser.getUserID() +
+                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                            "')";
+            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+            connection.close();
+
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+        }
+    }
 }
