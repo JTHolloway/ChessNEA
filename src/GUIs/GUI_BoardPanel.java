@@ -1,12 +1,17 @@
 package GUIs;
 
 import Game.Board.Square;
-import Game.Colour;
-import Game.Game;
-import Game.GameType;
-import Game.Minimax;
+import Game.*;
 import Game.Move.Move;
+import Game.Piece.Piece;
+import Game.Piece.PieceType;
+import Game.Piece.Pieces.Bishop;
+import Game.Piece.Pieces.Knight;
+import Game.Piece.Pieces.Queen;
+import Game.Piece.Pieces.Rook;
 import LibaryFunctions.MultiThread;
+import LibaryFunctions.Repository;
+import LibaryFunctions.Utility;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -119,6 +124,7 @@ public class GUI_BoardPanel extends JPanel {
                                     selectedSquare = null;
 
                                     game.UpdatePlayerToMove();
+                                    GameOver();
                                     if (game.getGameType() == GameType.VERSES_COMPUTER) {
                                         ComputerTurn();
                                     }
@@ -159,6 +165,91 @@ public class GUI_BoardPanel extends JPanel {
     private void ComputerTurn() {
         Thread newThread = new Thread(multiThread);
         newThread.start();
+        GameOver();
+    }
+
+    private Piece choosePromotionPiece(Move move) {
+        JComboBox<String> piece = new JComboBox<>(new String[]{"Queen", "Knight", "Bishop", "Rook"});
+
+        final JComponent[] Options = new JComponent[]{
+                new JLabel("Piece"),
+                piece,
+        };
+
+        int result = JOptionPane.showConfirmDialog(this, Options, "Promote Pawn", JOptionPane.DEFAULT_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            if (piece.getItemAt(piece.getSelectedIndex()).equals("Queen")) {
+                return new Queen(move.getEndPosition().ReturnCoordinate(), move.getMovedPiece().getColour(), PieceType.QUEEN);
+            } else if (piece.getItemAt(piece.getSelectedIndex()).equals("Knight")) {
+                return new Knight(move.getEndPosition().ReturnCoordinate(), move.getMovedPiece().getColour(), PieceType.KNIGHT);
+            } else if (piece.getItemAt(piece.getSelectedIndex()).equals("Bishop")) {
+                return new Bishop(move.getEndPosition().ReturnCoordinate(), move.getMovedPiece().getColour(), PieceType.BISHOP);
+            } else if (piece.getItemAt(piece.getSelectedIndex()).equals("Rook")) {
+                return new Rook(move.getEndPosition().ReturnCoordinate(), move.getMovedPiece().getColour(), PieceType.ROOK, CastlingAvailability.NEITHER);
+            }
+        }
+        return null;
+    }
+
+    private void GameOver() {
+        if (GUI_GamePanel.getGame().isGameOver()) {
+
+            Player winner = GUI_GamePanel.getGame().gameOver();
+            GameOutcome gameOutcome;
+
+            if (winner instanceof Player.Human) {
+                if (((Player.Human) winner).getUser() != null && ((Player.Human) winner).getUser().getUserID().equals(Repository.getCurrentUser().getUserID())) {
+                    gameOutcome = GameOutcome.WIN;
+                    Repository.getCurrentUser().getStatistics().setWins(Repository.getCurrentUser().getStatistics().getWins() + 1);
+                } else {
+                    gameOutcome = GameOutcome.LOSS;
+                    Repository.getCurrentUser().getStatistics().setLosses(Repository.getCurrentUser().getStatistics().getLosses() + 1);
+                }
+            } else if (winner instanceof Player.Computer) {
+                gameOutcome = GameOutcome.LOSS;
+                Repository.getCurrentUser().getStatistics().setLosses(Repository.getCurrentUser().getStatistics().getLosses() + 1);
+            } else {
+                gameOutcome = GameOutcome.DRAW;
+                Repository.getCurrentUser().getStatistics().setDraws(Repository.getCurrentUser().getStatistics().getDraws() + 1);
+            }
+
+            System.out.println(gameOutcome);
+
+            if (gameOutcome == GameOutcome.DRAW) {
+                JOptionPane.showMessageDialog(this, "Draw by Stalemate");
+            } else {
+                JOptionPane.showMessageDialog(this, ("Checkmate! " + winner.getPlayingColour() + " Wins"));
+            }
+            this.setVisible(false);
+            this.setEnabled(false);
+
+            if (!Repository.getCurrentUser().getUserID().equals("Guest")) {
+                int PlayerELO = Repository.getCurrentUser().getStatistics().getELO();
+                if (GUI_GamePanel.getGame().getGameType() == GameType.LOCAL_MULTIPLAYER) {
+                    Repository.getCurrentUser().getStatistics().setELO(
+                            Utility.CalculateNew_ELO(PlayerELO, PlayerELO, gameOutcome));
+                } else {
+                    int ComputerELO;
+                    if (Repository.getCurrentUser().getStatistics().getELO() <= 800) {
+                        ComputerELO = 700;
+                    } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1300) {
+                        ComputerELO = 1200;
+                    } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1600) {
+                        ComputerELO = 1500;
+                    } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1900) {
+                        ComputerELO = 1800;
+                    } else if (Repository.getCurrentUser().getStatistics().getELO() <= 2400) {
+                        ComputerELO = 2300;
+                    } else {
+                        ComputerELO = 2700;
+                    }
+                    Repository.getCurrentUser().getStatistics().setELO(
+                            Utility.CalculateNew_ELO(PlayerELO, ComputerELO, gameOutcome));
+                }
+                Repository.updateUsersStats();
+                //todo update game, gamelink and gamefile
+            }
+        }
     }
 
     private void SelectOriginSquare(Tile finalTile, Game game) {
@@ -173,7 +264,7 @@ public class GUI_BoardPanel extends JPanel {
                 for (Move move : moves) {
                     for (Tile tile1 : Tiles) {
                         if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
-                            tile1.setBorder(new LineBorder(Color.GREEN, 5));
+                            tile1.setBorder(new LineBorder(Color.CYAN, 70));
                         }
                     }
                 }
@@ -188,8 +279,17 @@ public class GUI_BoardPanel extends JPanel {
         for (Move move : moveList) {
                 if (move.getEndPosition().ReturnCoordinate().CompareCoordinates(destinationSquare)) {
                     valid = true;
-                    Game.MakeMove(move, game.getBoard());
+                    if (move instanceof Move.PawnPromotion) {
+                        Move pawnPromotionMove = new Move.PawnPromotion(move.getStartPosition(), move.getEndPosition(), choosePromotionPiece(move));
+                        Game.MakeMove(pawnPromotionMove, game.getBoard());
 
+                    } else if (move instanceof Move.PawnPromotionCapture) {
+                        Move pawnPromotionMove = new Move.PawnPromotionCapture(move.getStartPosition(), move.getEndPosition(), choosePromotionPiece(move), move.getCapturedPiece());
+                        Game.MakeMove(pawnPromotionMove, game.getBoard());
+
+                    } else Game.MakeMove(move, game.getBoard());
+
+                    //todo remove print
                     System.out.println();
                     game.getBoard().PrintBoard();
 
@@ -201,6 +301,7 @@ public class GUI_BoardPanel extends JPanel {
 
     private void UpdateBoard() {
         for (Tile tile : Tiles) {
+            this.remove(tile);
             if (tile.getSquare().SquareOccupied()) {
                 if (tile.getSquare().ReturnPiece().getColour() == Colour.WHITE) {
                     tile.getIcon().setForeground(new Color(247, 229, 195));
@@ -211,6 +312,7 @@ public class GUI_BoardPanel extends JPanel {
             } else {
                 tile.setIconText("");
             }
+            this.add(tile);
         }
     }
 }

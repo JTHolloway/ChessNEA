@@ -202,6 +202,11 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
 
+                if (gamePanel != null) {
+                    MainWindow.getContentPane().remove(gamePanel);
+                    gamePanel = null;
+                }
+
                 JComboBox<String> gameType = new JComboBox<>(new String[]{"Local", "Computer"});
                 JComboBox<String> colour = new JComboBox<>(new String[]{"White", "Black"});
                 GameType type = GameType.VERSES_COMPUTER;
