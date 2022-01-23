@@ -431,6 +431,17 @@ public class Game {
         return isKingCheckmated(Colour.WHITE) || isKingCheckmated(Colour.BLACK) || isStalemate(Colour.WHITE) || isStalemate(Colour.BLACK);
     }
 
+    //Todo comment - @return player: The winning player
+    public Player gameOver() {
+        if (isKingCheckmated(Colour.WHITE)) {
+            return blackPlayer;
+        } else if (isKingCheckmated(Colour.BLACK)) {
+            return whitePlayer;
+        } else {
+            return null;
+        }
+    }
+
     public Colour getSelectedColour() {
         return selectedColour;
     }
