@@ -3,7 +3,6 @@ package Game;
 import User.User;
 
 public abstract class Player {
-    //TODO this entire class
     protected final Colour playingColour;
     protected boolean isTurn;
 
@@ -46,6 +45,10 @@ public abstract class Player {
      */
     public static class Human extends Player {
         private final User user;
+
+        public User getUser() {
+            return user;
+        }
 
         /**
          * Constructor for a human player
