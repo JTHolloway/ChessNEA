@@ -1,5 +1,6 @@
 package LibaryFunctions;
 
+import Game.Game;
 import User.User;
 import User.UserStats;
 
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import Game.Colour;
 
 
 public class Repository {
@@ -322,27 +324,43 @@ public class Repository {
         return UserId;
     }
 
-    public static void AddGame(String Password, int CountryIndex) {
+    /**
+     * Adds a new record into the Game, GameFile and GameLink Database tables
+     * @param game The Game to enter into the database
+     * @param userColour The colour of the main user (Player 1 if local multiplayer selected)
+     */
+    public static void AddGame(Game game, Colour userColour) {
         String sql;
         try {
             sql =
-                    "INSERT INTO User(UserID, Username, Password, Email, FirstName, LastName, Country) " +
-                            "VALUES ('" + currentUser.getUserID() +
-                            "' , '" + currentUser.getUserName() +
-                            "' , '" + Utility.hashPassword(Password) +
-                            "' , '" + currentUser.getEmail().toLowerCase(Locale.ROOT) +
-                            "' , '" + currentUser.getName() +
-                            "' , '" + currentUser.getSurname() +
-                            "' , " + CountryIndex +
+                    "SELECT Max(FileID) AS Expr1, Max(GameID) AS Expr2 " +
+                            "FROM GameFile, Game";
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+            rs.next();
+            int GameFilePrimaryKey = rs.getInt("Expr1") + 1;
+            int GamePrimaryKey = rs.getInt("Expr2") + 1;
+            rs.close();
+            //Todo create and save PGN file
+
+            sql =
+                    "INSERT INTO GameFile(FileID) VALUES (" + GameFilePrimaryKey + ")";
+            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+
+            sql =
+                    "INSERT INTO Game(DatePlayed, TimePlayed, Colour, GameFile, MovesMade) " +
+                            "VALUES ('" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                            "' , " + (userColour == Colour.WHITE ? 2 : 1) +
+                            " , " + GameFilePrimaryKey +
+                            " , " + game.getMovesMade() +
                             ")";
             ExecuteSQL.executeUpdateQuery(getConnection(), sql);
 
             sql =
-                    "INSERT INTO UserStats(UserID, JoinDate, LastPlayDate) " +
-                            "VALUES ('" + currentUser.getUserID() +
-                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
-                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
-                            "')";
+                    "INSERT INTO GameLink(UserID, GameID) " +
+                            "VALUES ('" + getCurrentUser().getUserID() +
+                            "' , " + GamePrimaryKey +
+                            ")";
             ExecuteSQL.executeUpdateQuery(getConnection(), sql);
             connection.close();
 
