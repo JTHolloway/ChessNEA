@@ -13,9 +13,10 @@ import java.util.List;
 public class Game {
     private final Player whitePlayer, blackPlayer;
     private final Board board;
-    private Player PlayerToMove;
     private final Colour selectedColour;
     private final GameType gameType;
+    private Player PlayerToMove;
+    private int movesMade;
 
     /**
      * Game Constructor
@@ -28,6 +29,7 @@ public class Game {
         this.board = new Board();
         selectedColour = SelectedColour;
         gameType = Gametype;
+        movesMade = 0;
 
         if (Gametype == GameType.LOCAL_MULTIPLAYER) {
             if (SelectedColour == Colour.WHITE) {
@@ -51,9 +53,13 @@ public class Game {
 
     }
 
-    //TODO IMPORTANT.... and comment
-    public void mainGame() {
-
+    /**
+     * Converts a move to algebraic chess Notation
+     * @return a String in chess notation
+     */
+    public String MoveToNotation(Move move) {
+        //TODO PGN move notation
+        return "";
     }
 
     /**
@@ -461,5 +467,13 @@ public class Game {
         return gameType;
     }
 
-//todo call UpdateuserStats method in repository class after each game and update a players ELO
+    public int getMovesMade() {
+        return movesMade;
+    }
+
+    public void setMovesMade(int movesMade) {
+        this.movesMade = movesMade;
+    }
+
+    //todo call UpdateuserStats method in repository class after each game and update a players ELO
 }
