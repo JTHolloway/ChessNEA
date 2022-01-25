@@ -3,12 +3,14 @@ package GUIs;
 import Game.Board.Square;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Similar to the square method however this is a JPanel and not used for any of the program functionality
  */
 public final class Tile extends JPanel {
     private final Square square;
+    private final Color colour;
     private final JLabel icon;
 
     /**
@@ -16,7 +18,8 @@ public final class Tile extends JPanel {
      *
      * @param square The square which the tile refers to
      */
-    public Tile(final Square square, int tileSize) {
+    public Tile(final Square square, int tileSize, Color colour) {
+        this.colour = colour;
         this.square = square;
         this.icon = new JLabel("");
         this.icon.setSize(tileSize, tileSize);
@@ -34,5 +37,9 @@ public final class Tile extends JPanel {
     public void setIconText(String text) {
         icon.setText(text);
         this.repaint();
+    }
+
+    public Color getColour() {
+        return colour;
     }
 }
