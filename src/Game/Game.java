@@ -54,12 +54,87 @@ public class Game {
     }
 
     /**
-     * Converts a move to algebraic chess Notation
+     * Converts a move to algebraic chess Notation according to the same order and method as my flowchart
      * @return a String in chess notation
      */
     public String MoveToNotation(Move move) {
         //TODO PGN move notation
-        return "";
+        String moveNotation = "";
+        Piece movingPiece = move.getMovedPiece();
+        boolean isCapture = move.wasCapture();
+
+        if (movingPiece instanceof Pawn)
+        {
+            if (isCapture){
+                moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().FileToNotation();
+            }
+        }
+        else if (movingPiece instanceof King)
+        {
+            if (move instanceof Move.CastlingMove)
+            {
+                if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.KING_SIDE){
+                    moveNotation = moveNotation + "O-O";
+                } else if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.QUEEN_SIDE){
+                    moveNotation = moveNotation + "O-O-O";
+                }
+            }
+            else
+            {
+                moveNotation = moveNotation + movingPiece.PieceTypeToNotation();
+            }
+        }
+        else
+        {
+            moveNotation = moveNotation + movingPiece.PieceTypeToNotation();
+        }
+
+        //Ambiguous Moves
+        if (!(movingPiece instanceof King)){
+            if (isMoveAmbiguous(move)) {
+                //todo Check for ambiguity
+            }
+        }
+
+        //Capturing Moves
+        if (isCapture)
+        {
+            moveNotation = moveNotation + "X";
+        }
+        moveNotation = moveNotation + move.getEndPosition().ReturnCoordinate().CoordinateToNotation();
+
+        //Pawn Promotion
+        Piece pawnPromotion = null;
+        if (move instanceof Move.PawnPromotion){
+            pawnPromotion = ((Move.PawnPromotion) move).getPromotionPiece();
+        } else if (move instanceof Move.PawnPromotionCapture){
+            pawnPromotion = ((Move.PawnPromotionCapture) move).getPromotionPiece();
+        }
+        if (move instanceof Move.PawnPromotion || move instanceof Move.PawnPromotionCapture){
+            if (pawnPromotion instanceof Queen)
+            {
+
+            }
+            else if (pawnPromotion instanceof Rook)
+            {
+
+            }
+            else if (pawnPromotion instanceof Knight)
+            {
+
+            }
+            else if (pawnPromotion instanceof Bishop)
+            {
+
+            }
+        }
+
+        return moveNotation;
+    }
+
+    public boolean isMoveAmbiguous(Move move){
+        //Todo ambiguous moves
+        return true;
     }
 
     /**
