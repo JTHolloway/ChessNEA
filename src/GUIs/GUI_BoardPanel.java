@@ -41,19 +41,7 @@ public class GUI_BoardPanel extends JPanel {
 
         InitialiseTiles();
 
-//
-//        Square[][] array = GUI_GamePanel.getGame().getBoard().getBoardArray();
-//
-//        GUI_GamePanel.getGame().getBoard().PrintBoard();
-//        Game.MakeMove(new Move.RegularMove(array[1][1], array[2][1]), GUI_GamePanel.getGame().getBoard());
-//        Game.MakeMove(new Move.RegularMove(array[0][2], array[2][0]), GUI_GamePanel.getGame().getBoard());
-//        Game.MakeMove(new Move.RegularMove(array[0][1], array[2][2]), GUI_GamePanel.getGame().getBoard());
-//        Game.MakeMove(new Move.RegularMove(array[1][4], array[3][4]), GUI_GamePanel.getGame().getBoard());
-//        Game.MakeMove(new Move.RegularMove(array[0][3], array[2][5]), GUI_GamePanel.getGame().getBoard());
-//        System.out.println();
-//        GUI_GamePanel.getGame().getBoard().PrintBoard();
-//
-//        InitialisePieces();
+
     }
 
     /**
@@ -68,13 +56,15 @@ public class GUI_BoardPanel extends JPanel {
 
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
-                tile = new Tile(game.getBoard().getBoardArray()[(7 - (i - 1))][(7 - (j - 1))], TileSize);
-
+                Color tileColour;
                 if (i % 2 != j % 2) {
-                    tile.setBackground(new Color(234, 182, 118));
+                    tileColour = new Color(234, 182, 118);
                 } else {
-                    tile.setBackground(new Color(148, 85, 9));
+                    tileColour = new Color(148, 85, 9);
                 }
+
+                tile = new Tile(game.getBoard().getBoardArray()[(7 - (i - 1))][(7 - (j - 1))], TileSize, tileColour);
+                tile.setBackground(tileColour);
 
                 if (game.getSelectedColour() == Colour.WHITE) {
                     tile.setBounds((7 - (j - 1)) * (TileSize), this.getSize().height - ((8 - (i - 1)) * TileSize), TileSize, TileSize);
@@ -97,7 +87,6 @@ public class GUI_BoardPanel extends JPanel {
                 tile.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        //todo check if a pawn promotion desination occurs
 
                         if ((game.getPlayerToMove().getPlayingColour() == game.getSelectedColour() && game.getGameType() == GameType.VERSES_COMPUTER)
                                 || (game.getGameType() == GameType.LOCAL_MULTIPLAYER)) {
@@ -112,11 +101,13 @@ public class GUI_BoardPanel extends JPanel {
                                     //todo Update Board
                                     UpdateBoard();
 
+                                    game.setMovesMade(game.getMovesMade() + 1);
                                     previousBorder[0] = null;
                                     for (Move move : moves) {
                                         for (Tile tile1 : Tiles) {
                                             if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
                                                 tile1.setBorder(null);
+                                                tile1.setBackground(tile1.getColour());
                                             }
                                         }
                                     }
@@ -126,7 +117,7 @@ public class GUI_BoardPanel extends JPanel {
                                     game.UpdatePlayerToMove();
                                     GameOver();
                                     if (game.getGameType() == GameType.VERSES_COMPUTER) {
-                                        ComputerTurn();
+                                        ComputerTurn(game);
                                     }
 
                                 } else if ((finalTile.getSquare().SquareOccupied() && finalTile.getSquare().ReturnPiece().getColour() == game.getSelectedColour() && game.getGameType() == GameType.VERSES_COMPUTER)
@@ -158,13 +149,14 @@ public class GUI_BoardPanel extends JPanel {
         }
 
         if (GUI_GamePanel.getGame().getGameType() == GameType.VERSES_COMPUTER && GUI_GamePanel.getGame().getSelectedColour() != Colour.WHITE) {
-            ComputerTurn();
+            ComputerTurn(game);
         }
     }
 
-    private void ComputerTurn() {
+    private void ComputerTurn(Game game) {
         Thread newThread = new Thread(multiThread);
         newThread.start();
+        game.setMovesMade(game.getMovesMade() + 1);
         GameOver();
     }
 
@@ -247,7 +239,7 @@ public class GUI_BoardPanel extends JPanel {
                             Utility.CalculateNew_ELO(PlayerELO, ComputerELO, gameOutcome));
                 }
                 Repository.updateUsersStats();
-                //todo update game, gamelink and gamefile
+                Repository.AddGame(GUI_GamePanel.getGame(), GUI_GamePanel.getGame().getSelectedColour());
             }
         }
     }
@@ -260,11 +252,13 @@ public class GUI_BoardPanel extends JPanel {
                 List<Move> moves = selectedSquare.ReturnPiece().CalculateValidMoves(game.getBoard());
                 for (Tile tile1 : Tiles) {
                     tile1.setBorder(null);
+                    tile1.setBackground(tile1.getColour());
                 }
                 for (Move move : moves) {
                     for (Tile tile1 : Tiles) {
                         if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
-                            tile1.setBorder(new LineBorder(Color.CYAN, 70));
+                            tile1.setBorder(new LineBorder(tile1.getColour(), 7));
+                            tile1.setBackground(Color.cyan);
                         }
                     }
                 }
