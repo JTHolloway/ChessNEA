@@ -273,6 +273,11 @@ public class GUI_BoardPanel extends JPanel {
         for (Move move : moveList) {
                 if (move.getEndPosition().ReturnCoordinate().CompareCoordinates(destinationSquare)) {
                     valid = true;
+
+                    //todo remove print
+                    System.out.println();
+                    System.out.println(game.MoveToNotation(move));
+
                     if (move instanceof Move.PawnPromotion) {
                         Move pawnPromotionMove = new Move.PawnPromotion(move.getStartPosition(), move.getEndPosition(), choosePromotionPiece(move));
                         Game.MakeMove(pawnPromotionMove, game.getBoard());
@@ -284,7 +289,6 @@ public class GUI_BoardPanel extends JPanel {
                     } else Game.MakeMove(move, game.getBoard());
 
                     //todo remove print
-                    System.out.println();
                     game.getBoard().PrintBoard();
 
                     break;
