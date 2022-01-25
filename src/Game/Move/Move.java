@@ -24,18 +24,6 @@ public abstract class Move {
     }
 
     /**
-     * Converts a move to algebraic chess Notation
-     *
-     * @return a String in chess notation
-     * @// TODO: 13/07/2021 ToMoveNotation() method
-     */
-    public String ToMoveNotation() {
-        boolean Unambiguous;
-        boolean Capture;
-        return null;
-    }
-
-    /**
      * Returns the piece that was captured
      *
      * @return null if no piece was captured
