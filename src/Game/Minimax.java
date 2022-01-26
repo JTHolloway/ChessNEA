@@ -28,7 +28,7 @@ public final class Minimax {
         int depth = 0;
         pieceValues = new int[]{200, 9, 5, 3, 3, 1};
 
-        if (Repository.getCurrentUser() == null) {
+        if (Repository.getCurrentUser().getUserID().equals("Guest")) {
             pieceValues = new int[]{200, 9, 5, 3, 3, 1};
             depth = 3;
         } else if (Repository.getCurrentUser().getStatistics().getELO() <= 800) {
@@ -49,6 +49,8 @@ public final class Minimax {
             pieceValues = new int[]{200, 11, 6, 3, 3, 1};
         }
 
+        //todo dont always set depth = 1;
+        depth = 1;
         minimaxTraversal(game.getBoard(), depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, true, computerColour);
 
         return currentBestMove;
