@@ -11,7 +11,7 @@ import java.awt.*;
 public final class Tile extends JPanel {
     private Square square;
     private final Color colour;
-    private final JLabel icon;
+    private JLabel icon;
 
     /**
      * Constructor for a displayable board tile.
@@ -35,7 +35,8 @@ public final class Tile extends JPanel {
     }
 
     public void setIconText(String text) {
-        icon.setText(text);
+        icon = new JLabel(text);
+        this.add(icon);
         this.repaint();
     }
 
