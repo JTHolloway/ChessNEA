@@ -347,9 +347,10 @@ public class Repository {
             ExecuteSQL.executeUpdateQuery(getConnection(), sql);
 
             sql =
-                    "INSERT INTO Game(DatePlayed, TimePlayed, Colour, GameFile, MovesMade) " +
-                            "VALUES ('" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
-                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
+                    "INSERT INTO Game(GameID, DatePlayed, TimePlayed, Colour, GameFile, MovesMade) " +
+                            "VALUES ('" + GamePrimaryKey +
+                            "' , '" + new java.sql.Date (Calendar.getInstance().getTime().getTime()) +
+                            "' , '" + new java.sql.Timestamp(System.currentTimeMillis()) +
                             "' , " + (userColour == Colour.WHITE ? 2 : 1) +
                             " , " + GameFilePrimaryKey +
                             " , " + game.getMovesMade() +
