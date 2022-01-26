@@ -317,7 +317,6 @@ public class GUI_BoardPanel extends JPanel {
 
     private void UpdateBoard() {
         for (Tile tile : Tiles) {
-            this.remove(tile);
             if (tile.getSquare().SquareOccupied()) {
                 if (tile.getSquare().ReturnPiece().getColour() == Colour.WHITE) {
                     tile.getIcon().setForeground(new Color(247, 229, 195));
@@ -328,7 +327,7 @@ public class GUI_BoardPanel extends JPanel {
             } else {
                 tile.setIconText("");
             }
-            this.add(tile);
+            this.repaint();
         }
     }
 }
