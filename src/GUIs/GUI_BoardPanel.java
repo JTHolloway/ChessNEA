@@ -5,16 +5,14 @@ import Game.*;
 import Game.Move.Move;
 import Game.Piece.Piece;
 import Game.Piece.PieceType;
-import Game.Piece.Pieces.Bishop;
-import Game.Piece.Pieces.Knight;
-import Game.Piece.Pieces.Queen;
-import Game.Piece.Pieces.Rook;
+import Game.Piece.Pieces.*;
 import LibaryFunctions.MultiThread;
 import LibaryFunctions.Repository;
 import LibaryFunctions.Utility;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -103,18 +101,21 @@ public class GUI_BoardPanel extends JPanel {
 
                                     game.setMovesMade(game.getMovesMade() + 1);
                                     previousBorder[0] = null;
-                                    for (Move move : moves) {
-                                        for (Tile tile1 : Tiles) {
-                                            if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
-                                                tile1.setBorder(null);
-                                                tile1.setBackground(tile1.getColour());
+                                    //Make king Square red if checked
+                                    game.UpdatePlayerToMove();
+                                    for (Tile tile1 : Tiles){
+                                        if (tile1.getSquare().SquareOccupied() && tile1.getSquare().ReturnPiece() instanceof King && tile1.getSquare().ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour()){
+                                            if (Game.isKingChecked(game.getPlayerToMove().getPlayingColour(), game.getBoard())){
+                                                tile1.setBackground(new Color(255,77,77));
                                             }
+                                        } else {
+                                            tile1.setBackground(tile1.getColour());
+                                            tile1.setBorder(null);
                                         }
                                     }
                                     destinationSquare = null;
                                     selectedSquare = null;
 
-                                    game.UpdatePlayerToMove();
                                     GameOver();
                                     if (game.getGameType() == GameType.VERSES_COMPUTER) {
                                         ComputerTurn(game);
@@ -133,7 +134,11 @@ public class GUI_BoardPanel extends JPanel {
                     @Override
                     public void mouseEntered(MouseEvent e) {
                         previousBorder[0] = finalTile.getBorder();
-                        finalTile.setBorder(new LineBorder(Color.RED, 3));
+                        if (finalTile.getBorder() == null){
+                            finalTile.setBorder(new LineBorder(Color.RED, 3));
+                        } else {
+                            finalTile.setBorder(new LineBorder(finalTile.getColour(), 35));
+                        }
                     }
 
                     @Override
@@ -252,13 +257,26 @@ public class GUI_BoardPanel extends JPanel {
                 List<Move> moves = selectedSquare.ReturnPiece().CalculateValidMoves(game.getBoard());
                 for (Tile tile1 : Tiles) {
                     tile1.setBorder(null);
-                    tile1.setBackground(tile1.getColour());
+
+                    if (tile1.getSquare().SquareOccupied() && tile1.getSquare().ReturnPiece() instanceof King && tile1.getSquare().ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour()){
+                        if (Game.isKingChecked(game.getPlayerToMove().getPlayingColour(), game.getBoard())){
+                            tile1.setBackground(new Color(255,77,77));
+                        }
+                    } else{
+                        tile1.setBackground(tile1.getColour());
+                    }
                 }
                 for (Move move : moves) {
                     for (Tile tile1 : Tiles) {
                         if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
-                            tile1.setBorder(new LineBorder(tile1.getColour(), 7));
-                            tile1.setBackground(Color.cyan);
+                            tile1.setBorder(new LineBorder(tile1.getColour(), 22));
+                            if (move instanceof Move.CapturingMove || move instanceof Move.PawnPromotionCapture){
+                                tile1.setBackground(new Color(189, 120, 171));
+                            } else {
+                                if (!tile1.getBackground().equals(new Color(255,77,77))){
+                                    tile1.setBackground(new Color(178,190,181));
+                                }
+                            }
                         }
                     }
                 }
