@@ -119,7 +119,7 @@ public class Game {
         //Capturing Moves
         if (isCapture)
         {
-            moveNotation = moveNotation + "X";
+            moveNotation = moveNotation + "x";
         }
         moveNotation = moveNotation + move.getEndPosition().ReturnCoordinate().CoordinateToNotation();
 
