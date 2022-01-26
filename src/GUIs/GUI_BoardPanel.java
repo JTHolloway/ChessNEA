@@ -22,10 +22,11 @@ import java.util.List;
 
 public class GUI_BoardPanel extends JPanel {
 
-    private List<Tile> Tiles;
+    private static List<Tile> Tiles;
     private Square selectedSquare = null;
     private Square destinationSquare;
     private final MultiThread multiThread;
+    private boolean gameOver;
 
     /**
      * Constructor for the board JPanel
@@ -101,8 +102,17 @@ public class GUI_BoardPanel extends JPanel {
 
                                     game.setMovesMade(game.getMovesMade() + 1);
                                     previousBorder[0] = null;
-                                    //Make king Square red if checked
+
                                     game.UpdatePlayerToMove();
+                                    destinationSquare = null;
+                                    selectedSquare = null;
+
+                                    GameOver();
+                                    if (game.getGameType() == GameType.VERSES_COMPUTER) {
+                                        ComputerTurn(game);
+                                    }
+
+                                    //Make king Square red if checked
                                     for (Tile tile1 : Tiles){
                                         if (tile1.getSquare().SquareOccupied() && tile1.getSquare().ReturnPiece() instanceof King && tile1.getSquare().ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour()){
                                             if (Game.isKingChecked(game.getPlayerToMove().getPlayingColour(), game.getBoard())){
@@ -112,13 +122,6 @@ public class GUI_BoardPanel extends JPanel {
                                             tile1.setBackground(tile1.getColour());
                                             tile1.setBorder(null);
                                         }
-                                    }
-                                    destinationSquare = null;
-                                    selectedSquare = null;
-
-                                    GameOver();
-                                    if (game.getGameType() == GameType.VERSES_COMPUTER) {
-                                        ComputerTurn(game);
                                     }
 
                                 } else if ((finalTile.getSquare().SquareOccupied() && finalTile.getSquare().ReturnPiece().getColour() == game.getSelectedColour() && game.getGameType() == GameType.VERSES_COMPUTER)
@@ -137,7 +140,7 @@ public class GUI_BoardPanel extends JPanel {
                         if (finalTile.getBorder() == null){
                             finalTile.setBorder(new LineBorder(Color.RED, 3));
                         } else {
-                            finalTile.setBorder(new LineBorder(finalTile.getColour(), 35));
+                            finalTile.setBorder(new LineBorder(finalTile.getColour(), 5));
                         }
                     }
 
@@ -189,62 +192,64 @@ public class GUI_BoardPanel extends JPanel {
     }
 
     private void GameOver() {
-        if (GUI_GamePanel.getGame().isGameOver()) {
+        if (!gameOver){
+            if (GUI_GamePanel.getGame().isGameOver()) {
+                gameOver = true;
+                Player winner = GUI_GamePanel.getGame().gameOver();
+                GameOutcome gameOutcome;
 
-            Player winner = GUI_GamePanel.getGame().gameOver();
-            GameOutcome gameOutcome;
-
-            if (winner instanceof Player.Human) {
-                if (((Player.Human) winner).getUser() != null && ((Player.Human) winner).getUser().getUserID().equals(Repository.getCurrentUser().getUserID())) {
-                    gameOutcome = GameOutcome.WIN;
-                    Repository.getCurrentUser().getStatistics().setWins(Repository.getCurrentUser().getStatistics().getWins() + 1);
-                } else {
+                if (winner instanceof Player.Human) {
+                    if (((Player.Human) winner).getUser() != null && ((Player.Human) winner).getUser().getUserID().equals(Repository.getCurrentUser().getUserID())) {
+                        gameOutcome = GameOutcome.WIN;
+                        Repository.getCurrentUser().getStatistics().setWins(Repository.getCurrentUser().getStatistics().getWins() + 1);
+                    } else {
+                        gameOutcome = GameOutcome.LOSS;
+                        Repository.getCurrentUser().getStatistics().setLosses(Repository.getCurrentUser().getStatistics().getLosses() + 1);
+                    }
+                } else if (winner instanceof Player.Computer) {
                     gameOutcome = GameOutcome.LOSS;
                     Repository.getCurrentUser().getStatistics().setLosses(Repository.getCurrentUser().getStatistics().getLosses() + 1);
-                }
-            } else if (winner instanceof Player.Computer) {
-                gameOutcome = GameOutcome.LOSS;
-                Repository.getCurrentUser().getStatistics().setLosses(Repository.getCurrentUser().getStatistics().getLosses() + 1);
-            } else {
-                gameOutcome = GameOutcome.DRAW;
-                Repository.getCurrentUser().getStatistics().setDraws(Repository.getCurrentUser().getStatistics().getDraws() + 1);
-            }
-
-            System.out.println(gameOutcome);
-
-            if (gameOutcome == GameOutcome.DRAW) {
-                JOptionPane.showMessageDialog(this, "Draw by Stalemate");
-            } else {
-                JOptionPane.showMessageDialog(this, ("Checkmate! " + winner.getPlayingColour() + " Wins"));
-            }
-            this.setVisible(false);
-            this.setEnabled(false);
-
-            if (!Repository.getCurrentUser().getUserID().equals("Guest")) {
-                int PlayerELO = Repository.getCurrentUser().getStatistics().getELO();
-                if (GUI_GamePanel.getGame().getGameType() == GameType.LOCAL_MULTIPLAYER) {
-                    Repository.getCurrentUser().getStatistics().setELO(
-                            Utility.CalculateNew_ELO(PlayerELO, PlayerELO, gameOutcome));
                 } else {
-                    int ComputerELO;
-                    if (Repository.getCurrentUser().getStatistics().getELO() <= 800) {
-                        ComputerELO = 700;
-                    } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1300) {
-                        ComputerELO = 1200;
-                    } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1600) {
-                        ComputerELO = 1500;
-                    } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1900) {
-                        ComputerELO = 1800;
-                    } else if (Repository.getCurrentUser().getStatistics().getELO() <= 2400) {
-                        ComputerELO = 2300;
-                    } else {
-                        ComputerELO = 2700;
-                    }
-                    Repository.getCurrentUser().getStatistics().setELO(
-                            Utility.CalculateNew_ELO(PlayerELO, ComputerELO, gameOutcome));
+                    gameOutcome = GameOutcome.DRAW;
+                    Repository.getCurrentUser().getStatistics().setDraws(Repository.getCurrentUser().getStatistics().getDraws() + 1);
                 }
-                Repository.updateUsersStats();
-                Repository.AddGame(GUI_GamePanel.getGame(), GUI_GamePanel.getGame().getSelectedColour());
+
+                System.out.println(gameOutcome);
+
+                if (gameOutcome == GameOutcome.DRAW) {
+                    JOptionPane.showMessageDialog(this, "Draw by Stalemate");
+                } else {
+                    JOptionPane.showMessageDialog(this, ("Checkmate! " + winner.getPlayingColour() + " Wins"));
+                }
+                this.setVisible(false);
+                this.setEnabled(false);
+
+                if (!Repository.getCurrentUser().getUserID().equals("Guest")) {
+                    int PlayerELO = Repository.getCurrentUser().getStatistics().getELO();
+                    if (GUI_GamePanel.getGame().getGameType() == GameType.LOCAL_MULTIPLAYER) {
+                        Repository.getCurrentUser().getStatistics().setELO(
+                                Utility.CalculateNew_ELO(PlayerELO, PlayerELO, gameOutcome));
+                    } else {
+                        int ComputerELO;
+                        if (Repository.getCurrentUser().getStatistics().getELO() <= 800) {
+                            ComputerELO = 700;
+                        } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1300) {
+                            ComputerELO = 1200;
+                        } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1600) {
+                            ComputerELO = 1500;
+                        } else if (Repository.getCurrentUser().getStatistics().getELO() <= 1900) {
+                            ComputerELO = 1800;
+                        } else if (Repository.getCurrentUser().getStatistics().getELO() <= 2400) {
+                            ComputerELO = 2300;
+                        } else {
+                            ComputerELO = 2700;
+                        }
+                        Repository.getCurrentUser().getStatistics().setELO(
+                                Utility.CalculateNew_ELO(PlayerELO, ComputerELO, gameOutcome));
+                    }
+                    Repository.updateUsersStats();
+                    Repository.AddGame(GUI_GamePanel.getGame(), GUI_GamePanel.getGame().getSelectedColour());
+                }
             }
         }
     }
@@ -269,12 +274,12 @@ public class GUI_BoardPanel extends JPanel {
                 for (Move move : moves) {
                     for (Tile tile1 : Tiles) {
                         if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
-                            tile1.setBorder(new LineBorder(tile1.getColour(), 22));
+                            tile1.setBorder(new LineBorder(new Color(179, 140, 52), 2));
                             if (move instanceof Move.CapturingMove || move instanceof Move.PawnPromotionCapture){
                                 tile1.setBackground(new Color(189, 120, 171));
                             } else {
                                 if (!tile1.getBackground().equals(new Color(255,77,77))){
-                                    tile1.setBackground(new Color(178,190,181));
+                                    tile1.setBackground(new Color(216,180,85));
                                 }
                             }
                         }
@@ -315,9 +320,14 @@ public class GUI_BoardPanel extends JPanel {
         return valid;
     }
 
-    private void UpdateBoard() {
+    public static void UpdateBoard() {
         for (Tile tile : Tiles) {
-            this.remove(tile);
+            if (GUI_GamePanel.getGame().getGameType() == GameType.LOCAL_MULTIPLAYER){
+                tile.setSquare(GUI_GamePanel.getGame().getBoard().getBoardArray()[7 - ((tile.getSquare().ReturnCoordinate().getRank() - 1))][7 - ((tile.getSquare().ReturnCoordinate().getFile() - 1))]);
+            } else {
+                tile.setSquare(GUI_GamePanel.getGame().getBoard().getBoardArray()[((tile.getSquare().ReturnCoordinate().getRank() - 1))][((tile.getSquare().ReturnCoordinate().getFile() - 1))]);
+            }
+
             if (tile.getSquare().SquareOccupied()) {
                 if (tile.getSquare().ReturnPiece().getColour() == Colour.WHITE) {
                     tile.getIcon().setForeground(new Color(247, 229, 195));
@@ -328,7 +338,6 @@ public class GUI_BoardPanel extends JPanel {
             } else {
                 tile.setIconText("");
             }
-            this.add(tile);
         }
     }
 }

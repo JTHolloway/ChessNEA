@@ -9,7 +9,7 @@ import java.awt.*;
  * Similar to the square method however this is a JPanel and not used for any of the program functionality
  */
 public final class Tile extends JPanel {
-    private final Square square;
+    private Square square;
     private final Color colour;
     private final JLabel icon;
 
@@ -37,6 +37,10 @@ public final class Tile extends JPanel {
     public void setIconText(String text) {
         icon.setText(text);
         this.repaint();
+    }
+
+    public void setSquare(Square square) {
+        this.square = square;
     }
 
     public Color getColour() {
