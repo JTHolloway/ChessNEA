@@ -18,6 +18,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
     private static JPanel MorePanel;
     private static JPanel FriendsPanel;
     private static JPanel PodiumPanel;
+    private static JPanel ProfilePanel;
 
     private JLabel CloseWindowButton;
     private JLabel MinimiseWindowButton;
@@ -46,6 +47,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
             learnPanel.setVisible(false);
             AnalysisPanel.setVisible(false);
             MorePanel.setVisible(false);
+            ProfilePanel.setVisible(false);
             PodiumPanel.setVisible(true);
 
             if (gamePanel != null) {
@@ -69,6 +71,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
             AnalysisPanel.setVisible(false);
             MorePanel.setVisible(false);
             FriendsPanel.setVisible(false);
+            ProfilePanel.setVisible(false);
             PodiumPanel.setVisible(true);
 
             if (gamePanel != null) {
@@ -92,6 +95,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         MorePanel = new GUI_MorePanel();
         FriendsPanel = new GUI_FriendsPanel();
         PodiumPanel = new GUI_PodiumPanel();
+        ProfilePanel  = new GUI_ProfilePanel();
 
         CloseWindowButton = new JLabel();
         MinimiseWindowButton = new JLabel();
@@ -108,6 +112,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         FriendsPanel.setVisible(false);
         MorePanel.setVisible(false);
         PodiumPanel.setVisible(false);
+        ProfilePanel.setVisible(false);
         //todo the rest
         //endregion
 
