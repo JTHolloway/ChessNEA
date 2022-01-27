@@ -104,14 +104,6 @@ public class GUI_BoardPanel extends JPanel {
                                     previousBorder[0] = null;
 
                                     game.UpdatePlayerToMove();
-                                    destinationSquare = null;
-                                    selectedSquare = null;
-
-                                    GameOver();
-                                    if (game.getGameType() == GameType.VERSES_COMPUTER) {
-                                        ComputerTurn(game);
-                                    }
-
                                     //Make king Square red if checked
                                     for (Tile tile1 : Tiles){
                                         if (tile1.getSquare().SquareOccupied() && tile1.getSquare().ReturnPiece() instanceof King && tile1.getSquare().ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour()){
@@ -122,6 +114,13 @@ public class GUI_BoardPanel extends JPanel {
                                             tile1.setBackground(tile1.getColour());
                                             tile1.setBorder(null);
                                         }
+                                    }
+                                    destinationSquare = null;
+                                    selectedSquare = null;
+
+                                    GameOver();
+                                    if (game.getGameType() == GameType.VERSES_COMPUTER) {
+                                        ComputerTurn(game);
                                     }
 
                                 } else if ((finalTile.getSquare().SquareOccupied() && finalTile.getSquare().ReturnPiece().getColour() == game.getSelectedColour() && game.getGameType() == GameType.VERSES_COMPUTER)
