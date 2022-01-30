@@ -171,7 +171,6 @@ public class Repository {
      */
     public static List<User> getUsers() {
         try {
-            //TODO get userstats and user details in same method
             String sql = "SELECT User.*, Country.CountryName " +
                     "FROM User, Country " +
                     "WHERE Country.CountryID = User.Country";
@@ -271,7 +270,7 @@ public class Repository {
     }
 
     /**
-     * todo comment
+     * Updates the Users information in the database after they log in, log out or play a game
      */
     public static void updateUsersStats() {
         if (!currentUser.getUserID().equals("Guest")) {
@@ -339,7 +338,6 @@ public class Repository {
             int GameFilePrimaryKey = rs.getInt("Expr1") + 1;
             int GamePrimaryKey = rs.getInt("Expr2") + 1;
             rs.close();
-            //Todo create and save PGN file
 
             sql =
                     "INSERT INTO GameFile(FileID) VALUES (" + GameFilePrimaryKey + ")";

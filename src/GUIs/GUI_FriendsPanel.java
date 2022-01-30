@@ -73,13 +73,6 @@ public class GUI_FriendsPanel extends JPanel {
         confirmSearchButton.setBounds((int) (this.getWidth() - (this.getWidth() * 0.6d)), (int) ((this.getHeight() * 0.1d) - (int) (this.getHeight() * 0.08d)),
                 (int) (this.getWidth() * 0.1d), (int) (this.getHeight() * 0.05d));
 
-        confirmSearchButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                //TODO Find and Display Users 'LIKE' name in search bar from database. Else show 'no users found' dialog box
-            }
-        });
-
         //Search Results
         Results.getTableHeader().setOpaque(false);
         Results.getTableHeader().setBackground(Color.orange);
@@ -89,7 +82,6 @@ public class GUI_FriendsPanel extends JPanel {
         Results.setBounds((int) (this.getWidth() * 0.1d), (int) (this.getHeight() * 0.1d), (int) (this.getWidth() * 0.3d),
                 (int) (this.getHeight() * 0.8d));
         Results.setFont(new Font("", Font.PLAIN, (int) (this.getHeight() * 0.03d)));
-        //TODO actionListener
 
         //Friend List
         FriendsList.getTableHeader().setOpaque(false);
@@ -101,7 +93,6 @@ public class GUI_FriendsPanel extends JPanel {
                 (int) (this.getHeight() * 0.1d), (int) (this.getWidth() * 0.3d), (int) (this.getHeight() * 0.8d));
         FriendsList.setFont(new Font("", Font.PLAIN, (int) (this.getHeight() * 0.03d)));
         FriendsList.setRowHeight((int) (this.getHeight() * 0.03d));
-        //TODO actionListener
 
         this.add(searchBar);
         this.add(confirmSearchButton);

@@ -107,6 +107,9 @@ public class GUI_ProfilePanel extends JPanel{
         this.add(profilePicture);
     }
 
+    /**
+     * This method will update the stats on the profile panel if a new game is played.
+     */
     public static void updateStats(){
 
         double winPercentage;

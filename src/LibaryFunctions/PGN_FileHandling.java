@@ -13,6 +13,9 @@ public class PGN_FileHandling {
 
     private static File PGN_File;
 
+    /**
+     * Creates the PGN text file
+     */
     public static void createPGN(){
         String FileName = Repository.getCurrentUser().getUserID() + "_" + Repository.getCurrentUser().getStatistics().getGames() + ".txt";
         PGN_File = new File(FileName);
@@ -31,6 +34,10 @@ public class PGN_FileHandling {
         writeToPGN("[User \"" + Repository.getCurrentUser().getUserID() + "\"]\n\n\n");
     }
 
+    /**
+     * Appends a String to the text file
+     * @param StringToWrite The string to be appended
+     */
     public static void writeToPGN(String StringToWrite){
         try {
             FileWriter fileWriter = new FileWriter(PGN_File.getName(), true);
@@ -40,9 +47,5 @@ public class PGN_FileHandling {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void storePGN(){
-
     }
 }

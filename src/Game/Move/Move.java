@@ -138,8 +138,6 @@ public abstract class Move {
 
     /**
      * Class for a EnPassant move: A move in which an opponents piece pawn was captured when the pawn was an EnPassant pawn
-     *
-     * @TODO Check if necessary
      */
     public static class EnPassantMove extends Move {
         private final Piece CapturedPiece;

@@ -148,6 +148,14 @@ public class Game {
         return moveNotation;
     }
 
+    /**
+     * An ambiguous move is where the two pieces of the same colour and type
+     * can move to the same square in the same move. So different notation needs to be used to
+     * distinguish between moves
+     * @param move The move to check
+     * @return a list of pieces which are of the same colour and type which can all move to the same destination.
+     * return an empty list if move is not ambiguous
+     */
     public List<Piece> isMoveAmbiguous(Move move){
         List<Piece> pieces = move.getMovedPiece().getColour() == Colour.WHITE ? board.getWhitePieces() : board.getBlackPieces();
         List<Piece> ambiguousPieces = new ArrayList<>();
@@ -177,12 +185,9 @@ public class Game {
 
     /**
      * Updates the board by making a move.
-     *
      * @param move a move object identifying the move to be made
-     * @// TODO: 08/09/2021 make move in game class
      */
     public static void MakeMove(Move move, Board board) {
-        //todo move comes from player class
         int OriginX = move.getStartPosition().ReturnCoordinate().getFile();
         int OriginY = move.getStartPosition().ReturnCoordinate().getRank();
         int DestinationX = move.getEndPosition().ReturnCoordinate().getFile();
@@ -295,6 +300,13 @@ public class Game {
         }
     }
 
+    /**
+     * Reverses a move by setting each piece back to where it was originally.
+     * @param move The move to reverse
+     * @param board The board which the move was played on
+     * @param castlingAvailability The previous castling availability before the move was made
+     * @param enPassantPawn The previous EnPassant pawn before the move was made
+     */
     public static void reverseMove(Move move, Board board, CastlingAvailability castlingAvailability, Pawn enPassantPawn) {
         int OriginX = move.getStartPosition().ReturnCoordinate().getFile();
         int OriginY = move.getStartPosition().ReturnCoordinate().getRank();
@@ -378,9 +390,11 @@ public class Game {
     }
 
     /**
-     * @param ThreatenedColour
-     * @param ThreatenedSquare
-     * @return
+     * Checks whether a square is threatening to a certain colour. A square is threatened if a piece of a given colour
+     * can be captured in that square because it is guarded by the opposing colour .
+     * @param ThreatenedColour The colour for which the destination square is a threat.
+     * @param ThreatenedSquare The square which is being checked
+     * @return true if the colour is threatened in that square.
      */
     public static boolean isThreatenedSquare(Colour ThreatenedColour, Square ThreatenedSquare, Board board) {
 
@@ -472,8 +486,6 @@ public class Game {
         return false;
     }
 
-    //If the king is in check then no need to check for stalemate.
-    // check checkmate -> check -> stalemate
     /**
      * If the square which the king is on is a threatened square, then the king must be in check
      * @param colour The colour of the king you want to determine is checked or not.
@@ -536,11 +548,16 @@ public class Game {
         return false;
     }
 
+    /**
+     * @return true if checkmate or stalemate has occurred, the game is over.
+     */
     public boolean isGameOver() {
         return isKingCheckmated(Colour.WHITE) || isKingCheckmated(Colour.BLACK) || isStalemate(Colour.WHITE) || isStalemate(Colour.BLACK);
     }
 
-    //Todo comment - @return player: The winning player
+    /**
+     * @return The winning player when the game is over
+     */
     public Player gameOver() {
         if (isKingCheckmated(Colour.WHITE)) {
             return blackPlayer;

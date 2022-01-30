@@ -36,7 +36,7 @@ public class UserStats {
         LastOnline = lastOnline;
     }
 
-    /*Setter Methods for each Variable (Except join date)*/
+    /*Setter Methods for each Variable (Except dates)*/
     public void setRank(String rank) {
         Rank = rank;
     }
@@ -55,10 +55,6 @@ public class UserStats {
 
     public void setLosses(int losses) {
         Losses = losses;
-    }
-
-    public void setLastOnline(Date lastOnline) {
-        LastOnline = lastOnline;
     }
 
     /*Getter Methods for each Variable*/

@@ -92,25 +92,11 @@ public class Board {
         }
 
         //Initialise Empty Squares
-        for (int i = 2; i < 6; i++) {       //Y-Coordinates
+        for (int i = 2; i < 6; i++) {        //Y-Coordinates
             for (int j = 0; j < 8; j++) {    //X-Coordinates
                 BoardArray[i][j] = new Square.EmptySquare(j + 1, i + 1);
             }
         }
-    }
-
-
-    /**
-     * Returns the square which matches the given coordinates
-     *
-     * @param coordinate A coordinate object
-     * @return a Square object in the board array
-     */
-    public Square ReturnSquare(final Coordinate coordinate) {
-        int X_coordinate = coordinate.getFile();
-        int Y_coordinate = coordinate.getRank();
-
-        return BoardArray[Y_coordinate - 1][X_coordinate - 1];
     }
 
     /**
@@ -191,15 +177,7 @@ public class Board {
         return WhitePieces;
     }
 
-    public void setWhitePieces(List<Piece> whitePieces) {
-        WhitePieces = new ArrayList<>(whitePieces);
-    }
-
     public List<Piece> getBlackPieces() {
         return BlackPieces;
-    }
-
-    public void setBlackPieces(List<Piece> blackPieces) {
-        BlackPieces = new ArrayList<>(blackPieces);
     }
 }

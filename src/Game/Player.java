@@ -25,21 +25,6 @@ public abstract class Player {
     }
 
     /**
-     * @return boolean whether it is this players turn
-     */
-    public boolean isTurn() {
-        return isTurn;
-    }
-
-    /**
-     * @param turn sets turn to this player
-     */
-    public void setTurn(boolean turn) {
-        isTurn = turn;
-    }
-
-
-    /**
      * Class for a Human Player
      * Extends Player class
      */
@@ -75,7 +60,5 @@ public abstract class Player {
         public Computer(Colour playingColour) {
             super(playingColour);
         }
-
-        //todo call minimax algorithm calculate move
     }
 }

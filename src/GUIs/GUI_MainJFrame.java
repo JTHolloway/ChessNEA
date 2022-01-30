@@ -63,6 +63,10 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * When method is called it sets the profile panel as visible.
+     * This method is called when the Profile button is pressed on the More Panel and is called from the GUI_MorePanel Class.
+     */
     public static void ProfilePanelClicked() {
 
         if (Repository.getCurrentUser().getUserID().equals("Guest")){
@@ -140,7 +144,6 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         MorePanel.setVisible(false);
         PodiumPanel.setVisible(false);
         ProfilePanel.setVisible(false);
-        //todo the rest
         //endregion
 
         //region Screen Dimensions
@@ -275,7 +278,6 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     FriendsPanel.setVisible(false);
                     PodiumPanel.setVisible(false);
                     ProfilePanel.setVisible(false);
-                    //TODO set other panels visibility to false
                 }
             }
 
@@ -317,7 +319,6 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     if (gamePanel != null) {
                         gamePanel.setVisible(false);
                     }
-                    //TODO set other panels visibility to false
                 }
             }
 
@@ -359,7 +360,6 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     if (gamePanel != null) {
                         gamePanel.setVisible(false);
                     }
-                    //TODO set other panels visibility to false
                 }
             }
 

@@ -74,7 +74,6 @@ public class Coordinate {
            If displacement of square is 0 in comparison to coordinates then
            they are in the same location
          */
-        // Coordinates are different
         return XDisplacement == 0 && YDisplacement == 0;    //Coordinates are the same
     }
 

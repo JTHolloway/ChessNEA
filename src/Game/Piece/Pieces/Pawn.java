@@ -210,6 +210,4 @@ public class Pawn extends Piece {
     public String ReturnPieceIcon() {
         return "♟";
     }
-
-    //TODO pawn promotion handling
 }

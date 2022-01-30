@@ -18,12 +18,16 @@ public final class Minimax {
     private Move currentBestMove;
     private int[] pieceValues;
 
-    private int temp = 0; // TODO remove
-
     public Minimax(Game game) {
         this.game = game;
     }
 
+    /**
+     * This method alters the computer difficulty based on the users ELO rank and calls the minimax
+     * algorithm to find the best move.
+     * @param computerColour The colour which the computer is playing as
+     * @return the best move found by the minimax algorithm
+     */
     public Move getComputerMove(Colour computerColour) {
         int depth = 0;
         pieceValues = new int[]{200, 9, 5, 3, 3, 1};
@@ -50,15 +54,25 @@ public final class Minimax {
         }
 
         //todo dont always set depth = 1;
-        depth = 1;
+        depth = 2;
         minimaxTraversal(game.getBoard(), depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, true, computerColour);
 
         return currentBestMove;
     }
 
+    /**
+     * The method created a move tree to find the highest value move which can be made by the computer
+     * @param currentPosition The current state of the board for which the move is to be made
+     * @param searchDepth the level of depth to which the move tree will be traversed.
+     *                    Higher depths means the computer can see further ahead and therefore play better.
+     * @param alpha A value used for alpha-beta pruning to prune any branches which dont contain the best move.
+     * @param beta A value used for alpha-beta pruning to prune any branches which dont contain the best move.
+     * @param maximizer a boolean value to determine whether or not the maximizing colours moves are being checked
+     * @param maximizingColour The colour which the computer is playing as
+     * @return a double value for the value of the bottom of a branch, which can be compared to other values until the highest
+     * value branch is located
+     */
     private double minimaxTraversal(Board currentPosition, int searchDepth, double alpha, double beta, boolean maximizer, Colour maximizingColour) {
-        temp++;
-        //System.out.println("");
         if (searchDepth == 0 || game.isGameOver()) {
             return evaluateBranch(currentPosition, maximizingColour);
         }
@@ -80,19 +94,8 @@ public final class Minimax {
             for (Move currentNode : moves) {
                 Game.MakeMove(currentNode, currentPosition);
 
-//                System.out.println("Move Made");
-//                game.getBoard().PrintBoard();
-//                System.out.println();
-
-                //game.getBoard().PrintBoard(); //todo Remove
-                //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
                 double nodeEvaluation = minimaxTraversal(currentPosition, searchDepth - 1, alpha, beta, false, maximizingColour);
-                //System.out.println("Node Evaluation: " + nodeEvaluation);
                 Game.reverseMove(currentNode, currentPosition, castlingAvailability, enPassantPawn);
-
-//                System.out.println("Move Reversed");
-//                game.getBoard().PrintBoard();
-//                System.out.println();
 
                 if (nodeEvaluation > maxEvaluation) {
                     maxEvaluation = nodeEvaluation;
@@ -111,19 +114,8 @@ public final class Minimax {
             for (Move currentNode : moves) {
                 Game.MakeMove(currentNode, currentPosition);
 
-//                System.out.println("Move Made");
-//                game.getBoard().PrintBoard();
-//                System.out.println();
-
-                //game.getBoard().PrintBoard(); //todo remove
-                //if (currentNode.wasCapture()) System.out.println("Capture"); //todo remove
                 double nodeEvaluation = minimaxTraversal(currentPosition, searchDepth - 1, alpha, beta, true, maximizingColour);
-                //System.out.println("min Node evaluation: " + nodeEvaluation);
                 Game.reverseMove(currentNode, currentPosition, castlingAvailability, enPassantPawn);
-
-//                System.out.println("Move Reversed");
-//                game.getBoard().PrintBoard();
-//                System.out.println();
 
                 if (nodeEvaluation < minEvaluation) {
                     minEvaluation = nodeEvaluation;
@@ -140,6 +132,12 @@ public final class Minimax {
         }
     }
 
+    /**
+     * Gets all child nodes of a move, where a child is any subsequent move which can be made after the previous move.
+     * @param maximizer a boolean value to determine whether or not the maximizing colours moves are being checked
+     * @param maximizingColour The colour which the computer is playing as
+     * @return a list of move objects for each possible move which can be made by a colour.
+     */
     private List<Move> getChildren(Board board, boolean maximizer, Colour maximizingColour) {
         List<Move> children = new ArrayList<>();
         List<Piece> pieces;
@@ -156,6 +154,11 @@ public final class Minimax {
         return children;
     }
 
+    /**
+     * Calculates the total value of a move branch
+     * @param maximizingColour The colour which the computer is playing as
+     * @return the value of the branch.
+     */
     private double evaluateBranch(Board board, Colour maximizingColour) {
         double branchValue = 0;
 
@@ -174,20 +177,12 @@ public final class Minimax {
 
             //Mobility Score (Number of moves which can be made by each side * 0.05)
             branchValue += calculateMobilityScore(board);
-
-            //Position Score
-            branchValue += calculatePositionScore(board);
-
         }
 
         //Make evaluation positive or negative based on the maximisingColour
         if (maximizingColour == Colour.BLACK) {
             return ((100 * branchValue) * -1);
         } else return (100 * branchValue);
-    }
-
-    private double calculatePositionScore(Board board) {
-        return 0;
     }
 
     /**
@@ -217,8 +212,6 @@ public final class Minimax {
                     noOfBlackPiecesOfType++;
                 }
             }
-//            System.out.println("No. of black " + pieceValueReference[index] + "'s = " + noOfBlackPiecesOfType);
-//            System.out.println("No. of white " + pieceValueReference[index] + "'s = " + noOfWhitePiecesOfType);
 
             materialScore += pieceValues[index] * (noOfWhitePiecesOfType - noOfBlackPiecesOfType);
         }
@@ -232,26 +225,16 @@ public final class Minimax {
         }
         materialScore += pieceValues[0] * (blackChecked - whiteChecked);
 
-        //System.out.println("material score: " + materialScore);
-
-        //todo Decrease score based on whether doubled, blocked or isolated pawns are present.
-
         return materialScore;
     }
 
+    /**
+     * @return a score value based on how many moves one player can make in relation to the other player.
+     */
     private double calculateMobilityScore(Board board) {
         int whiteMobility = getChildren(board, true, Colour.WHITE).size();
         int blackMobility = getChildren(board, true, Colour.BLACK).size();
 
-        //System.out.println("Black Mobility: " + blackMobility + ", White mobility: " + whiteMobility + ", Mobility Score = " + (0.05 * (whiteMobility - blackMobility)));
-        //todo maybe decrease score based on trapped pieces / forks / skewers
-
         return 0.05 * (whiteMobility - blackMobility);
-    }
-
-    //todo remove
-    public Move getCurrentBestMove() {
-        System.out.println("Temp = " + temp);
-        return currentBestMove;
     }
 }

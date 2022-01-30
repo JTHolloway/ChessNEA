@@ -6,6 +6,10 @@ public enum GameOutcome {
     LOSS,
     DRAW;
 
+    /**
+     * @param outcome The outcome of the game
+     * @return The value of this outcome to be used when calculating ELO score.
+     */
     public static double valueOf(GameOutcome outcome){
         if (outcome == WIN)
         {

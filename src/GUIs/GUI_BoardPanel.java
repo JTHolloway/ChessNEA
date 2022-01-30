@@ -121,7 +121,7 @@ public class GUI_BoardPanel extends JPanel {
 
                                     GameOver();
                                     if (game.getGameType() == GameType.VERSES_COMPUTER) {
-                                        ComputerTurn(game);
+                                        ComputerTurn();
                                     }
 
                                 } else if ((finalTile.getSquare().SquareOccupied() && finalTile.getSquare().ReturnPiece().getColour() == game.getSelectedColour() && game.getGameType() == GameType.VERSES_COMPUTER)
@@ -157,16 +157,24 @@ public class GUI_BoardPanel extends JPanel {
         }
 
         if (GUI_GamePanel.getGame().getGameType() == GameType.VERSES_COMPUTER && GUI_GamePanel.getGame().getSelectedColour() != Colour.WHITE) {
-            ComputerTurn(game);
+            ComputerTurn();
         }
     }
 
-    private void ComputerTurn(Game game) {
+    /**
+     * Runs a new thread to calculate and make the computer move
+     */
+    private void ComputerTurn() {
         Thread newThread = new Thread(multiThread);
         newThread.start();
         GameOver();
     }
 
+    /**
+     * If a player can promote a pawn then this method will allow them to chose the piece they promote to
+     * @param move The Pawn Promotion move
+     * @return The promotion piece object
+     */
     private Piece choosePromotionPiece(Move move) {
         JComboBox<String> piece = new JComboBox<>(new String[]{"Queen", "Knight", "Bishop", "Rook"});
 
@@ -190,6 +198,9 @@ public class GUI_BoardPanel extends JPanel {
         return null;
     }
 
+    /**
+     * Checks whether the game is over and saves the game to the database if the game is over.
+     */
     private void GameOver() {
         if (!gameOver){
             if (GUI_GamePanel.getGame().isGameOver()) {
@@ -256,6 +267,11 @@ public class GUI_BoardPanel extends JPanel {
         }
     }
 
+    /**
+     * This method is called when a user presses a square and checks whether the square is occupied.
+     * If a square is occupied then it is set as the selected square and the valid destination squares are highlighted
+     * @param finalTile The tile which is pressed by the user
+     */
     private void SelectOriginSquare(Tile finalTile, Game game) {
         selectedSquare = finalTile.getSquare();
         if (selectedSquare.SquareOccupied()) { //If the square is occupied
@@ -291,6 +307,12 @@ public class GUI_BoardPanel extends JPanel {
         } else selectedSquare = null;
     }
 
+    /**
+     * This method checks if the destination pressed by the user is valid and will perform the move if it is.
+     * @param finalTile The tile which is pressed by the user
+     * @param moveList The list of moves which could have been made
+     * @return true is the move was valid and successfully performed
+     */
     private boolean SelectDestinationSquare(Tile finalTile, Game game, List<Move> moveList) {
         destinationSquare = finalTile.getSquare();
         boolean valid = false;
@@ -310,15 +332,15 @@ public class GUI_BoardPanel extends JPanel {
 
                     } else Game.MakeMove(move, game.getBoard());
 
-                    //todo remove print
-                    game.getBoard().PrintBoard();
-
                     break;
                 }
         }
         return valid;
     }
 
+    /**
+     * Updates the GUI by moving the pieces to their new locations or removing captured pieces
+     */
     public static void UpdateBoard() {
         for (Tile tile : Tiles) {
             if (GUI_GamePanel.getGame().getGameType() == GameType.LOCAL_MULTIPLAYER){

@@ -48,6 +48,9 @@ public abstract class Piece {
      */
     public abstract String PieceTypeToNotation();
 
+    /**
+     * @return The unicode character corresponding to a certain piece type
+     */
     public abstract String ReturnPieceIcon();
 
     /**
@@ -60,7 +63,7 @@ public abstract class Piece {
     protected List<Square> CheckCollisions(List<Square> OneDimensionalArray) {
         int PiecePositionIndex = 0;
 
-        //Find index of moving piece
+        //Find the index of the moving piece
         for (int i = 0; i < OneDimensionalArray.size(); i++) {
             Square square = OneDimensionalArray.get(i);
             if (getPieceCoordinate().CompareCoordinates(square)) {
@@ -93,6 +96,7 @@ public abstract class Piece {
             }
         }
 
+        //Returns a sublist between the two possible collisions, therefore the moving piece can only move in between the other pieces and not past them
         OneDimensionalArray = OneDimensionalArray.subList(BackIndex, FrontIndex + 1);
         return OneDimensionalArray;
     }
@@ -153,6 +157,12 @@ public abstract class Piece {
         return Moves;
     }
 
+    /**
+     * If a move results in the players king in check then it is not legal because you
+     * cannot check your own king
+     * @param moves The list of move objects to be checked
+     * @return A list of move objects with illegal moves removed
+     */
     protected List<Move> removeIllegalMoves(Board board, List<Move> moves) {
         List<Move> illegalMoves = new ArrayList<>();
 

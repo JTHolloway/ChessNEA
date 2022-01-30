@@ -15,6 +15,10 @@ public class MultiThread implements Runnable {
         this.minimax = minimax;
     }
 
+    /**
+     * Calls the minimax algorithm and makes the computer move.
+     * Also increments the number of moves made and updates the board and the player turn.
+     */
     @Override
     public void run() {
         Move computerMove = minimax.getComputerMove(Colour.GetOtherColour(GUI_GamePanel.getGame().getSelectedColour()));
@@ -23,11 +27,6 @@ public class MultiThread implements Runnable {
 
         Game.MakeMove(computerMove, GUI_GamePanel.getGame().getBoard());
         GUI_BoardPanel.UpdateBoard();
-
-        //todo remove print
-        System.out.println();
-        //System.out.println(GUI_GamePanel.getGame().MoveToNotation(computerMove));
-        GUI_GamePanel.getGame().getBoard().PrintBoard();
 
         GUI_GamePanel.getGame().UpdatePlayerToMove();
         GUI_GamePanel.updateTurn();

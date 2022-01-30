@@ -139,10 +139,6 @@ public class GUI_MorePanel extends JPanel {
         SettingsPanelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         SettingsPanelButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                //TODO settings panel
-            }
 
             @Override
             public void mouseEntered(MouseEvent e) {

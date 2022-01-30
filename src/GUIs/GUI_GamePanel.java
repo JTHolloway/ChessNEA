@@ -70,14 +70,24 @@ public class GUI_GamePanel extends JPanel {
         this.setVisible(false);
     }
 
+    /**
+     * Adds the move notation of the latest move to the move box text area
+     * @param moveNotation The string to be appended
+     */
     public static void updateMoveBox(String moveNotation){
         moveBox.setText(moveBox.getText() +  (game.getMovesMade() + 1)+ "." + moveNotation + " ");
     }
 
+    /**
+     * @return the text in the move box text area
+     */
     public static String getPGN(){
         return moveBox.getText();
     }
 
+    /**
+     * Sets the text in the turn box to 'Whites turn' or 'Blacks turn' depending on which player needs to move
+     */
     public static void updateTurn(){
         Colour colourTurn = GUI_GamePanel.getGame().getPlayerToMove().getPlayingColour();
         if (colourTurn == Colour.WHITE){

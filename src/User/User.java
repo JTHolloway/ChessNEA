@@ -32,7 +32,6 @@ public class User {
         Surname = surname;
         Country = country;
         Statistics = statistics;
-        //get default profile picture from database
     }
 
     /**
@@ -57,21 +56,9 @@ public class User {
         ProfilePicture = ProfilePic;
     }
 
-    /*Setter Methods for each Variable (Except UserID or Statistics)*/
-    public void setUserName(String userName) {
-        UserName = userName;
-    }
-
+    /*Setter Methods for Variables*/
     public void setEmail(String email) {
         Email = email;
-    }
-
-    public void setName(String name) {
-        Name = name;
-    }
-
-    public void setSurname(String surname) {
-        Surname = surname;
     }
 
     public void setCountry(String country) {
