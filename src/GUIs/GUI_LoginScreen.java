@@ -185,7 +185,6 @@ public class GUI_LoginScreen extends JFrame {
                                             0,
                                             0,
                                             0,
-                                            0,
                                             Today,
                                             Today
                                     )
