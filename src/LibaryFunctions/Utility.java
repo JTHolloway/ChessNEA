@@ -91,7 +91,7 @@ public class Utility {
                     isNotBlankOrEmpty(Email) &&
                     isNotBlankOrEmpty(Name) &&
                     isNotBlankOrEmpty(Surname) &&
-                    isNotBlankOrEmpty(Password) &&
+                    isNotBlankOrEmpty(Password) && Password.length() >= 8 &&
                     isNotBlankOrEmpty(ConfirmPassword)) {
                 if (Password.equals(ConfirmPassword)) {
                     return isEmailFormatValid(Email);

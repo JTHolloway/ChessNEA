@@ -211,8 +211,15 @@ public class GUI_LoginScreen extends JFrame {
 
                     if ((String.valueOf(Create_Password.getPassword()).equals(String.valueOf(Create_ConfirmPassword.getPassword()))) &&
                             Utility.isNotBlankOrEmpty((String.valueOf(Create_Password.getPassword())))) {
-                        Create_Password.setBackground(new Color(109, 245, 50));
-                        Create_ConfirmPassword.setBackground(new Color(109, 245, 50));
+                        if((String.valueOf(Create_Password.getPassword())).length() >= 8){
+                            Create_Password.setBackground(new Color(109, 245, 50));
+                            Create_ConfirmPassword.setBackground(new Color(109, 245, 50));
+                        } else {
+                            Create_Password.setBackground(new Color(220, 20, 60));
+                            Create_ConfirmPassword.setBackground(new Color(220, 20, 60));
+                            ErrorMsg += "Password must contain at least 8 characters\n";
+                        }
+
                     } else {
                         Create_Password.setBackground(new Color(220, 20, 60));
                         Create_ConfirmPassword.setBackground(new Color(220, 20, 60));
