@@ -121,7 +121,9 @@ public class Game {
         {
             moveNotation = moveNotation + "x";
         }
-        moveNotation = moveNotation + move.getEndPosition().ReturnCoordinate().CoordinateToNotation();
+        if (!(move instanceof Move.CastlingMove)){
+            moveNotation = moveNotation + move.getEndPosition().ReturnCoordinate().CoordinateToNotation();
+        }
 
         //Pawn Promotion
         if (move instanceof Move.PawnPromotion){

@@ -12,11 +12,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        UserStats userStatsTest = new UserStats("pro", 1000, 10, 5, 5, 0, new java.sql.Date(Calendar.getInstance().getTime().getTime()),
-//                new java.sql.Date(Calendar.getInstance().getTime().getTime()));
-//        User me = new User("1", "James123", "get", "james", "Holloway", "UK", userStatsTest);
-//
-//        new GUI_MainJFrame();
         new GUI_LoginScreen();
 
 //        Game g = new Game();
