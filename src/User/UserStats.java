@@ -19,17 +19,16 @@ public class UserStats {
      *
      * @param rank       This parameter is the users rank as a string
      * @param ELO        This parameter is the numeric ELO rank of the user
-     * @param games      This parameter is the number of games which a user has played in total
      * @param wins       This parameter is the total number of games which a user has won
      * @param losses     This parameter is the total number of games which a user has lost
      * @param draws      This parameter is the total number of games which a user has drawn
      * @param joinDate   This parameter is the Date the user created their account
      * @param lastOnline This parameter is the date that the user last logged on to their account
      */
-    public UserStats(String rank, int ELO, int games, int wins, int losses, int draws, Date joinDate, Date lastOnline) {
+    public UserStats(String rank, int ELO, int wins, int losses, int draws, Date joinDate, Date lastOnline) {
         Rank = rank;
         this.ELO = ELO;
-        Games = games;
+        Games = wins + draws + losses;
         Wins = wins;
         Losses = losses;
         Draws = draws;
