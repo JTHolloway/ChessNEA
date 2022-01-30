@@ -577,6 +577,4 @@ public class Game {
     public void setMovesMade(int movesMade) {
         this.movesMade = movesMade;
     }
-
-    //todo call UpdateuserStats method in repository class after each game and update a players ELO
 }
