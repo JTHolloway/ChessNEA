@@ -40,21 +40,49 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
      * This method is called when the friendList button is pressed on the More Panel. This method is called from the GUI_MorePanel Class.
      */
     public static void FriendsPanelClicked() {
-        GUI_FriendsPanel.UpdateFriendsTable();
 
-        if (!FriendsPanel.isVisible()) {
-            FriendsPanel.setVisible(true);
-            learnPanel.setVisible(false);
-            AnalysisPanel.setVisible(false);
-            MorePanel.setVisible(false);
-            ProfilePanel.setVisible(false);
-            PodiumPanel.setVisible(true);
+        if (Repository.getCurrentUser().getUserID().equals("Guest")){
+            JOptionPane.showMessageDialog(null, "Guest accounts cannot view Friend List");
 
-            if (gamePanel != null) {
-                gamePanel.setVisible(false);
+        } else {
+            GUI_FriendsPanel.UpdateFriendsTable();
+
+            if (!FriendsPanel.isVisible()) {
+                FriendsPanel.setVisible(true);
+                learnPanel.setVisible(false);
+                AnalysisPanel.setVisible(false);
+                MorePanel.setVisible(false);
+                ProfilePanel.setVisible(false);
+                PodiumPanel.setVisible(false);
+
+                if (gamePanel != null) {
+                    gamePanel.setVisible(false);
+                }
+                MorePanel.setVisible(false);
             }
-            MorePanel.setVisible(false);
-            //TODO set other panels visibility to false
+        }
+    }
+
+    public static void ProfilePanelClicked() {
+
+        if (Repository.getCurrentUser().getUserID().equals("Guest")){
+            JOptionPane.showMessageDialog(null, "Guest accounts cannot view Profile Page");
+
+        } else {
+            GUI_ProfilePanel.updateStats();
+            if (!ProfilePanel.isVisible()) {
+                FriendsPanel.setVisible(false);
+                learnPanel.setVisible(false);
+                AnalysisPanel.setVisible(false);
+                MorePanel.setVisible(false);
+                ProfilePanel.setVisible(true);
+                PodiumPanel.setVisible(false);
+
+                if (gamePanel != null) {
+                    gamePanel.setVisible(false);
+                }
+                MorePanel.setVisible(false);
+            }
         }
     }
 
@@ -78,7 +106,6 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                 gamePanel.setVisible(false);
             }
             MorePanel.setVisible(false);
-            //TODO set other panels visibility to false
         }
     }
 
@@ -247,6 +274,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     MorePanel.setVisible(false);
                     FriendsPanel.setVisible(false);
                     PodiumPanel.setVisible(false);
+                    ProfilePanel.setVisible(false);
                     //TODO set other panels visibility to false
                 }
             }
@@ -284,6 +312,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     MorePanel.setVisible(false);
                     FriendsPanel.setVisible(false);
                     PodiumPanel.setVisible(false);
+                    ProfilePanel.setVisible(false);
 
                     if (gamePanel != null) {
                         gamePanel.setVisible(false);
@@ -325,6 +354,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
                     MorePanel.setVisible(false);
                     PodiumPanel.setVisible(false);
                     FriendsPanel.setVisible(false);
+                    ProfilePanel.setVisible(false);
 
                     if (gamePanel != null) {
                         gamePanel.setVisible(false);
@@ -438,6 +468,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         this.getContentPane().add(FriendsPanel);
         this.getContentPane().add(MorePanel);
         this.getContentPane().add(PodiumPanel);
+        this.getContentPane().add(ProfilePanel);
         //endregion
 
         this.setVisible(true);
