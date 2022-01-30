@@ -18,15 +18,9 @@ public class MultiThread implements Runnable {
     @Override
     public void run() {
         Move computerMove = minimax.getComputerMove(Colour.GetOtherColour(GUI_GamePanel.getGame().getSelectedColour()));
-        if (computerMove.wasCapture()) {
-                System.out.println(computerMove.getMovedPiece().getColour() + " " + computerMove.getMovedPiece().getType() + ", " + computerMove.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
-                        computerMove.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", " + computerMove.getCapturedPiece().getType() + ", " + computerMove.getCapturedPiece().getColour() + ", " +
-                        computerMove.getCapturedPiece().getPieceCoordinate().CoordinateToNotation());
-            } else {
-                System.out.println(computerMove.getMovedPiece().getColour() + " " + computerMove.getMovedPiece().getType() + ", " + computerMove.getStartPosition().ReturnCoordinate().CoordinateToNotation() + ", " +
-                        computerMove.getEndPosition().ReturnCoordinate().CoordinateToNotation() + ", NULL");
-            }
-        
+        GUI_GamePanel.updateMoveBox(GUI_GamePanel.getGame().MoveToNotation(computerMove));
+        GUI_GamePanel.getGame().setMovesMade(GUI_GamePanel.getGame().getMovesMade() + 1);
+
         Game.MakeMove(computerMove, GUI_GamePanel.getGame().getBoard());
         GUI_BoardPanel.UpdateBoard();
 
@@ -36,5 +30,6 @@ public class MultiThread implements Runnable {
         GUI_GamePanel.getGame().getBoard().PrintBoard();
 
         GUI_GamePanel.getGame().UpdatePlayerToMove();
+        GUI_GamePanel.updateTurn();
     }
 }
