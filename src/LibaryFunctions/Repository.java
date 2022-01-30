@@ -252,7 +252,6 @@ public class Repository {
                 stats = (new UserStats(
                         rs.getString("Rank.Rank"),
                         rs.getInt("UserStats.ELO"),
-                        rs.getInt("UserStats.GamesPlayed"),
                         rs.getInt("UserStats.Wins"),
                         rs.getInt("UserStats.Losses"),
                         rs.getInt("UserStats.Draws"),
