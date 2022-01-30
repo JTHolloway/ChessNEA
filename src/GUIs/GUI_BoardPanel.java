@@ -7,6 +7,7 @@ import Game.Piece.Piece;
 import Game.Piece.PieceType;
 import Game.Piece.Pieces.*;
 import LibaryFunctions.MultiThread;
+import LibaryFunctions.PGN_FileHandling;
 import LibaryFunctions.Repository;
 import LibaryFunctions.Utility;
 
@@ -97,13 +98,13 @@ public class GUI_BoardPanel extends JPanel {
                                 boolean valid = SelectDestinationSquare(finalTile, game, moves);
 
                                 if (valid) {
-                                    //todo Update Board
                                     UpdateBoard();
 
                                     game.setMovesMade(game.getMovesMade() + 1);
                                     previousBorder[0] = null;
 
                                     game.UpdatePlayerToMove();
+                                    GUI_GamePanel.updateTurn();
                                     //Make king Square red if checked
                                     for (Tile tile1 : Tiles){
                                         if (tile1.getSquare().SquareOccupied() && tile1.getSquare().ReturnPiece() instanceof King && tile1.getSquare().ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour()){
@@ -163,7 +164,6 @@ public class GUI_BoardPanel extends JPanel {
     private void ComputerTurn(Game game) {
         Thread newThread = new Thread(multiThread);
         newThread.start();
-        game.setMovesMade(game.getMovesMade() + 1);
         GameOver();
     }
 
@@ -212,6 +212,7 @@ public class GUI_BoardPanel extends JPanel {
                     gameOutcome = GameOutcome.DRAW;
                     Repository.getCurrentUser().getStatistics().setDraws(Repository.getCurrentUser().getStatistics().getDraws() + 1);
                 }
+                Repository.getCurrentUser().getStatistics().setGames(Repository.getCurrentUser().getStatistics().getGames() + 1);
 
                 System.out.println(gameOutcome);
 
@@ -248,6 +249,8 @@ public class GUI_BoardPanel extends JPanel {
                     }
                     Repository.updateUsersStats();
                     Repository.AddGame(GUI_GamePanel.getGame(), GUI_GamePanel.getGame().getSelectedColour());
+                    PGN_FileHandling.createPGN();
+                    PGN_FileHandling.writeToPGN(GUI_GamePanel.getPGN());
                 }
             }
         }
@@ -274,7 +277,7 @@ public class GUI_BoardPanel extends JPanel {
                     for (Tile tile1 : Tiles) {
                         if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
                             tile1.setBorder(new LineBorder(new Color(179, 140, 52), 2));
-                            if (move instanceof Move.CapturingMove || move instanceof Move.PawnPromotionCapture){
+                            if (move instanceof Move.CapturingMove || move instanceof Move.PawnPromotionCapture || move instanceof Move.EnPassantMove){
                                 tile1.setBackground(new Color(189, 120, 171));
                             } else {
                                 if (!tile1.getBackground().equals(new Color(255,77,77))){
@@ -295,10 +298,7 @@ public class GUI_BoardPanel extends JPanel {
         for (Move move : moveList) {
                 if (move.getEndPosition().ReturnCoordinate().CompareCoordinates(destinationSquare)) {
                     valid = true;
-
-                    //todo remove print
-                    System.out.println();
-                    System.out.println(game.MoveToNotation(move));
+                    GUI_GamePanel.updateMoveBox(game.MoveToNotation(move));
 
                     if (move instanceof Move.PawnPromotion) {
                         Move pawnPromotionMove = new Move.PawnPromotion(move.getStartPosition(), move.getEndPosition(), choosePromotionPiece(move));
