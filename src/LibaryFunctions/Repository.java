@@ -147,9 +147,12 @@ public class Repository {
             ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
 
             if (rs.next()) {
-                rs.close();
-                connection.close();
-                return true;
+
+                if (UserID.equals(rs.getString("UserID"))){
+                    rs.close();
+                    connection.close();
+                    return true;
+                }
             }
 
             rs.close();
@@ -197,6 +200,25 @@ public class Repository {
         } catch (Exception e) {
             System.out.println("Error in the repository class: " + e);
             return new ArrayList<User>();
+        }
+    }
+
+    public static String[] getUserLoginInfo(String userId) {
+        try {
+            String sql = "SELECT Email, Password " +
+                    "FROM User " +
+                    "WHERE UserID = '" + userId + "'";
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+            rs.next();
+            String[] details = {rs.getString("Email"), rs.getString("Password")};
+
+            rs.close();
+            connection.close();
+            return details;
+
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+            return null;
         }
     }
 
@@ -320,6 +342,29 @@ public class Repository {
             System.out.println("Error in the repository class: " + e);
         }
         return UserId;
+    }
+
+
+    /**
+     * @return a List containing all Emails assigned to each user
+     */
+    public static List<String> getEmails() {
+        List<String> Emails = new ArrayList<>();
+
+        try {
+
+            String sql = "SELECT Email FROM User";
+            ResultSet rs = ExecuteSQL.executeQuery(getConnection(), sql);
+
+            while (rs.next()) {
+                Emails.add(rs.getString("Email"));
+            }
+            rs.close();
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Error in the repository class: " + e);
+        }
+        return Emails;
     }
 
     /**
