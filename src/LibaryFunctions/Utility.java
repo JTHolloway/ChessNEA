@@ -87,10 +87,10 @@ public class Utility {
     public static boolean CheckValidNewUser(String UserID, String Username, String Email, String Name,
                                             String Surname, String Password, String ConfirmPassword) {
         if (isNotBlankOrEmpty(UserID) && isUserIdAvailable(UserID) && UserID.length() == 4) {
-            if (isNotBlankOrEmpty(Username) &&
-                    isNotBlankOrEmpty(Email) &&
-                    isNotBlankOrEmpty(Name) &&
-                    isNotBlankOrEmpty(Surname) &&
+            if (isNotBlankOrEmpty(Username) && Username.matches("[a-zA-Z0-9]{1,35}") &&
+                    isNotBlankOrEmpty(Email) && isEmailAvailable(Email) &&
+                    isNotBlankOrEmpty(Name) && Name.matches("[a-zA-Z]{1,30}") &&
+                    isNotBlankOrEmpty(Surname) && Surname.matches("[a-zA-Z]{1,30}") &&
                     isNotBlankOrEmpty(Password) && Password.length() >= 8 &&
                     isNotBlankOrEmpty(ConfirmPassword)) {
                 if (Password.equals(ConfirmPassword)) {
@@ -126,7 +126,16 @@ public class Utility {
         for (String ID : Repository.getUserIds()) {
             if (ID.equals(UserID)) return false;
         }
-        return ! UserID.contains("//");
+        return UserID.matches("[a-zA-Z0-9]+");
+    }
+
+    public static boolean isEmailAvailable(String Email) {
+        for (String ID : Repository.getEmails()) {
+            if (ID != null){
+                if (ID.equals(Email)) return false;
+            }
+        }
+        return true;
     }
 
     /**

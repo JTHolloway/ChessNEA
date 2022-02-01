@@ -94,10 +94,26 @@ public class GUI_LoginScreen extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String ErrorMsg = "";
+                JTextField[] components = {Login_UserIDTag, Login_Email, Login_Password};
 
                 if (!(Utility.isNotBlankOrEmpty(Login_UserIDTag.getText()) && Utility.isNotBlankOrEmpty(Login_Email.getText()) && Utility.isNotBlankOrEmpty(String.valueOf(Login_Password.getPassword())))) {
                     ErrorMsg += "Fill in all fields\n";
                 }
+                for (JTextField field : components) {
+                    if (field instanceof JPasswordField){
+                        if (!Utility.isNotBlankOrEmpty(String.valueOf(Login_Password.getPassword()))){
+                            field.setBackground(new Color(220, 20, 60));
+                        } else {
+                            field.setBackground(new Color(109, 245, 50));
+                        }
+
+                    } else if (!Utility.isNotBlankOrEmpty(field.getText())){
+                        field.setBackground(new Color(220, 20, 60));
+                    } else {
+                        field.setBackground(new Color(109, 245, 50));
+                    }
+                }
+
                 if (Utility.CheckValidLogin(Login_UserIDTag.getText(), Login_Email.getText(), String.valueOf(Login_Password.getPassword()))) {
                     Repository.Login(Login_UserIDTag.getText());
                     Repository.updateUsersStats();
@@ -106,7 +122,45 @@ public class GUI_LoginScreen extends JFrame {
                     This.dispose();
 
                 } else {
-                    ErrorMsg += "Invalid Details\n";
+                    if (!ErrorMsg.equals("Fill in all fields\n")) {
+                        ErrorMsg += "Invalid Details\n";
+                    }
+
+                    boolean invalidID = true;
+                    if (Utility.isNotBlankOrEmpty(Login_UserIDTag.getText())){
+                        for (String userID : Repository.getUserIds()){
+                            if (!userID.equals("Guest")){
+                                if (userID.equals(Login_UserIDTag.getText())){
+                                    Login_UserIDTag.setBackground(new Color(109, 245, 50));
+                                    invalidID = false;
+
+                                    String[] details = Repository.getUserLoginInfo(userID);
+                                    if (details[0].equals(Login_Email.getText())){
+                                        Login_Email.setBackground(new Color(109, 245, 50));
+                                    } else{
+                                        Login_Email.setBackground(new Color(220, 20, 60));
+                                    }
+                                    if (details[1].equals(Utility.hashPassword(String.valueOf(Login_Password.getPassword())))){
+                                        Login_Password.setBackground(new Color(109, 245, 50));
+                                    } else{
+                                        Login_Password.setBackground(new Color(220, 20, 60));
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        Login_Email.setBackground(Color.LIGHT_GRAY);
+                        Login_Password.setBackground(Color.LIGHT_GRAY);
+                    }
+
+                    if (invalidID) {
+                        Login_UserIDTag.setBackground(new Color(220, 20, 60));
+                        Login_Email.setBackground(Color.LIGHT_GRAY);
+                        Login_Password.setBackground(Color.LIGHT_GRAY);
+                    }
+
                     JOptionPane.showMessageDialog(This, ErrorMsg);
                 }
             }
@@ -119,8 +173,24 @@ public class GUI_LoginScreen extends JFrame {
                 Repository.Login("Guest");
                 Repository.getCurrentUser().setCountry(Guest_Country.getSelectedItem().toString());
 
-                new GUI_MainJFrame();
-                This.dispose();
+                if (Guest_Username.getText().matches("[a-zA-Z0-9]{1,35}")){
+                    Guest_Username.setBackground(new Color(109, 245, 50));
+                    Repository.Login("Guest");
+                    Repository.getCurrentUser().setCountry(Guest_Country.getSelectedItem().toString());
+
+                    new GUI_MainJFrame();
+                    This.dispose();
+
+                } else if (Guest_Username.getText().length() > 35){
+                    Guest_Username.setBackground(new Color(220, 20, 60));
+                    JOptionPane.showMessageDialog(This, "Username too long");
+                } else if (!Utility.isNotBlankOrEmpty(Guest_Username.getText())){
+                    Guest_Username.setBackground(new Color(220, 20, 60));
+                    JOptionPane.showMessageDialog(This, "Enter a Temporary Username");
+                } else {
+                    Guest_Username.setBackground(new Color(220, 20, 60));
+                    JOptionPane.showMessageDialog(This, "Username must not contain special characters");
+                }
             }
         });
 
@@ -199,14 +269,41 @@ public class GUI_LoginScreen extends JFrame {
                     isValid = false;
 
                     if (isEmpty) {
-                        ErrorMsg += "Fill in all fields\n";
+                        ErrorMsg += "Fill in all Fields\n";
                     }
 
-                    if (Utility.isEmailFormatValid(Create_Email.getText())) {
-                        Create_Email.setBackground(new Color(109, 245, 50));
+                    if (!Create_Name.getText().matches("[a-zA-Z]{1,30}") && Utility.isNotBlankOrEmpty(Create_Name.getText())){
+                        Create_Name.setBackground(new Color(220, 20, 60));
+                        if (Create_Name.getText().length() > 30){
+                            ErrorMsg += "Name Too long\n";
+                        } else ErrorMsg += "Name must only contain letters\n";
+                    } else if (!Utility.isNotBlankOrEmpty(Create_Name.getText())){
+                        Create_Name.setBackground(new Color(220, 20, 60));
                     } else {
+                        Create_Name.setBackground(new Color(109, 245, 50));
+                    }
+                    if (!Create_Surname.getText().matches("[a-zA-Z]{1,30}") && Utility.isNotBlankOrEmpty(Create_Surname.getText())){
+                        Create_Surname.setBackground(new Color(220, 20, 60));
+                        if (Create_Surname.getText().length() > 30){
+                            ErrorMsg += "Surname Too long\n";
+                        } else ErrorMsg += "Surname must only contain letters\n";
+
+                    } else if (!Utility.isNotBlankOrEmpty(Create_Surname.getText())){
+                        Create_Surname.setBackground(new Color(220, 20, 60));
+                    } else {
+                        Create_Surname.setBackground(new Color(109, 245, 50));
+                    }
+
+                    if (Utility.isEmailFormatValid(Create_Email.getText()) && Utility.isEmailAvailable(Create_Email.getText())) {
+                        Create_Email.setBackground(new Color(109, 245, 50));
+                    } else if (!Utility.isEmailFormatValid(Create_Email.getText()) && Utility.isNotBlankOrEmpty(Create_Email.getText())){
                         Create_Email.setBackground(new Color(220, 20, 60));
                         ErrorMsg += "Invalid Email\n";
+                    } else  if (!Utility.isEmailAvailable(Create_Email.getText()) && Utility.isNotBlankOrEmpty(Create_Email.getText())){
+                        Create_Email.setBackground(new Color(220, 20, 60));
+                        ErrorMsg += "Email Taken\n";
+                    } else {
+                        Create_Email.setBackground(new Color(220, 20, 60));
                     }
 
                     if ((String.valueOf(Create_Password.getPassword()).equals(String.valueOf(Create_ConfirmPassword.getPassword()))) &&
@@ -223,7 +320,9 @@ public class GUI_LoginScreen extends JFrame {
                     } else {
                         Create_Password.setBackground(new Color(220, 20, 60));
                         Create_ConfirmPassword.setBackground(new Color(220, 20, 60));
-                        ErrorMsg += "Passwords dont match\n";
+                        if (!(String.valueOf(Create_Password.getPassword()).equals(String.valueOf(Create_ConfirmPassword.getPassword())))){
+                            ErrorMsg += "Passwords dont match\n";
+                        }
                     }
 
                     if (Utility.isNotBlankOrEmpty(Create_UserIDTag.getText())
@@ -236,7 +335,21 @@ public class GUI_LoginScreen extends JFrame {
                         }
                     } else {
                         Create_UserIDTag.setBackground(new Color(220, 20, 60));
-                        ErrorMsg += "Id Tag Invalid or Taken\n";
+                        if (Utility.isNotBlankOrEmpty(Create_UserIDTag.getText())){
+                            ErrorMsg += "Id Tag Invalid or Taken\n";
+                        }
+                    }
+
+                    if (Create_Username.getText().matches("[a-zA-Z0-9]{1,35}")){
+                        Create_Username.setBackground(new Color(109, 245, 50));
+                    } else if (Create_Username.getText().length() > 35){
+                        Create_Username.setBackground(new Color(220, 20, 60));
+                        ErrorMsg += "Username too long\n";
+                    } else if (!Utility.isNotBlankOrEmpty(Create_Username.getText())){
+                        Create_Username.setBackground(new Color(220, 20, 60));
+                    } else {
+                        Create_Username.setBackground(new Color(220, 20, 60));
+                        ErrorMsg += "Username must not contain special characters\n";
                     }
 
                 }
