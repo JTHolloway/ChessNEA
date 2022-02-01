@@ -203,6 +203,11 @@ public class Repository {
         }
     }
 
+    /**
+     * Gets the email and hashed password of a user with specified UserID from the database so that entered login details can be checked
+     * @param userId The UserID of the user whose information is to be fetched from the database
+     * @return an array of strings containing {Email, Password}
+     */
     public static String[] getUserLoginInfo(String userId) {
         try {
             String sql = "SELECT Email, Password " +
