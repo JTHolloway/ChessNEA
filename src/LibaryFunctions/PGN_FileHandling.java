@@ -18,15 +18,7 @@ public class PGN_FileHandling {
      */
     public static void createPGN(){
         String FileName = Repository.getCurrentUser().getUserID() + "_" + Repository.getCurrentUser().getStatistics().getGames() + ".txt";
-        PGN_File = new File(FileName);
-
-        try {
-            PGN_File.createNewFile();
-
-        } catch (IOException exception) {
-            System.out.println("Error Creating PGN file");
-            exception.printStackTrace();
-        }
+        PGN_File = new File(System.getProperty("user.dir") + "/Game Files/" + FileName);
 
         writeToPGN("[Event \"" + GUI_GamePanel.getGame().getGameType() + "\"]\n");
         writeToPGN("[Date \"" + new java.sql.Date (Calendar.getInstance().getTime().getTime()) + "\"]\n");
