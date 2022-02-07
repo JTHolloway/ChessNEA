@@ -10,6 +10,7 @@ import LibaryFunctions.MultiThread;
 import LibaryFunctions.PGN_FileHandling;
 import LibaryFunctions.Repository;
 import LibaryFunctions.Utility;
+import Tests.CalculateValidMovesTest;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -40,8 +41,6 @@ public class GUI_BoardPanel extends JPanel {
         this.setLayout(null);
 
         InitialiseTiles();
-
-
     }
 
     /**
@@ -66,11 +65,16 @@ public class GUI_BoardPanel extends JPanel {
                 tile = new Tile(game.getBoard().getBoardArray()[(7 - (i - 1))][(7 - (j - 1))], TileSize, tileColour);
                 tile.setBackground(tileColour);
 
-                if (game.getSelectedColour() == Colour.WHITE) {
-                    tile.setBounds((7 - (j - 1)) * (TileSize), this.getSize().height - ((8 - (i - 1)) * TileSize), TileSize, TileSize);
+                if (game.getGameType() == GameType.VERSES_COMPUTER){
+                    if (game.getSelectedColour() == Colour.WHITE) {
+                        tile.setBounds((7 - (j - 1)) * (TileSize), this.getSize().height - ((8 - (i - 1)) * TileSize), TileSize, TileSize);
+                    } else {
+                        tile.setBounds((j - 1) * (TileSize), this.getSize().height - (i * TileSize), TileSize, TileSize);
+                    }
                 } else {
-                    tile.setBounds((j - 1) * (TileSize), this.getSize().height - (i * TileSize), TileSize, TileSize);
+                    tile.setBounds((7 - (j - 1)) * (TileSize), this.getSize().height - ((8 - (i - 1)) * TileSize), TileSize, TileSize);
                 }
+
                 tile.setLayout(null);
 
                 if (tile.getSquare().SquareOccupied()) {
@@ -88,6 +92,7 @@ public class GUI_BoardPanel extends JPanel {
                     @Override
                     public void mouseClicked(MouseEvent e) {
 
+                        GameOver();
                         if ((game.getPlayerToMove().getPlayingColour() == game.getSelectedColour() && game.getGameType() == GameType.VERSES_COMPUTER)
                                 || (game.getGameType() == GameType.LOCAL_MULTIPLAYER)) {
                             if (selectedSquare == null) { //Selecting a square
@@ -167,7 +172,6 @@ public class GUI_BoardPanel extends JPanel {
     private void ComputerTurn() {
         Thread newThread = new Thread(multiThread);
         newThread.start();
-        GameOver();
     }
 
     /**

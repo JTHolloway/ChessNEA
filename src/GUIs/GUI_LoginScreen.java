@@ -117,7 +117,6 @@ public class GUI_LoginScreen extends JFrame {
                 if (Utility.CheckValidLogin(Login_UserIDTag.getText(), Login_Email.getText(), String.valueOf(Login_Password.getPassword()))) {
                     Repository.Login(Login_UserIDTag.getText());
                     Repository.updateUsersStats();
-
                     new GUI_MainJFrame();
                     This.dispose();
 
@@ -177,7 +176,6 @@ public class GUI_LoginScreen extends JFrame {
                     Guest_Username.setBackground(new Color(109, 245, 50));
                     Repository.Login("Guest");
                     Repository.getCurrentUser().setCountry(Guest_Country.getSelectedItem().toString());
-
                     new GUI_MainJFrame();
                     This.dispose();
 

@@ -166,7 +166,7 @@ public class Game {
             if (piece.getType() == move.getMovedPiece().getType() && piece != move.getMovedPiece())
             {
                 for (Move otherMove : piece.CalculateValidMoves(board)){
-                    if (otherMove.getEndPosition() == move.getEndPosition()){
+                    if (otherMove.getEndPosition().ReturnCoordinate().CompareCoordinates(move.getEndPosition())){
                         ambiguousPieces.add(otherMove.getMovedPiece());
                     }
                 }

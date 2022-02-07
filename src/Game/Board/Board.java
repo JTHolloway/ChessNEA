@@ -154,6 +154,19 @@ public class Board {
     }
 
     /**
+     * Returns the square which matches the given coordinates
+     *
+     * @param coordinate A coordinate object
+     * @return a Square object in the board array
+     */
+    public Square ReturnSquare(final Coordinate coordinate) {
+        int X_coordinate = coordinate.getFile();
+        int Y_coordinate = coordinate.getRank();
+
+        return BoardArray[Y_coordinate - 1][X_coordinate - 1];
+    }
+
+    /**
      * @return a pawn object of the current enPassant Pawn
      */
     public Pawn getEnPassantPawn() {

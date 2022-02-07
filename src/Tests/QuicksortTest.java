@@ -10,13 +10,15 @@ public class QuicksortTest {
 
     public static void main(String[] args) {
 
+        System.out.println("Order Before Sort:");
         List<User> users = Repository.getUsers();
         printArray(users);
 
         System.out.println("\n");
 
-        ELO_Quicksort(users);
-        //Username_Quicksort(users);
+        System.out.println("Order After Sort:");
+        //ELO_Quicksort(users);
+        Username_Quicksort(users);
 
         printArray(users);
 
