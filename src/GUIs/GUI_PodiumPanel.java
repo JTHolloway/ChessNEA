@@ -41,11 +41,11 @@ public class GUI_PodiumPanel extends JPanel {
         Quicksort.quicksort(Users, true);
         Users.removeIf(user -> user.getUserID().equals("Guest"));
 
-        List<User> topTenUsers;
+        List<User> topUsers;
         if (Users.size() > 50) {
-            topTenUsers = Users.subList(0, 49);
-        } else topTenUsers = Users;
-        for (User user : topTenUsers) {
+            topUsers = Users.subList(0, 49);
+        } else topUsers = Users;
+        for (User user : topUsers) {
             String[] data = new String[3];
             data[0] = String.valueOf(user.getStatistics().getELO());
             data[1] = user.getUserName();
@@ -68,11 +68,11 @@ public class GUI_PodiumPanel extends JPanel {
         Users.removeIf(user -> !user.getCountry().equals(Repository.getCurrentUser().getCountry()));
         Users.removeIf(user -> user.getUserID().equals("Guest"));
 
-        List<User> topTenUsers;
+        List<User> topUsers;
         if (Users.size() > 50) {
-            topTenUsers = Users.subList(0, 49);
-        } else topTenUsers = Users;
-        for (User user : topTenUsers) {
+            topUsers = Users.subList(0, 49);
+        } else topUsers = Users;
+        for (User user : topUsers) {
             String[] data = new String[2];
             data[0] = String.valueOf(user.getStatistics().getELO());
             data[1] = user.getUserName();
