@@ -53,7 +53,6 @@ public final class Minimax {
             pieceValues = new int[]{200, 11, 6, 3, 3, 1};
         }
 
-        //todo dont always set depth = 1;
         depth = 2;
         minimaxTraversal(game.getBoard(), depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, true, computerColour);
 

@@ -59,9 +59,7 @@ public class Utility {
             byte[] Hashed = Hash.digest();
 
             StringBuilder sb = new StringBuilder();
-            for (byte b : Hashed) {
-                sb.append(String.format("%02x", b));
-            }
+            for (byte b : Hashed) sb.append(String.format("%02x", b));
 
             return sb.toString();
 
