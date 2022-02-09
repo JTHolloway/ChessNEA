@@ -78,27 +78,27 @@ public class Repository {
      * @param CountryIndex The Country Index which uniquely identifies the database record containing the users country
      */
     public static void AddUser(String Password, int CountryIndex) {
-        String sql;
         try {
-            sql =
-                    "INSERT INTO User(UserID, Username, Password, Email, FirstName, LastName, Country) " +
-                            "VALUES ('" + currentUser.getUserID() +
-                            "' , '" + currentUser.getUserName() +
-                            "' , '" + Utility.hashPassword(Password) +
-                            "' , '" + currentUser.getEmail().toLowerCase(Locale.ROOT) +
-                            "' , '" + currentUser.getName() +
-                            "' , '" + currentUser.getSurname() +
-                            "' , " + CountryIndex +
-                            ")";
-            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+            getConnection();
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO User(UserID, Username, Password, Email, FirstName, LastName, Country) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)");
+            stmt.setString(1, currentUser.getUserID());
+            stmt.setString(2, currentUser.getUserName());
+            stmt.setString(3, Utility.hashPassword(Password));
+            stmt.setString(4, currentUser.getEmail().toLowerCase(Locale.ROOT));
+            stmt.setString(5, currentUser.getName());
+            stmt.setString(6, currentUser.getSurname());
+            stmt.setInt(7, CountryIndex);
 
-            sql =
-                    "INSERT INTO UserStats(UserID, JoinDate, LastPlayDate) " +
-                            "VALUES ('" + currentUser.getUserID() +
-                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
-                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
-                            "')";
-            ExecuteSQL.executeUpdateQuery(getConnection(), sql);
+            ExecuteSQL.executeUpdateQuery(connection, stmt);
+
+            stmt = connection.prepareStatement("INSERT INTO UserStats(UserID, JoinDate, LastPlayDate) " +
+                    "VALUES (?, ?, ?)");
+            stmt.setString(1, currentUser.getUserID());
+            stmt.setDate(2, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+            stmt.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+
+            ExecuteSQL.executeUpdateQuery(connection, stmt);
             connection.close();
 
         } catch (Exception e) {
