@@ -30,6 +30,7 @@ public class Knight extends Piece {
      *
      * The knight can move in an L-shape pattern where it moves two squares in a horizontal or vertical
      * direction and then moves one square perpendicular to its previous motion.
+     * The knight can also jump over other pieces
      *
      * @param board An instance of the current board (which contains an array of squares)
      * @return a list of all available/legal moves (where move is a move object)
