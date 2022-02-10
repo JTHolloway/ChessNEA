@@ -43,7 +43,7 @@ public class Knight extends Piece {
         for (Square[] Row : BoardArray) {
             //For each square in the row
             for (Square square : Row) {
-                //Calculate the vector displacement of the square from the piece in X and Y components
+                //Calculate the magnitude of vector displacement of the square from the piece in X and Y components
                 Coordinate Destination = square.ReturnCoordinate();
                 int XDisplacement = Math.abs(getPieceCoordinate().getFile() - Destination.getFile());
                 int YDisplacement = Math.abs(getPieceCoordinate().getRank() - Destination.getRank());
