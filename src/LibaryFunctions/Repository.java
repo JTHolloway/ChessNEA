@@ -80,7 +80,8 @@ public class Repository {
     public static void AddUser(String Password, int CountryIndex) {
         try {
             getConnection();
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO User(UserID, Username, Password, Email, FirstName, LastName, Country) " +
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO User(UserID, Username, Password, " +
+                    "Email, FirstName, LastName, Country) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)");
             stmt.setString(1, currentUser.getUserID());
             stmt.setString(2, currentUser.getUserName());
