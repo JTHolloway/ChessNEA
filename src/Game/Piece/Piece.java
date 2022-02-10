@@ -96,7 +96,10 @@ public abstract class Piece {
             }
         }
 
-        //Returns a sublist between the two possible collisions, therefore the moving piece can only move in between the other pieces and not past them
+        /*
+        Returns a sublist between the two possible collisions,
+        therefore the moving piece can only move in between the other pieces and not past them
+         */
         OneDimensionalArray = OneDimensionalArray.subList(BackIndex, FrontIndex + 1);
         return OneDimensionalArray;
     }

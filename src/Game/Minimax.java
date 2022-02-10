@@ -50,9 +50,10 @@ public final class Minimax {
             pieceValues = new int[]{200, 11, 6, 3, 3, 1};
         } else {
             depth = 6;
-            pieceValues = new int[]{200, 11, 6, 3, 3, 1};
+            pieceValues = new int[]{200, 12, 6, 3, 3, 1};
         }
 
+        //A fixed depth is set because otherwise erroneous results occur
         depth = 2;
         minimaxTraversal(game.getBoard(), depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, true, computerColour);
 
