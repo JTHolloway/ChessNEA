@@ -73,6 +73,7 @@ public class Repository {
 
     /**
      * Adds a new user to the database after they have created an account
+     * Uses Prepared statements for security
      *
      * @param Password     New users un-hashed password
      * @param CountryIndex The Country Index which uniquely identifies the database record containing the users country
