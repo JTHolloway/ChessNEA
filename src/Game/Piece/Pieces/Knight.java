@@ -28,6 +28,9 @@ public class Knight extends Piece {
      * illegal moves cannot be made
      * Takes into account that check may be present on the board etc...
      *
+     * The knight can move in an L-shape pattern where it moves two squares in a horizontal or vertical
+     * direction and then moves one square perpendicular to its previous motion.
+     *
      * @param board An instance of the current board (which contains an array of squares)
      * @return a list of all available/legal moves (where move is a move object)
      */
@@ -36,8 +39,11 @@ public class Knight extends Piece {
         Square[][] BoardArray = board.getBoardArray();
         List<Square> PossibleDestinations = new ArrayList<>();
 
+        //For each row in the board
         for (Square[] Row : BoardArray) {
+            //For each square in the row
             for (Square square : Row) {
+                //Calculate the vector displacement of the square from the piece in X and Y components
                 Coordinate Destination = square.ReturnCoordinate();
                 int XDisplacement = Math.abs(getPieceCoordinate().getFile() - Destination.getFile());
                 int YDisplacement = Math.abs(getPieceCoordinate().getRank() - Destination.getRank());
@@ -56,6 +62,7 @@ public class Knight extends Piece {
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
 
+        //Return the list of legal moves. Illegal moves are removed if they cause check of a players own king
         return removeIllegalMoves(board, DestinationsToMoves(PossibleDestinations, BoardArray));
     }
 
