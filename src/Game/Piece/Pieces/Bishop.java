@@ -77,7 +77,7 @@ public class Bishop extends Piece {
         List<Square> PossibleDestinations = PositiveDiagonal;
         PossibleDestinations.addAll(NegativeDiagonal);
         
-        /*Remove Square that moving piece is occupying and squares which
+        /*Remove the Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
 

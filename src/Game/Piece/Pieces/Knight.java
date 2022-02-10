@@ -59,7 +59,7 @@ public class Knight extends Piece {
             }
         }
         
-        /*Remove Square that moving piece is occupying and squares which
+        /*Remove the Square that moving piece is occupying and squares which
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
 
