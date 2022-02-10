@@ -30,9 +30,12 @@ public class Rook extends Piece {
     }
 
     /**
-     * Takes a board object and calculates the available Rook moves so that
-     * illegal moves cannot be made
-     * Takes into account that check may be present on the board etc..
+     * Takes a board object and calculates the available Rook moves so that illegal moves cannot be made
+     * Takes into account that check may be present on the board etc...
+     *
+     * The Rook can move any number of spaces, in both the vertical and horizontal directions,
+     * It can also castle, however castling is technically a king move so the castling move is not
+     * created in this method.
      *
      * @param board An instance of the current board (which contains an array of squares)
      * @return a list of all available/legal moves (where move is a move object)
@@ -42,6 +45,7 @@ public class Rook extends Piece {
         Square[][] BoardArray = board.getBoardArray();
         List<Square> PossibleDestinations = new ArrayList<>();
 
+        //Uses the methods in the utility class to return arrays for the both row and column which contain the queen
         List<Square> Row = Utility.ArrayToRow(BoardArray, getPieceCoordinate().GetSquareAt(BoardArray));
         List<Square> Column = Utility.ArrayToColumn(BoardArray, getPieceCoordinate().GetSquareAt(BoardArray));
 
@@ -55,6 +59,7 @@ public class Rook extends Piece {
         cannot be captured (because a piece of equal colour occupies it)*/
         PossibleDestinations = RemoveRemainingInvalidDestinations(PossibleDestinations);
 
+        //Return the list of legal moves. Illegal moves are removed if they cause check of a players own king
         return removeIllegalMoves(board, DestinationsToMoves(PossibleDestinations, BoardArray));
     }
 
