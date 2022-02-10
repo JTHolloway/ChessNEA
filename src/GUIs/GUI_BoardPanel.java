@@ -10,11 +10,9 @@ import LibaryFunctions.MultiThread;
 import LibaryFunctions.PGN_FileHandling;
 import LibaryFunctions.Repository;
 import LibaryFunctions.Utility;
-import Tests.CalculateValidMovesTest;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -327,11 +325,14 @@ public class GUI_BoardPanel extends JPanel {
                     GUI_GamePanel.updateMoveBox(game.MoveToNotation(move));
 
                     if (move instanceof Move.PawnPromotion) {
-                        Move pawnPromotionMove = new Move.PawnPromotion(move.getStartPosition(), move.getEndPosition(), choosePromotionPiece(move));
+                        Move pawnPromotionMove = new Move.PawnPromotion(move.getStartPosition(), move.getEndPosition(),
+                                choosePromotionPiece(move));
                         Game.MakeMove(pawnPromotionMove, game.getBoard());
 
                     } else if (move instanceof Move.PawnPromotionCapture) {
-                        Move pawnPromotionMove = new Move.PawnPromotionCapture(move.getStartPosition(), move.getEndPosition(), choosePromotionPiece(move), move.getCapturedPiece());
+                        Move pawnPromotionMove = new Move.PawnPromotionCapture(move.getStartPosition(),
+                                move.getEndPosition(),
+                                choosePromotionPiece(move), move.getCapturedPiece());
                         Game.MakeMove(pawnPromotionMove, game.getBoard());
 
                     } else Game.MakeMove(move, game.getBoard());

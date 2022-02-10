@@ -55,137 +55,6 @@ public class Game {
     }
 
     /**
-     * Converts a move to algebraic chess Notation according to the same order and method as my flowchart
-     * This method is called before the move is made
-     * @return a String in chess notation
-     */
-    public String MoveToNotation(Move move) {
-        String moveNotation = "";
-        Piece movingPiece = move.getMovedPiece();
-        boolean isCapture = move.wasCapture();
-
-        //Piece Type and Origin
-        if (movingPiece instanceof Pawn)
-        {
-            if (isCapture){
-                moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().FileToNotation();
-            }
-        }
-        else if (movingPiece instanceof King)
-        {
-            //Castling
-            if (move instanceof Move.CastlingMove)
-            {
-                if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.KING_SIDE){
-                    moveNotation = moveNotation + "O-O";
-                } else if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.QUEEN_SIDE){
-                    moveNotation = moveNotation + "O-O-O";
-                }
-            }
-            else
-            {
-                moveNotation = moveNotation + movingPiece.PieceTypeToNotation();
-            }
-        }
-        else
-        {
-            moveNotation = moveNotation + movingPiece.PieceTypeToNotation();
-        }
-
-        //Ambiguous Moves
-        if (!(movingPiece instanceof King)){
-            List<Piece> ambiguousPieces = isMoveAmbiguous(move);
-            if (!ambiguousPieces.isEmpty()) {
-                boolean uniqueFile = true;
-                boolean uniqueRank = true;
-                for (Piece piece : ambiguousPieces){
-                    if (piece.getPieceCoordinate().getFile() == move.getMovedPiece().getPieceCoordinate().getFile()){
-                        uniqueFile = false;
-                    }
-                    if (piece.getPieceCoordinate().getRank() == move.getMovedPiece().getPieceCoordinate().getRank()){
-                        uniqueRank = false;
-                    }
-                }
-                if (uniqueFile){
-                    moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().FileToNotation();
-                } else if (uniqueRank) {
-                    moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().getRank();
-                } else {
-                    moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().CoordinateToNotation();
-                }
-            }
-        }
-
-        //Capturing Moves
-        if (isCapture)
-        {
-            moveNotation = moveNotation + "x";
-        }
-        if (!(move instanceof Move.CastlingMove)){
-            moveNotation = moveNotation + move.getEndPosition().ReturnCoordinate().CoordinateToNotation();
-        }
-
-        //Pawn Promotion
-        if (move instanceof Move.PawnPromotion){
-            Piece pawnPromotion = ((Move.PawnPromotion) move).getPromotionPiece();
-            moveNotation = moveNotation + ("=" + pawnPromotion.PieceTypeToNotation());
-        } else if (move instanceof Move.PawnPromotionCapture){
-            Piece pawnPromotion = ((Move.PawnPromotionCapture) move).getPromotionPiece();
-            moveNotation = moveNotation + ("=" + pawnPromotion.PieceTypeToNotation());
-        }
-
-        //Check or Checkmate
-        King[] kings = {(King) board.getKings()[0], (King) board.getKings()[1]};
-        final CastlingAvailability current_CastlingAbility =
-                move.getMovedPiece().getColour() == Colour.WHITE ? kings[0].getCastlingAvailability() : kings[1].getCastlingAvailability();
-        final Pawn current_EnPassantPawn = board.getEnPassantPawn();
-        MakeMove(move, board);
-        if (isKingCheckmated(Colour.GetOtherColour(move.getMovedPiece().getColour()))){
-            moveNotation = moveNotation + "#";
-        } else if (isKingChecked(Colour.GetOtherColour(move.getMovedPiece().getColour()), board)){
-            moveNotation = moveNotation + "+";
-        }
-        reverseMove(move, board, current_CastlingAbility, current_EnPassantPawn);
-
-        return moveNotation;
-    }
-
-    /**
-     * An ambiguous move is where the two pieces of the same colour and type
-     * can move to the same square in the same move. So different notation needs to be used to
-     * distinguish between moves
-     * @param move The move to check
-     * @return a list of pieces which are of the same colour and type which can all move to the same destination.
-     * return an empty list if move is not ambiguous
-     */
-    public List<Piece> isMoveAmbiguous(Move move){
-        List<Piece> pieces = move.getMovedPiece().getColour() == Colour.WHITE ? board.getWhitePieces() : board.getBlackPieces();
-        List<Piece> ambiguousPieces = new ArrayList<>();
-
-        for (Piece piece : pieces){
-            if (piece.getType() == move.getMovedPiece().getType() && piece != move.getMovedPiece())
-            {
-                for (Move otherMove : piece.CalculateValidMoves(board)){
-                    if (otherMove.getEndPosition().ReturnCoordinate().CompareCoordinates(move.getEndPosition())){
-                        ambiguousPieces.add(otherMove.getMovedPiece());
-                    }
-                }
-            }
-        }
-        return ambiguousPieces;
-    }
-
-    /**
-     * Changes the player to move
-     */
-    public void UpdatePlayerToMove() {
-        if (PlayerToMove == whitePlayer) {
-            PlayerToMove = blackPlayer;
-        } else PlayerToMove = whitePlayer;
-    }
-
-
-    /**
      * Updates the board by making a move.
      * @param move a move object identifying the move to be made
      */
@@ -259,11 +128,14 @@ public class Game {
 
 
         if (move.getMovedPiece() instanceof Pawn) {
+            //Double Pawn moves
             if (move.getMovedPiece().getColour() == Colour.WHITE && (OriginY - DestinationY == -2) && (OriginX - DestinationX == 0)) {
                 board.setEnPassantPawn((Pawn) move.getMovedPiece());
             } else if (move.getMovedPiece().getColour() == Colour.BLACK && (OriginY - DestinationY == 2) && (OriginX - DestinationX == 0)) {
                 board.setEnPassantPawn((Pawn) move.getMovedPiece());
-            } else {
+            }
+            //Regular Pawn move
+            else {
                 board.setEnPassantPawn(null);
             }
         } else if (move.getMovedPiece() instanceof Rook) {
@@ -496,11 +368,146 @@ public class Game {
      */
     public static boolean isKingChecked(Colour colour, Board board) {
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
-        return isThreatenedSquare(king.getColour(), king.getPieceCoordinate().GetSquareAt(board.getBoardArray()), board);
+        return isThreatenedSquare(king.getColour(), king.getPieceCoordinate().GetSquareAt(board.getBoardArray()),
+                board);
+    }
+
+    /**
+     * Converts a move to algebraic chess Notation according to the same order and method as my flowchart
+     * This method is called before the move is made
+     *
+     * @return a String in chess notation
+     */
+    public String MoveToNotation(Move move) {
+        String moveNotation = "";
+        Piece movingPiece = move.getMovedPiece();
+        boolean isCapture = move.wasCapture();
+
+        //Piece Type and Origin
+        if (movingPiece instanceof Pawn) {
+            if (isCapture) {
+                moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().FileToNotation();
+            }
+        }
+        else if (movingPiece instanceof King) {
+            //Castling
+            if (move instanceof Move.CastlingMove) {
+                if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.KING_SIDE) {
+                    moveNotation = moveNotation + "O-O";
+                }
+                else if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.QUEEN_SIDE) {
+                    moveNotation = moveNotation + "O-O-O";
+                }
+            }
+            else {
+                moveNotation = moveNotation + movingPiece.PieceTypeToNotation();
+            }
+        }
+        else {
+            moveNotation = moveNotation + movingPiece.PieceTypeToNotation();
+        }
+
+        //Ambiguous Moves
+        if (!(movingPiece instanceof King)) {
+            List<Piece> ambiguousPieces = isMoveAmbiguous(move);
+            if (!ambiguousPieces.isEmpty()) {
+                boolean uniqueFile = true;
+                boolean uniqueRank = true;
+                for (Piece piece : ambiguousPieces) {
+                    if (piece.getPieceCoordinate().getFile() == move.getMovedPiece().getPieceCoordinate().getFile()) {
+                        uniqueFile = false;
+                    }
+                    if (piece.getPieceCoordinate().getRank() == move.getMovedPiece().getPieceCoordinate().getRank()) {
+                        uniqueRank = false;
+                    }
+                }
+                if (uniqueFile) {
+                    moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().FileToNotation();
+                }
+                else if (uniqueRank) {
+                    moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().getRank();
+                }
+                else {
+                    moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().CoordinateToNotation();
+                }
+            }
+        }
+
+        //Capturing Moves
+        if (isCapture) {
+            moveNotation = moveNotation + "x";
+        }
+        if (!(move instanceof Move.CastlingMove)) {
+            moveNotation = moveNotation + move.getEndPosition().ReturnCoordinate().CoordinateToNotation();
+        }
+
+        //Pawn Promotion
+        if (move instanceof Move.PawnPromotion) {
+            Piece pawnPromotion = ((Move.PawnPromotion) move).getPromotionPiece();
+            moveNotation = moveNotation + ("=" + pawnPromotion.PieceTypeToNotation());
+        }
+        else if (move instanceof Move.PawnPromotionCapture) {
+            Piece pawnPromotion = ((Move.PawnPromotionCapture) move).getPromotionPiece();
+            moveNotation = moveNotation + ("=" + pawnPromotion.PieceTypeToNotation());
+        }
+
+        //Check or Checkmate
+        King[] kings = {(King) board.getKings()[0], (King) board.getKings()[1]};
+        final CastlingAvailability current_CastlingAbility =
+                move.getMovedPiece().getColour() == Colour.WHITE ? kings[0].getCastlingAvailability() :
+                        kings[1].getCastlingAvailability();
+        final Pawn current_EnPassantPawn = board.getEnPassantPawn();
+        MakeMove(move, board);
+        if (isKingCheckmated(Colour.GetOtherColour(move.getMovedPiece().getColour()))) {
+            moveNotation = moveNotation + "#";
+        }
+        else if (isKingChecked(Colour.GetOtherColour(move.getMovedPiece().getColour()), board)) {
+            moveNotation = moveNotation + "+";
+        }
+        reverseMove(move, board, current_CastlingAbility, current_EnPassantPawn);
+
+        return moveNotation;
+    }
+
+    /**
+     * An ambiguous move is where the two pieces of the same colour and type
+     * can move to the same square in the same move. So different notation needs to be used to
+     * distinguish between moves
+     *
+     * @param move The move to check
+     * @return a list of pieces which are of the same colour and type which can all move to the same destination.
+     * return an empty list if move is not ambiguous
+     */
+    public List<Piece> isMoveAmbiguous(Move move) {
+        List<Piece> pieces = move.getMovedPiece().getColour() == Colour.WHITE ? board.getWhitePieces() :
+                board.getBlackPieces();
+        List<Piece> ambiguousPieces = new ArrayList<>();
+
+        for (Piece piece : pieces) {
+            if (piece.getType() == move.getMovedPiece().getType() && piece != move.getMovedPiece()) {
+                for (Move otherMove : piece.CalculateValidMoves(board)) {
+                    if (otherMove.getEndPosition().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
+                        ambiguousPieces.add(otherMove.getMovedPiece());
+                    }
+                }
+            }
+        }
+        return ambiguousPieces;
+    }
+
+    /**
+     * Changes the player to move
+     */
+    public void UpdatePlayerToMove() {
+        if (PlayerToMove == whitePlayer) {
+            PlayerToMove = blackPlayer;
+        }
+        else PlayerToMove = whitePlayer;
     }
 
     /**
      * If the player is currently in check and cannot move out of check then the player is in checkmate.
+     *
      * @param colour The colour of the king you want to determine is in checkmate
      * @return true if king is checkmated
      */
@@ -554,7 +561,8 @@ public class Game {
      * @return true if checkmate or stalemate has occurred, the game is over.
      */
     public boolean isGameOver() {
-        return isKingCheckmated(Colour.WHITE) || isKingCheckmated(Colour.BLACK) || isStalemate(Colour.WHITE) || isStalemate(Colour.BLACK);
+        return isKingCheckmated(Colour.WHITE) || isKingCheckmated(Colour.BLACK) ||
+                isStalemate(Colour.WHITE) || isStalemate(Colour.BLACK);
     }
 
     /**
