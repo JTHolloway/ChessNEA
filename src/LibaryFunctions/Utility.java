@@ -22,7 +22,8 @@ public class Utility {
         ArrayList<Square> Row = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             //Row is constant but column is variable, to fetch all squares from each row in that column
-            Row.add(board[PieceOrigin.ReturnCoordinate().getRank() - 1][i]); //Add -1 because array coordinates begin at 0 but board coordinates start at 1
+            //Add -1 for index because array index's begin at 0 but board coordinates start at 1
+            Row.add(board[PieceOrigin.ReturnCoordinate().getRank() - 1][i]);
         }
         return Row;
     }
@@ -40,6 +41,7 @@ public class Utility {
         ArrayList<Square> Column = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             //Column is constant but row is variable, to fetch all squares from each column in that row
+            //Add -1 for index because array index's begin at 0 but board coordinates start at 1
             Column.add(board[i][PieceOrigin.ReturnCoordinate().getFile() - 1]);
         }
         return Column;
@@ -80,7 +82,7 @@ public class Utility {
      * @param Surname         The users last name
      * @param Password        The users un-hashed password
      * @param ConfirmPassword The users un-hashed confirmation password
-     * @return a boolean of whether the new users details are all valid or not.
+     * @return a boolean determining whether the new users details are all valid or not.
      */
     public static boolean CheckValidNewUser(String UserID, String Username, String Email, String Name,
                                             String Surname, String Password, String ConfirmPassword) {
@@ -100,7 +102,7 @@ public class Utility {
     }
 
     /**
-     * Checks whether a users details exist within the database, if they do then they can log in
+     * Checks whether a users detail's exist within the database, if they do then they can log in
      *
      * @param UserID   A Unique User Defined 4-digit Identification key
      * @param Email    The Users unique email address
