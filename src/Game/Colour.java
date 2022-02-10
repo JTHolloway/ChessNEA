@@ -9,7 +9,7 @@ public enum Colour {
     BLACK;
 
     /**
-     * Gets the other colour that the one passed in. Used for allocating player colours.
+     * Gets the opposite colour to what is passed in. Used for allocating player colours.
      *
      * @param colour the Initial colour
      * @return the other colour which was not passed into the method

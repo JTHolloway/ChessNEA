@@ -29,7 +29,7 @@ public class Coordinate {
     }
 
     /**
-     * Converts full Cartigean coordinates into chess coordinates (eg. 3,5 = c5)
+     * Converts full Cartesian coordinates into chess coordinates (eg. 3,5 = c5)
      *
      * @return a String for the coordinate notation
      */
@@ -52,6 +52,7 @@ public class Coordinate {
                     }
                 }
 
+                //If the square has the same coordinate as this coordinate object then the square is returned
                 if (CompareCoordinates(square)) {
                     return square;
                 }

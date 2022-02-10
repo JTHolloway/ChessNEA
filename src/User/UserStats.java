@@ -11,7 +11,7 @@ public class UserStats {
     private int Losses;
     private int Draws;
     private final Date JoinDate;
-    private Date LastOnline;
+    private final Date LastOnline;
 
     /**
      * Constructor for UserStats object
