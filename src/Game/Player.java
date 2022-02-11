@@ -31,10 +31,6 @@ public abstract class Player {
     public static class Human extends Player {
         private final User user;
 
-        public User getUser() {
-            return user;
-        }
-
         /**
          * Constructor for a human player
          *
@@ -44,6 +40,10 @@ public abstract class Player {
         public Human(Colour playingColour, User user) {
             super(playingColour);
             this.user = user;
+        }
+
+        public User getUser() {
+            return user;
         }
     }
 

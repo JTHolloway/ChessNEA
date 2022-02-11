@@ -1,5 +1,6 @@
 package LibaryFunctions;
 
+import Game.Colour;
 import Game.Game;
 import User.User;
 import User.UserStats;
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import Game.Colour;
 
 
 public class Repository {
@@ -150,7 +150,7 @@ public class Repository {
 
             if (rs.next()) {
 
-                if (UserID.equals(rs.getString("UserID"))){
+                if (UserID.equals(rs.getString("UserID"))) {
                     rs.close();
                     connection.close();
                     return true;
@@ -207,6 +207,7 @@ public class Repository {
 
     /**
      * Gets the email and hashed password of a user with specified UserID from the database so that entered login details can be checked
+     *
      * @param userId The UserID of the user whose information is to be fetched from the database
      * @return an array of strings containing {Email, Password}
      */
@@ -376,7 +377,8 @@ public class Repository {
 
     /**
      * Adds a new record into the Game, GameFile and GameLink Database tables
-     * @param game The Game to enter into the database
+     *
+     * @param game       The Game to enter into the database
      * @param userColour The colour of the main user (Player 1 if local multiplayer selected)
      */
     public static void AddGame(Game game, Colour userColour) {
@@ -398,7 +400,7 @@ public class Repository {
             sql =
                     "INSERT INTO Game(GameID, DatePlayed, TimePlayed, Colour, GameFile, MovesMade) " +
                             "VALUES ('" + GamePrimaryKey +
-                            "' , '" + new java.sql.Date (Calendar.getInstance().getTime().getTime()) +
+                            "' , '" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) +
                             "' , '" + new java.sql.Timestamp(System.currentTimeMillis()) +
                             "' , " + (userColour == Colour.WHITE ? 2 : 1) +
                             " , " + GameFilePrimaryKey +

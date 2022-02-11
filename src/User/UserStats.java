@@ -4,14 +4,14 @@ import java.sql.Date;
 
 public class UserStats {
 
+    private final Date JoinDate;
+    private final Date LastOnline;
     private String Rank;
     private int ELO;
     private int Games;
     private int Wins;
     private int Losses;
     private int Draws;
-    private final Date JoinDate;
-    private final Date LastOnline;
 
     /**
      * Constructor for UserStats object
@@ -36,46 +36,46 @@ public class UserStats {
         LastOnline = lastOnline;
     }
 
-    /*Setter Methods for each Variable (Except dates)*/
-    public void setRank(String rank) {
-        Rank = rank;
-    }
-
-    public void setELO(int ELO) {
-        this.ELO = ELO;
-    }
-
-    public void setGames(int games) {
-        Games = games;
-    }
-
-    public void setWins(int wins) {
-        Wins = wins;
-    }
-
-    public void setLosses(int losses) {
-        Losses = losses;
-    }
-
     /*Getter Methods for each Variable*/
     public String getRank() {
         return Rank;
+    }
+
+    /*Setter Methods for each Variable (Except dates)*/
+    public void setRank(String rank) {
+        Rank = rank;
     }
 
     public int getELO() {
         return ELO;
     }
 
+    public void setELO(int ELO) {
+        this.ELO = ELO;
+    }
+
     public int getGames() {
         return Games;
+    }
+
+    public void setGames(int games) {
+        Games = games;
     }
 
     public int getWins() {
         return Wins;
     }
 
+    public void setWins(int wins) {
+        Wins = wins;
+    }
+
     public int getLosses() {
         return Losses;
+    }
+
+    public void setLosses(int losses) {
+        Losses = losses;
     }
 
     public Date getJoinDate() {

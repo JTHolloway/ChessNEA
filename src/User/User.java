@@ -5,12 +5,12 @@ import javax.swing.*;
 public class User {
 
     private final String UserID;
-    private String UserName;
-    private String Email;
-    private String Name;
-    private String Surname;
-    private String Country;
     private final UserStats Statistics;
+    private final String UserName;
+    private String Email;
+    private final String Name;
+    private final String Surname;
+    private String Country;
     private ImageIcon ProfilePicture;
 
     /**
@@ -56,15 +56,6 @@ public class User {
         ProfilePicture = ProfilePic;
     }
 
-    /*Setter Methods for Variables*/
-    public void setEmail(String email) {
-        Email = email;
-    }
-
-    public void setCountry(String country) {
-        Country = country;
-    }
-
     /*Getter Methods for each Variable*/
     public String getUserID() {
         return UserID;
@@ -78,6 +69,11 @@ public class User {
         return Email;
     }
 
+    /*Setter Methods for Variables*/
+    public void setEmail(String email) {
+        Email = email;
+    }
+
     public String getName() {
         return Name;
     }
@@ -88,6 +84,10 @@ public class User {
 
     public String getCountry() {
         return Country;
+    }
+
+    public void setCountry(String country) {
+        Country = country;
     }
 
     public UserStats getStatistics() {

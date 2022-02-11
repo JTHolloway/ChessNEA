@@ -56,6 +56,7 @@ public class Game {
 
     /**
      * Updates the board by making a move.
+     *
      * @param move a move object identifying the move to be made
      */
     public static void MakeMove(Move move, Board board) {
@@ -176,10 +177,11 @@ public class Game {
 
     /**
      * Reverses a move by setting each piece back to where it was originally.
-     * @param move The move to reverse
-     * @param board The board which the move was played on
+     *
+     * @param move                 The move to reverse
+     * @param board                The board which the move was played on
      * @param castlingAvailability The previous castling availability before the move was made
-     * @param enPassantPawn The previous EnPassant pawn before the move was made
+     * @param enPassantPawn        The previous EnPassant pawn before the move was made
      */
     public static void reverseMove(Move move, Board board, CastlingAvailability castlingAvailability, Pawn enPassantPawn) {
         int OriginX = move.getStartPosition().ReturnCoordinate().getFile();
@@ -266,6 +268,7 @@ public class Game {
     /**
      * Checks whether a square is threatening to a certain colour. A square is threatened if a piece of a given colour
      * can be captured in that square because it is guarded by the opposing colour .
+     *
      * @param ThreatenedColour The colour for which the destination square is a threat.
      * @param ThreatenedSquare The square which is being checked
      * @return true if the colour is threatened in that square.
@@ -283,11 +286,10 @@ public class Game {
             int currentFile = file + knightHorizontalDirections[DirectionIndex];
             int currentRank = rank + knightVerticalDirections[DirectionIndex];
 
-            if ((currentFile <= 7 && currentFile >= 0) && (currentRank <= 7 && currentRank >= 0)){
-                if (board.getBoardArray()[currentRank][currentFile].SquareOccupied())
-                {
+            if ((currentFile <= 7 && currentFile >= 0) && (currentRank <= 7 && currentRank >= 0)) {
+                if (board.getBoardArray()[currentRank][currentFile].SquareOccupied()) {
                     Piece threateningPiece = board.getBoardArray()[currentRank][currentFile].ReturnPiece();
-                    if(threateningPiece instanceof Knight && threateningPiece.getColour() != ThreatenedColour){
+                    if (threateningPiece instanceof Knight && threateningPiece.getColour() != ThreatenedColour) {
                         return true;
                     }
                 }
@@ -299,37 +301,35 @@ public class Game {
         int[] regularHorizontalDirections = {-1, -1, -1, 0, 0, 1, 1, 1};
         int[] regularVerticalDirections = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-        for (int DirectionIndex = 0; DirectionIndex < 8; DirectionIndex++){
+        for (int DirectionIndex = 0; DirectionIndex < 8; DirectionIndex++) {
             int currentFile = file;
             int currentRank = rank;
 
             int loop = -1;
-            while (loop < 8){
+            while (loop < 8) {
                 loop++;
                 currentFile = currentFile + regularHorizontalDirections[DirectionIndex];
                 currentRank = currentRank + regularVerticalDirections[DirectionIndex];
 
-                if (currentFile > 7 || currentFile < 0 || currentRank > 7 || currentRank < 0){
+                if (currentFile > 7 || currentFile < 0 || currentRank > 7 || currentRank < 0) {
                     break;
-                }
-                else if (board.getBoardArray()[currentRank][currentFile].SquareOccupied()){
+                } else if (board.getBoardArray()[currentRank][currentFile].SquareOccupied()) {
                     Piece threateningPiece = board.getBoardArray()[currentRank][currentFile].ReturnPiece();
 
-                    if (threateningPiece.getColour() != ThreatenedColour)
-                    {
+                    if (threateningPiece.getColour() != ThreatenedColour) {
                         //Queen, Bishop and Rook checks
-                        if (threateningPiece instanceof Queen){
+                        if (threateningPiece instanceof Queen) {
                             return true;
 
-                        } else if (threateningPiece instanceof Bishop){
+                        } else if (threateningPiece instanceof Bishop) {
                             boolean[] bishopAttackingCapabilities = {true, false, true, false, false, true, false, true};
-                            if (bishopAttackingCapabilities[DirectionIndex]){
+                            if (bishopAttackingCapabilities[DirectionIndex]) {
                                 return true;
                             }
 
-                        }else if(threateningPiece instanceof Rook){
+                        } else if (threateningPiece instanceof Rook) {
                             boolean[] rookAttackingCapabilities = {false, true, false, true, true, false, true, false};
-                            if (rookAttackingCapabilities[DirectionIndex]){
+                            if (rookAttackingCapabilities[DirectionIndex]) {
                                 return true;
                             }
                         } else {
@@ -338,11 +338,10 @@ public class Game {
                         King and Pawn checks:
                         If loop = 0 then the current square being checked is directly adjacent to the origin (threatened) square
                          */
-                            if (loop == 0){
-                                if (threateningPiece instanceof King){
+                            if (loop == 0) {
+                                if (threateningPiece instanceof King) {
                                     return true;
-                                }
-                                else if (threateningPiece instanceof Pawn) {
+                                } else if (threateningPiece instanceof Pawn) {
                                     boolean validDirection = threateningPiece.getColour() == Colour.WHITE;
                                     boolean[] pawnAttackingCapabilities = {validDirection, false, !validDirection, false, false,
                                             validDirection, false, !validDirection};
@@ -362,8 +361,9 @@ public class Game {
 
     /**
      * If the square which the king is on is a threatened square, then the king must be in check
+     *
      * @param colour The colour of the king you want to determine is checked or not.
-     * @param board The board object associated with the current game
+     * @param board  The board object associated with the current game
      * @return true if the king is checked.
      */
     public static boolean isKingChecked(Colour colour, Board board) {
@@ -388,22 +388,18 @@ public class Game {
             if (isCapture) {
                 moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().FileToNotation();
             }
-        }
-        else if (movingPiece instanceof King) {
+        } else if (movingPiece instanceof King) {
             //Castling
             if (move instanceof Move.CastlingMove) {
                 if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.KING_SIDE) {
                     moveNotation = moveNotation + "O-O";
-                }
-                else if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.QUEEN_SIDE) {
+                } else if (((Move.CastlingMove) move).getCastleType() == CastlingAvailability.QUEEN_SIDE) {
                     moveNotation = moveNotation + "O-O-O";
                 }
-            }
-            else {
+            } else {
                 moveNotation = moveNotation + movingPiece.PieceTypeToNotation();
             }
-        }
-        else {
+        } else {
             moveNotation = moveNotation + movingPiece.PieceTypeToNotation();
         }
 
@@ -423,11 +419,9 @@ public class Game {
                 }
                 if (uniqueFile) {
                     moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().FileToNotation();
-                }
-                else if (uniqueRank) {
+                } else if (uniqueRank) {
                     moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().getRank();
-                }
-                else {
+                } else {
                     moveNotation = moveNotation + move.getStartPosition().ReturnCoordinate().CoordinateToNotation();
                 }
             }
@@ -445,8 +439,7 @@ public class Game {
         if (move instanceof Move.PawnPromotion) {
             Piece pawnPromotion = ((Move.PawnPromotion) move).getPromotionPiece();
             moveNotation = moveNotation + ("=" + pawnPromotion.PieceTypeToNotation());
-        }
-        else if (move instanceof Move.PawnPromotionCapture) {
+        } else if (move instanceof Move.PawnPromotionCapture) {
             Piece pawnPromotion = ((Move.PawnPromotionCapture) move).getPromotionPiece();
             moveNotation = moveNotation + ("=" + pawnPromotion.PieceTypeToNotation());
         }
@@ -460,8 +453,7 @@ public class Game {
         MakeMove(move, board);
         if (isKingCheckmated(Colour.GetOtherColour(move.getMovedPiece().getColour()))) {
             moveNotation = moveNotation + "#";
-        }
-        else if (isKingChecked(Colour.GetOtherColour(move.getMovedPiece().getColour()), board)) {
+        } else if (isKingChecked(Colour.GetOtherColour(move.getMovedPiece().getColour()), board)) {
             moveNotation = moveNotation + "+";
         }
         reverseMove(move, board, current_CastlingAbility, current_EnPassantPawn);
@@ -501,8 +493,7 @@ public class Game {
     public void UpdatePlayerToMove() {
         if (PlayerToMove == whitePlayer) {
             PlayerToMove = blackPlayer;
-        }
-        else PlayerToMove = whitePlayer;
+        } else PlayerToMove = whitePlayer;
     }
 
     /**
@@ -540,10 +531,11 @@ public class Game {
 
     /**
      * If the king is not checkmated and the player has no available moves then the player is in stalemate
+     *
      * @param colour The colour you want to determine is in Stalemate
      * @return true if the player of that colour is stalemated
      */
-    public boolean isStalemate(Colour colour){
+    public boolean isStalemate(Colour colour) {
         Piece king = colour == Colour.WHITE ? board.getKings()[0] : board.getKings()[1];
         if (king.CalculateValidMoves(board).isEmpty() && !isKingChecked(colour, board)) {
             List<Piece> pieces = colour == Colour.WHITE ? board.getWhitePieces() : board.getBlackPieces();

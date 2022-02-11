@@ -35,6 +35,36 @@ public class GUI_GamePanel extends JPanel {
     }
 
     /**
+     * Adds the move notation of the latest move to the move box text area
+     *
+     * @param moveNotation The string to be appended
+     */
+    public static void updateMoveBox(String moveNotation) {
+        moveBox.setText(moveBox.getText() + (game.getMovesMade() + 1) + "." + moveNotation + " ");
+    }
+
+    /**
+     * @return the text in the move box text area
+     */
+    public static String getPGN() {
+        return moveBox.getText();
+    }
+
+    /**
+     * Sets the text in the turn box to 'Whites turn' or 'Blacks turn' depending on which player needs to move
+     */
+    public static void updateTurn() {
+        Colour colourTurn = GUI_GamePanel.getGame().getPlayerToMove().getPlayingColour();
+        if (colourTurn == Colour.WHITE) {
+            playerTurn.setForeground(new Color(247, 229, 195));
+            playerTurn.setText("White's Turn");
+        } else {
+            playerTurn.setForeground(new Color(59, 40, 4));
+            playerTurn.setText("Black's Turn");
+        }
+    }
+
+    /**
      * Initializes the components of the JPanel with each components properties.
      */
     private void InitComponents() {
@@ -48,18 +78,18 @@ public class GUI_GamePanel extends JPanel {
         this.setLayout(null);
 
         moveBox = new JTextPane();
-        moveBox.setBounds((int)(this.getWidth() * 0.71), (int)(this.getHeight() * 0.06),(int)(this.getWidth() * 0.25), (int)(this.getHeight() * 0.8));
+        moveBox.setBounds((int) (this.getWidth() * 0.71), (int) (this.getHeight() * 0.06), (int) (this.getWidth() * 0.25), (int) (this.getHeight() * 0.8));
         moveBox.setBorder(new LineBorder(Color.BLACK, 2, true));
         moveBox.setForeground(Color.BLACK);
-        moveBox.setBackground(new Color(160,160,160));
-        moveBox.setFont(new Font("", Font.PLAIN, ScreenHeight/45));
+        moveBox.setBackground(new Color(160, 160, 160));
+        moveBox.setFont(new Font("", Font.PLAIN, ScreenHeight / 45));
 
         playerTurn = new JLabel("White's Turn", SwingConstants.CENTER);
-        playerTurn.setBounds((int)(this.getWidth() * 0.71), (int)(this.getHeight() * 0.88),(int)(this.getWidth() * 0.25), (int)(this.getHeight() * 0.06));
+        playerTurn.setBounds((int) (this.getWidth() * 0.71), (int) (this.getHeight() * 0.88), (int) (this.getWidth() * 0.25), (int) (this.getHeight() * 0.06));
         playerTurn.setBorder(new LineBorder(Color.BLACK, 2, true));
         playerTurn.setForeground(new Color(247, 229, 195));
-        playerTurn.setBackground(new Color(160,160,160));
-        playerTurn.setFont(new Font("", Font.PLAIN, ScreenHeight/20));
+        playerTurn.setBackground(new Color(160, 160, 160));
+        playerTurn.setFont(new Font("", Font.PLAIN, ScreenHeight / 20));
 
         JPanel BoardDisplay = boardPanel;
         BoardDisplay.setLocation((int) (BoardDisplay.getWidth() * 0.1), (ScreenHeight - BoardDisplay.getHeight()) / 2);
@@ -68,34 +98,5 @@ public class GUI_GamePanel extends JPanel {
         this.add(playerTurn);
 
         this.setVisible(false);
-    }
-
-    /**
-     * Adds the move notation of the latest move to the move box text area
-     * @param moveNotation The string to be appended
-     */
-    public static void updateMoveBox(String moveNotation){
-        moveBox.setText(moveBox.getText() +  (game.getMovesMade() + 1)+ "." + moveNotation + " ");
-    }
-
-    /**
-     * @return the text in the move box text area
-     */
-    public static String getPGN(){
-        return moveBox.getText();
-    }
-
-    /**
-     * Sets the text in the turn box to 'Whites turn' or 'Blacks turn' depending on which player needs to move
-     */
-    public static void updateTurn(){
-        Colour colourTurn = GUI_GamePanel.getGame().getPlayerToMove().getPlayingColour();
-        if (colourTurn == Colour.WHITE){
-            playerTurn.setForeground(new Color(247, 229, 195));
-            playerTurn.setText("White's Turn");
-        } else {
-            playerTurn.setForeground(new Color(59, 40, 4));
-            playerTurn.setText("Black's Turn");
-        }
     }
 }

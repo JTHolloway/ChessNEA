@@ -23,9 +23,9 @@ import java.util.List;
 public class GUI_BoardPanel extends JPanel {
 
     private static List<Tile> Tiles;
+    private final MultiThread multiThread;
     private Square selectedSquare = null;
     private Square destinationSquare;
-    private final MultiThread multiThread;
     private boolean gameOver;
 
     /**
@@ -39,6 +39,30 @@ public class GUI_BoardPanel extends JPanel {
         this.setLayout(null);
 
         InitialiseTiles();
+    }
+
+    /**
+     * Updates the GUI by moving the pieces to their new locations or removing captured pieces
+     */
+    public static void UpdateBoard() {
+        for (Tile tile : Tiles) {
+            if (GUI_GamePanel.getGame().getGameType() == GameType.LOCAL_MULTIPLAYER) {
+                tile.setSquare(GUI_GamePanel.getGame().getBoard().getBoardArray()[7 - ((tile.getSquare().ReturnCoordinate().getRank() - 1))][7 - ((tile.getSquare().ReturnCoordinate().getFile() - 1))]);
+            } else {
+                tile.setSquare(GUI_GamePanel.getGame().getBoard().getBoardArray()[((tile.getSquare().ReturnCoordinate().getRank() - 1))][((tile.getSquare().ReturnCoordinate().getFile() - 1))]);
+            }
+
+            if (tile.getSquare().SquareOccupied()) {
+                if (tile.getSquare().ReturnPiece().getColour() == Colour.WHITE) {
+                    tile.getIcon().setForeground(new Color(247, 229, 195));
+                } else tile.getIcon().setForeground(new Color(59, 40, 4));
+
+                String Icon = tile.getSquare().ReturnPiece().ReturnPieceIcon();
+                tile.setIconText(Icon);
+            } else {
+                tile.setIconText("");
+            }
+        }
     }
 
     /**
@@ -63,7 +87,7 @@ public class GUI_BoardPanel extends JPanel {
                 tile = new Tile(game.getBoard().getBoardArray()[(7 - (i - 1))][(7 - (j - 1))], TileSize, tileColour);
                 tile.setBackground(tileColour);
 
-                if (game.getGameType() == GameType.VERSES_COMPUTER){
+                if (game.getGameType() == GameType.VERSES_COMPUTER) {
                     if (game.getSelectedColour() == Colour.WHITE) {
                         tile.setBounds((7 - (j - 1)) * (TileSize), this.getSize().height - ((8 - (i - 1)) * TileSize), TileSize, TileSize);
                     } else {
@@ -109,10 +133,10 @@ public class GUI_BoardPanel extends JPanel {
                                     game.UpdatePlayerToMove();
                                     GUI_GamePanel.updateTurn();
                                     //Make king Square red if checked
-                                    for (Tile tile1 : Tiles){
-                                        if (tile1.getSquare().SquareOccupied() && tile1.getSquare().ReturnPiece() instanceof King && tile1.getSquare().ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour()){
-                                            if (Game.isKingChecked(game.getPlayerToMove().getPlayingColour(), game.getBoard())){
-                                                tile1.setBackground(new Color(255,77,77));
+                                    for (Tile tile1 : Tiles) {
+                                        if (tile1.getSquare().SquareOccupied() && tile1.getSquare().ReturnPiece() instanceof King && tile1.getSquare().ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour()) {
+                                            if (Game.isKingChecked(game.getPlayerToMove().getPlayingColour(), game.getBoard())) {
+                                                tile1.setBackground(new Color(255, 77, 77));
                                             }
                                         } else {
                                             tile1.setBackground(tile1.getColour());
@@ -140,7 +164,7 @@ public class GUI_BoardPanel extends JPanel {
                     @Override
                     public void mouseEntered(MouseEvent e) {
                         previousBorder[0] = finalTile.getBorder();
-                        if (finalTile.getBorder() == null){
+                        if (finalTile.getBorder() == null) {
                             finalTile.setBorder(new LineBorder(Color.RED, 3));
                         } else {
                             finalTile.setBorder(new LineBorder(finalTile.getColour(), 5));
@@ -174,6 +198,7 @@ public class GUI_BoardPanel extends JPanel {
 
     /**
      * If a player can promote a pawn then this method will allow them to chose the piece they promote to
+     *
      * @param move The Pawn Promotion move
      * @return The promotion piece object
      */
@@ -204,7 +229,7 @@ public class GUI_BoardPanel extends JPanel {
      * Checks whether the game is over and saves the game to the database if the game is over.
      */
     private void GameOver() {
-        if (!gameOver){
+        if (!gameOver) {
             if (GUI_GamePanel.getGame().isGameOver()) {
                 gameOver = true;
                 Player winner = GUI_GamePanel.getGame().gameOver();
@@ -272,6 +297,7 @@ public class GUI_BoardPanel extends JPanel {
     /**
      * This method is called when a user presses a square and checks whether the square is occupied.
      * If a square is occupied then it is set as the selected square and the valid destination squares are highlighted
+     *
      * @param finalTile The tile which is pressed by the user
      */
     private void SelectOriginSquare(Tile finalTile, Game game) {
@@ -283,11 +309,11 @@ public class GUI_BoardPanel extends JPanel {
                 for (Tile tile1 : Tiles) {
                     tile1.setBorder(null);
 
-                    if (tile1.getSquare().SquareOccupied() && tile1.getSquare().ReturnPiece() instanceof King && tile1.getSquare().ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour()){
-                        if (Game.isKingChecked(game.getPlayerToMove().getPlayingColour(), game.getBoard())){
-                            tile1.setBackground(new Color(255,77,77));
+                    if (tile1.getSquare().SquareOccupied() && tile1.getSquare().ReturnPiece() instanceof King && tile1.getSquare().ReturnPiece().getColour() == game.getPlayerToMove().getPlayingColour()) {
+                        if (Game.isKingChecked(game.getPlayerToMove().getPlayingColour(), game.getBoard())) {
+                            tile1.setBackground(new Color(255, 77, 77));
                         }
-                    } else{
+                    } else {
                         tile1.setBackground(tile1.getColour());
                     }
                 }
@@ -295,11 +321,11 @@ public class GUI_BoardPanel extends JPanel {
                     for (Tile tile1 : Tiles) {
                         if (tile1.getSquare().ReturnCoordinate().CompareCoordinates(move.getEndPosition())) {
                             tile1.setBorder(new LineBorder(new Color(179, 140, 52), 2));
-                            if (move instanceof Move.CapturingMove || move instanceof Move.PawnPromotionCapture || move instanceof Move.EnPassantMove){
+                            if (move instanceof Move.CapturingMove || move instanceof Move.PawnPromotionCapture || move instanceof Move.EnPassantMove) {
                                 tile1.setBackground(new Color(189, 120, 171));
                             } else {
-                                if (!tile1.getBackground().equals(new Color(255,77,77))){
-                                    tile1.setBackground(new Color(216,180,85));
+                                if (!tile1.getBackground().equals(new Color(255, 77, 77))) {
+                                    tile1.setBackground(new Color(216, 180, 85));
                                 }
                             }
                         }
@@ -311,8 +337,9 @@ public class GUI_BoardPanel extends JPanel {
 
     /**
      * This method checks if the destination pressed by the user is valid and will perform the move if it is.
+     *
      * @param finalTile The tile which is pressed by the user
-     * @param moveList The list of moves which could have been made
+     * @param moveList  The list of moves which could have been made
      * @return true is the move was valid and successfully performed
      */
     private boolean SelectDestinationSquare(Tile finalTile, Game game, List<Move> moveList) {
@@ -320,50 +347,26 @@ public class GUI_BoardPanel extends JPanel {
         boolean valid = false;
 
         for (Move move : moveList) {
-                if (move.getEndPosition().ReturnCoordinate().CompareCoordinates(destinationSquare)) {
-                    valid = true;
-                    GUI_GamePanel.updateMoveBox(game.MoveToNotation(move));
+            if (move.getEndPosition().ReturnCoordinate().CompareCoordinates(destinationSquare)) {
+                valid = true;
+                GUI_GamePanel.updateMoveBox(game.MoveToNotation(move));
 
-                    if (move instanceof Move.PawnPromotion) {
-                        Move pawnPromotionMove = new Move.PawnPromotion(move.getStartPosition(), move.getEndPosition(),
-                                choosePromotionPiece(move));
-                        Game.MakeMove(pawnPromotionMove, game.getBoard());
+                if (move instanceof Move.PawnPromotion) {
+                    Move pawnPromotionMove = new Move.PawnPromotion(move.getStartPosition(), move.getEndPosition(),
+                            choosePromotionPiece(move));
+                    Game.MakeMove(pawnPromotionMove, game.getBoard());
 
-                    } else if (move instanceof Move.PawnPromotionCapture) {
-                        Move pawnPromotionMove = new Move.PawnPromotionCapture(move.getStartPosition(),
-                                move.getEndPosition(),
-                                choosePromotionPiece(move), move.getCapturedPiece());
-                        Game.MakeMove(pawnPromotionMove, game.getBoard());
+                } else if (move instanceof Move.PawnPromotionCapture) {
+                    Move pawnPromotionMove = new Move.PawnPromotionCapture(move.getStartPosition(),
+                            move.getEndPosition(),
+                            choosePromotionPiece(move), move.getCapturedPiece());
+                    Game.MakeMove(pawnPromotionMove, game.getBoard());
 
-                    } else Game.MakeMove(move, game.getBoard());
+                } else Game.MakeMove(move, game.getBoard());
 
-                    break;
-                }
+                break;
+            }
         }
         return valid;
-    }
-
-    /**
-     * Updates the GUI by moving the pieces to their new locations or removing captured pieces
-     */
-    public static void UpdateBoard() {
-        for (Tile tile : Tiles) {
-            if (GUI_GamePanel.getGame().getGameType() == GameType.LOCAL_MULTIPLAYER){
-                tile.setSquare(GUI_GamePanel.getGame().getBoard().getBoardArray()[7 - ((tile.getSquare().ReturnCoordinate().getRank() - 1))][7 - ((tile.getSquare().ReturnCoordinate().getFile() - 1))]);
-            } else {
-                tile.setSquare(GUI_GamePanel.getGame().getBoard().getBoardArray()[((tile.getSquare().ReturnCoordinate().getRank() - 1))][((tile.getSquare().ReturnCoordinate().getFile() - 1))]);
-            }
-
-            if (tile.getSquare().SquareOccupied()) {
-                if (tile.getSquare().ReturnPiece().getColour() == Colour.WHITE) {
-                    tile.getIcon().setForeground(new Color(247, 229, 195));
-                } else tile.getIcon().setForeground(new Color(59, 40, 4));
-
-                String Icon = tile.getSquare().ReturnPiece().ReturnPieceIcon();
-                tile.setIconText(Icon);
-            } else {
-                tile.setIconText("");
-            }
-        }
     }
 }

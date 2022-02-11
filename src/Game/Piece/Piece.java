@@ -15,9 +15,9 @@ import java.util.List;
 
 public abstract class Piece {
 
-    protected Coordinate PieceCoordinate;
     protected final Colour colour;
     protected final PieceType type;
+    protected Coordinate PieceCoordinate;
 
     /**
      * Constructor for a piece
@@ -163,6 +163,7 @@ public abstract class Piece {
     /**
      * If a move results in the players king in check then it is not legal because you
      * cannot check your own king
+     *
      * @param moves The list of move objects to be checked
      * @return A list of move objects with illegal moves removed
      */

@@ -9,8 +9,9 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
-public class GUI_ProfilePanel extends JPanel{
+public class GUI_ProfilePanel extends JPanel {
 
+    private static final DecimalFormat df = new DecimalFormat("0.0");
     private static JLabel Title;
     private static JLabel label_userName;
     private static JLabel label_country;
@@ -22,14 +23,35 @@ public class GUI_ProfilePanel extends JPanel{
     private static JLabel label_joinDate;
     private static JLabel label_lastDateOnline;
     private static JLabel label_winPercentage;
-    private static final DecimalFormat df = new DecimalFormat("0.0");
 
     public GUI_ProfilePanel() {
 
-        if (!Repository.getCurrentUser().getUserID().equals("Guest")){
+        if (!Repository.getCurrentUser().getUserID().equals("Guest")) {
             InitComponents();
             this.setVisible(true);
         }
+    }
+
+    /**
+     * This method will update the stats on the profile panel if a new game is played.
+     */
+    public static void updateStats() {
+
+        double winPercentage;
+        try {
+            winPercentage = (((double) Repository.getCurrentUser().getStatistics().getWins() / (double) Repository.getCurrentUser().getStatistics().getGames()) * 100);
+
+        } catch (Exception exception) {
+            System.out.println(exception);
+            winPercentage = 0.00;
+        }
+
+        label_ELO.setText(" ELO: " + Repository.getCurrentUser().getStatistics().getELO());
+        label_rank.setText(" Rank: " + Repository.getCurrentUser().getStatistics().getRank());
+        label_wins.setText(" Wins: " + Repository.getCurrentUser().getStatistics().getWins());
+        label_losses.setText(" Losses: " + Repository.getCurrentUser().getStatistics().getLosses());
+        label_draws.setText(" Draws: " + Repository.getCurrentUser().getStatistics().getDraws());
+        label_winPercentage.setText(" " + df.format(winPercentage) + "% Win Percentage");
     }
 
     /**
@@ -56,7 +78,7 @@ public class GUI_ProfilePanel extends JPanel{
         try {
             winPercentage = (((double) Repository.getCurrentUser().getStatistics().getWins() / (double) Repository.getCurrentUser().getStatistics().getGames()) * 100);
 
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception);
             winPercentage = 0.00;
         }
@@ -77,55 +99,33 @@ public class GUI_ProfilePanel extends JPanel{
                 label_joinDate, label_lastDateOnline, label_winPercentage};
 
         //Set Properties
-        for (JLabel label : Components){
+        for (JLabel label : Components) {
             label.setBorder(new LineBorder(Color.black, 2, true));
             label.setFont(new Font("", Font.PLAIN, ScreenHeight / 25));
             label.setForeground(Color.white);
         }
 
         //Set Bounds
-        label_userName.setBounds((int)(this.getWidth() * 0.291), (int)(this.getHeight() * 0.111),(int)(this.getWidth() * 0.358), (int)(this.getHeight() * 0.07));
-        label_country.setBounds((int)(this.getWidth() * 0.291), (int)(this.getHeight() * 0.195),(int)(this.getWidth() * 0.255), (int)(this.getHeight() * 0.07));
-        label_ELO.setBounds((int)(this.getWidth() * 0.675), (int)(this.getHeight() * 0.111),(int)(this.getWidth() * 0.175), (int)(this.getHeight() * 0.07));
-        label_rank.setBounds((int)(this.getWidth() * 0.675), (int)(this.getHeight() * 0.195),(int)(this.getWidth() * 0.28), (int)(this.getHeight() * 0.07));
-        label_wins.setBounds((int)(this.getWidth() * 0.05), (int)(this.getHeight() * 0.365),(int)(this.getWidth() * 0.18), (int)(this.getHeight() * 0.07));
-        label_losses.setBounds((int)(this.getWidth() * 0.26), (int)(this.getHeight() * 0.365),(int)(this.getWidth() * 0.18), (int)(this.getHeight() * 0.07));
-        label_draws.setBounds((int)(this.getWidth() * 0.47), (int)(this.getHeight() * 0.365),(int)(this.getWidth() * 0.18), (int)(this.getHeight() * 0.07));
-        label_joinDate.setBounds((int)(this.getWidth() * 0.05), (int)(this.getHeight() * 0.455),(int)(this.getWidth() * 0.27), (int)(this.getHeight() * 0.07));
-        label_lastDateOnline.setBounds((int)(this.getWidth() * 0.33), (int)(this.getHeight() * 0.455),(int)(this.getWidth() * 0.32), (int)(this.getHeight() * 0.07));
-        label_winPercentage.setBounds((int)(this.getWidth() * 0.05), (int)(this.getHeight() * 0.545),(int)(this.getWidth() * 0.32), (int)(this.getHeight() * 0.07));
+        label_userName.setBounds((int) (this.getWidth() * 0.291), (int) (this.getHeight() * 0.111), (int) (this.getWidth() * 0.358), (int) (this.getHeight() * 0.07));
+        label_country.setBounds((int) (this.getWidth() * 0.291), (int) (this.getHeight() * 0.195), (int) (this.getWidth() * 0.255), (int) (this.getHeight() * 0.07));
+        label_ELO.setBounds((int) (this.getWidth() * 0.675), (int) (this.getHeight() * 0.111), (int) (this.getWidth() * 0.175), (int) (this.getHeight() * 0.07));
+        label_rank.setBounds((int) (this.getWidth() * 0.675), (int) (this.getHeight() * 0.195), (int) (this.getWidth() * 0.28), (int) (this.getHeight() * 0.07));
+        label_wins.setBounds((int) (this.getWidth() * 0.05), (int) (this.getHeight() * 0.365), (int) (this.getWidth() * 0.18), (int) (this.getHeight() * 0.07));
+        label_losses.setBounds((int) (this.getWidth() * 0.26), (int) (this.getHeight() * 0.365), (int) (this.getWidth() * 0.18), (int) (this.getHeight() * 0.07));
+        label_draws.setBounds((int) (this.getWidth() * 0.47), (int) (this.getHeight() * 0.365), (int) (this.getWidth() * 0.18), (int) (this.getHeight() * 0.07));
+        label_joinDate.setBounds((int) (this.getWidth() * 0.05), (int) (this.getHeight() * 0.455), (int) (this.getWidth() * 0.27), (int) (this.getHeight() * 0.07));
+        label_lastDateOnline.setBounds((int) (this.getWidth() * 0.33), (int) (this.getHeight() * 0.455), (int) (this.getWidth() * 0.32), (int) (this.getHeight() * 0.07));
+        label_winPercentage.setBounds((int) (this.getWidth() * 0.05), (int) (this.getHeight() * 0.545), (int) (this.getWidth() * 0.32), (int) (this.getHeight() * 0.07));
 
         JLabel profilePicture = new JLabel();
-        profilePicture.setBounds((int)(this.getWidth() * 0.05), (int)(this.getHeight() * 0.111), (int)(this.getHeight() * 0.23), (int)(this.getHeight() * 0.23));
+        profilePicture.setBounds((int) (this.getWidth() * 0.05), (int) (this.getHeight() * 0.111), (int) (this.getHeight() * 0.23), (int) (this.getHeight() * 0.23));
         profilePicture.setBorder(new LineBorder(Color.black, 2, true));
 
         //Add Labels
-        for (JLabel label : Components){
+        for (JLabel label : Components) {
             this.add(label);
         }
         this.add(Title);
         this.add(profilePicture);
-    }
-
-    /**
-     * This method will update the stats on the profile panel if a new game is played.
-     */
-    public static void updateStats(){
-
-        double winPercentage;
-        try {
-            winPercentage = (((double) Repository.getCurrentUser().getStatistics().getWins() / (double) Repository.getCurrentUser().getStatistics().getGames()) * 100);
-
-        } catch (Exception exception){
-            System.out.println(exception);
-            winPercentage = 0.00;
-        }
-
-        label_ELO.setText(" ELO: " + Repository.getCurrentUser().getStatistics().getELO());
-        label_rank.setText(" Rank: " + Repository.getCurrentUser().getStatistics().getRank());
-        label_wins.setText(" Wins: " + Repository.getCurrentUser().getStatistics().getWins());
-        label_losses.setText(" Losses: " + Repository.getCurrentUser().getStatistics().getLosses());
-        label_draws.setText(" Draws: " + Repository.getCurrentUser().getStatistics().getDraws());
-        label_winPercentage.setText(" " + df.format(winPercentage) + "% Win Percentage");
     }
 }

@@ -25,6 +25,7 @@ public final class Minimax {
     /**
      * This method alters the computer difficulty based on the users ELO rank and calls the minimax
      * algorithm to find the best move.
+     *
      * @param computerColour The colour which the computer is playing as
      * @return the best move found by the minimax algorithm
      */
@@ -62,12 +63,13 @@ public final class Minimax {
 
     /**
      * The method created a move tree to find the highest value move which can be made by the computer
-     * @param currentPosition The current state of the board for which the move is to be made
-     * @param searchDepth the level of depth to which the move tree will be traversed.
-     *                    Higher depths means the computer can see further ahead and therefore play better.
-     * @param alpha A value used for alpha-beta pruning to prune any branches which dont contain the best move.
-     * @param beta A value used for alpha-beta pruning to prune any branches which dont contain the best move.
-     * @param maximizer a boolean value to determine whether or not the maximizing colours moves are being checked
+     *
+     * @param currentPosition  The current state of the board for which the move is to be made
+     * @param searchDepth      the level of depth to which the move tree will be traversed.
+     *                         Higher depths means the computer can see further ahead and therefore play better.
+     * @param alpha            A value used for alpha-beta pruning to prune any branches which dont contain the best move.
+     * @param beta             A value used for alpha-beta pruning to prune any branches which dont contain the best move.
+     * @param maximizer        a boolean value to determine whether or not the maximizing colours moves are being checked
      * @param maximizingColour The colour which the computer is playing as
      * @return a double value for the value of the bottom of a branch, which can be compared to other values until the highest
      * value branch is located
@@ -134,7 +136,8 @@ public final class Minimax {
 
     /**
      * Gets all child nodes of a move, where a child is any subsequent move which can be made after the previous move.
-     * @param maximizer a boolean value to determine whether or not the maximizing colours moves are being checked
+     *
+     * @param maximizer        a boolean value to determine whether or not the maximizing colours moves are being checked
      * @param maximizingColour The colour which the computer is playing as
      * @return a list of move objects for each possible move which can be made by a colour.
      */
@@ -156,6 +159,7 @@ public final class Minimax {
 
     /**
      * Calculates the total value of a move branch
+     *
      * @param maximizingColour The colour which the computer is playing as
      * @return the value of the branch.
      */

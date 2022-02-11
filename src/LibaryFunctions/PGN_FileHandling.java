@@ -16,7 +16,7 @@ public class PGN_FileHandling {
     /**
      * Creates the PGN text file
      */
-    public static void createPGN(){
+    public static void createPGN() {
         String FileName = Repository.getCurrentUser().getUserID() + "_" + Repository.getCurrentUser().getStatistics().getGames() + ".txt";
         File directory = new File(System.getProperty("user.dir") + "/Game Files");
         directory.mkdir();
@@ -42,7 +42,7 @@ public class PGN_FileHandling {
         }
 
         writeToPGN("[Event \"" + GUI_GamePanel.getGame().getGameType() + "\"]\n");
-        writeToPGN("[Date \"" + new java.sql.Date (Calendar.getInstance().getTime().getTime()) + "\"]\n");
+        writeToPGN("[Date \"" + new java.sql.Date(Calendar.getInstance().getTime().getTime()) + "\"]\n");
         writeToPGN("[User Elo \"" + Repository.getCurrentUser().getStatistics().getELO() + "\"]\n");
         writeToPGN("[Colour \"" + GUI_GamePanel.getGame().getSelectedColour() + "\"]\n");
         writeToPGN("[Outcome \"" + gameOutcome + "\"]\n");
@@ -51,9 +51,10 @@ public class PGN_FileHandling {
 
     /**
      * Appends a String to the text file
+     *
      * @param StringToWrite The string to be appended
      */
-    public static void writeToPGN(String StringToWrite){
+    public static void writeToPGN(String StringToWrite) {
         try {
             FileWriter fileWriter = new FileWriter(PGN_File.getAbsoluteFile(), true);
             fileWriter.write(StringToWrite);

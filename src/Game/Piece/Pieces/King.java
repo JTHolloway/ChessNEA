@@ -32,7 +32,7 @@ public class King extends Piece {
     /**
      * Takes a board object and calculates the available king moves so that illegal moves cannot be made
      * Takes into account that check may be present on the board etc...
-     *
+     * <p>
      * The King can move 1 space in all directions but cannot move into a threatened
      * square and can do a special castling move if some conditions are met.
      *

@@ -9,9 +9,9 @@ import java.awt.*;
  * Similar to the square method however this is a JPanel and not used for any of the program functionality
  */
 public final class Tile extends JPanel {
-    private Square square;
     private final Color colour;
     private final JLabel icon;
+    private Square square;
 
     /**
      * Constructor for a displayable board tile.
@@ -33,6 +33,10 @@ public final class Tile extends JPanel {
         return square;
     }
 
+    public void setSquare(Square square) {
+        this.square = square;
+    }
+
     /**
      * @return the JLabel which contains the piece icon. Empty tiles have empty JLabels
      */
@@ -42,15 +46,12 @@ public final class Tile extends JPanel {
 
     /**
      * Updates the contents of the tile
+     *
      * @param text The text to be written to the tile. Either a unicode piece or an empty string.
      */
     public void setIconText(String text) {
         icon.setText(text);
         this.repaint();
-    }
-
-    public void setSquare(Square square) {
-        this.square = square;
     }
 
     /**

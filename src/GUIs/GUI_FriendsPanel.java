@@ -5,10 +5,7 @@ import LibaryFunctions.Repository;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class GUI_FriendsPanel extends JPanel {
@@ -22,7 +19,7 @@ public class GUI_FriendsPanel extends JPanel {
      * Constructor for the Friends JPanel. Calls the initComponents() method
      */
     public GUI_FriendsPanel() {
-        if (Repository.getCurrentUser() != null){
+        if (Repository.getCurrentUser() != null) {
             Usernames = Repository.getCurrentUsersFriends();
             InitComponents();
         }
@@ -37,7 +34,7 @@ public class GUI_FriendsPanel extends JPanel {
         FriendsList.setModel(model);
         model.addRow(ColumnNames);
 
-        for (String User : Usernames){
+        for (String User : Usernames) {
             String[] data = (User.split(","));
             model.addRow(data);
         }

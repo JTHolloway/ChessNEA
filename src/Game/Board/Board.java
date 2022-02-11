@@ -13,10 +13,10 @@ import java.util.List;
 public class Board {
 
     private final Square[][] BoardArray = new Square[8][8];
-    private Pawn enPassantPawn;
     private final Piece[] Kings = new Piece[2];
-    private List<Piece> WhitePieces = new ArrayList<>();
-    private List<Piece> BlackPieces = new ArrayList<>();
+    private Pawn enPassantPawn;
+    private final List<Piece> WhitePieces = new ArrayList<>();
+    private final List<Piece> BlackPieces = new ArrayList<>();
 
     /**
      * Board constructor

@@ -27,7 +27,7 @@ public class Knight extends Piece {
      * Takes a board object and calculates the available Knight moves so that
      * illegal moves cannot be made
      * Takes into account that check may be present on the board etc...
-     *
+     * <p>
      * The knight can move in an L-shape pattern where it moves two squares in a horizontal or vertical
      * direction and then moves one square perpendicular to its previous motion.
      * The knight can also jump over other pieces

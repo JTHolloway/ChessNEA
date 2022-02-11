@@ -27,7 +27,7 @@ public class Bishop extends Piece {
      * Takes a board object and calculates the available bishop moves so that
      * illegal moves cannot be made
      * Takes into account that check may be present on the board etc...
-     *
+     * <p>
      * Bishops can move any number of spaces along a diagonal
      *
      * @param board An instance of the current board (which contains an array of squares)

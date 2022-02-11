@@ -28,7 +28,7 @@ public class Pawn extends Piece {
      * Takes a board object and calculates the available pawn moves so that
      * illegal moves cannot be made
      * Takes into account that check may be present on the board etc...
-     *
+     * <p>
      * The Pawn can move forwards and not backwards, It can only move one space at a time
      * unless it is it's first move, where it has the choice to move two spaces.
      * The pawn can only capture diagonally and can promote to a better piece if it reaches the
@@ -228,8 +228,7 @@ public class Pawn extends Piece {
                     Moves.add(new Move.PawnPromotionCapture(PieceCoordinate.GetSquareAt(BoardArray), square,
                             new Bishop(square.ReturnCoordinate(), colour, PieceType.BISHOP), square.ReturnPiece()));
 
-                }
-                else {
+                } else {
                     //Capturing move - Just a regular pawn capturing move
                     Moves.add(new Move.CapturingMove(PieceCoordinate.GetSquareAt(BoardArray), square, square.ReturnPiece()));
                 }

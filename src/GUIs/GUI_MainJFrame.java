@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 
 public class GUI_MainJFrame extends javax.swing.JFrame {
 
-    private JFrame MainWindow;
     private static JPanel gamePanel;
     private static JPanel learnPanel;
     private static JPanel AnalysisPanel;
@@ -19,7 +18,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
     private static JPanel FriendsPanel;
     private static JPanel PodiumPanel;
     private static JPanel ProfilePanel;
-
+    private JFrame MainWindow;
     private JLabel CloseWindowButton;
     private JLabel MinimiseWindowButton;
     private JLabel OpenPlayPanel;
@@ -41,7 +40,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
      */
     public static void FriendsPanelClicked() {
 
-        if (Repository.getCurrentUser().getUserID().equals("Guest")){
+        if (Repository.getCurrentUser().getUserID().equals("Guest")) {
             JOptionPane.showMessageDialog(null, "Guest accounts cannot view Friend List");
 
         } else {
@@ -69,7 +68,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
      */
     public static void ProfilePanelClicked() {
 
-        if (Repository.getCurrentUser().getUserID().equals("Guest")){
+        if (Repository.getCurrentUser().getUserID().equals("Guest")) {
             JOptionPane.showMessageDialog(null, "Guest accounts cannot view Profile Page");
 
         } else {
@@ -126,7 +125,7 @@ public class GUI_MainJFrame extends javax.swing.JFrame {
         MorePanel = new GUI_MorePanel();
         FriendsPanel = new GUI_FriendsPanel();
         PodiumPanel = new GUI_PodiumPanel();
-        ProfilePanel  = new GUI_ProfilePanel();
+        ProfilePanel = new GUI_ProfilePanel();
 
         CloseWindowButton = new JLabel();
         MinimiseWindowButton = new JLabel();

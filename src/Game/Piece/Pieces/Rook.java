@@ -32,7 +32,7 @@ public class Rook extends Piece {
     /**
      * Takes a board object and calculates the available Rook moves so that illegal moves cannot be made
      * Takes into account that check may be present on the board etc...
-     *
+     * <p>
      * The Rook can move any number of spaces, in both the vertical and horizontal directions,
      * It can also castle, however castling is technically a king move so the castling move is not
      * created in this method.

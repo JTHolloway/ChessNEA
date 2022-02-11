@@ -27,7 +27,7 @@ public class Queen extends Piece {
     /**
      * Takes a board object and calculates the available queen moves so that illegal moves cannot be made
      * Takes into account that check may be present on the board etc...
-     *
+     * <p>
      * The Queen can move any number of spaces, in any direction, as long as it is the same direction
      * Eg - the queen can move diagonally 5 spaces but cannot change its direction in the same move
      *

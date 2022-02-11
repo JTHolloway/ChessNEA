@@ -11,7 +11,7 @@ import java.util.List;
 public class Utility {
     /**
      * Converts one row of a board to a 1D array so that it can be manipulated to look for
-     *  piece collisions or check pathways.
+     * piece collisions or check pathways.
      *
      * @param board       a 2D square array to represent a board, so that one dimension can be copied to another array,
      * @param PieceOrigin The square that holds the piece involved on the row, such as a pathway of checked squares by a rook.
@@ -131,7 +131,7 @@ public class Utility {
 
     public static boolean isEmailAvailable(String Email) {
         for (String ID : Repository.getEmails()) {
-            if (ID != null){
+            if (ID != null) {
                 if (ID.equals(Email)) return false;
             }
         }
@@ -181,15 +181,16 @@ public class Utility {
 
     /**
      * Updates the ELO of a player based on their current rank, opponents rank, and game outcome
-     * @param ELO_of_Player The current ELO rank of the player which rank needs to be updated after a game
+     *
+     * @param ELO_of_Player   The current ELO rank of the player which rank needs to be updated after a game
      * @param ELO_of_Opponent The ELO score of the opponent the player played against
-     * @param gameOutcome The outcome of the game, Such as a win, loss or draw.
+     * @param gameOutcome     The outcome of the game, Such as a win, loss or draw.
      * @return a rounded integer of the players new ELO, this could be less than or more than their original ELO
      * depending on the game outcome
      */
     public static int CalculateNew_ELO(int ELO_of_Player, int ELO_of_Opponent, GameOutcome gameOutcome) {
 
-        double ExpectedScore_Player = 1 / (1 + (Math.pow(10, (double)(ELO_of_Opponent - ELO_of_Player) / 400)));
+        double ExpectedScore_Player = 1 / (1 + (Math.pow(10, (double) (ELO_of_Opponent - ELO_of_Player) / 400)));
         int K_Factor;
 
         if (ELO_of_Player > 2400) K_Factor = 16;
