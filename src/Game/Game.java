@@ -161,7 +161,7 @@ public class Game {
                 ((King) move.getMovedPiece()).setCastlingAvailability(CastlingAvailability.NEITHER);
             }
         }
-        //Unset en-passant pawn if a double pawn move didnt happen
+        //Unset en-passant pawn if a double pawn move didn't happen
         if (move.getMovedPiece().getType() != PieceType.PAWN) {
             board.setEnPassantPawn(null);
         }

@@ -75,11 +75,21 @@ public final class Minimax {
      * value branch is located
      */
     private double minimaxTraversal(Board currentPosition, int searchDepth, double alpha, double beta, boolean maximizer, Colour maximizingColour) {
+        /*
+        If the branch has been traversed or this node results in a won,
+        lost or drawn game then return the value of the branch
+        */
         if (searchDepth == 0 || game.isGameOver()) {
             return evaluateBranch(currentPosition, maximizingColour);
         }
+
+        //Gets the child nodes of this node - which is all possible moves which can be made in response to this last move
         List<Move> moves = getChildren(currentPosition, maximizer, maximizingColour);
         if (moves.get(0).getMovedPiece().getColour() == maximizingColour) {
+            /*
+            Choose a random move in case of there being more than one Best move
+            so that the algorithm doesn't play the sae move each time
+             */
             Random r = new Random();
             currentBestMove = moves.get(r.nextInt(moves.size()));
         }
@@ -93,18 +103,24 @@ public final class Minimax {
 
         if (maximizer) {
             double maxEvaluation = Double.NEGATIVE_INFINITY;
+            //For each possible move
             for (Move currentNode : moves) {
+                //Make the move
                 Game.MakeMove(currentNode, currentPosition);
 
+                //Evaluate the move and reverse the move
                 double nodeEvaluation = minimaxTraversal(currentPosition, searchDepth - 1, alpha, beta, false, maximizingColour);
                 Game.reverseMove(currentNode, currentPosition, castlingAvailability, enPassantPawn);
 
+                //If the move has the highest found value then set as best move
                 if (nodeEvaluation > maxEvaluation) {
                     maxEvaluation = nodeEvaluation;
                     if (currentNode.getMovedPiece().getColour() == maximizingColour) {
                         currentBestMove = currentNode;
                     }
                 }
+
+                //Alpha-Beta pruning - Break out of loop if branch does not possibly contain a good move
                 alpha = Math.max(alpha, nodeEvaluation);
                 if (beta <= alpha) {
                     break;
@@ -113,18 +129,24 @@ public final class Minimax {
             return maxEvaluation;
         } else {
             double minEvaluation = Double.POSITIVE_INFINITY;
+            //For each possible move
             for (Move currentNode : moves) {
+                //Make the move
                 Game.MakeMove(currentNode, currentPosition);
 
+                //Evaluate the move and reverse the move
                 double nodeEvaluation = minimaxTraversal(currentPosition, searchDepth - 1, alpha, beta, true, maximizingColour);
                 Game.reverseMove(currentNode, currentPosition, castlingAvailability, enPassantPawn);
 
+                //If the move has the lowest found value then set as best move
                 if (nodeEvaluation < minEvaluation) {
                     minEvaluation = nodeEvaluation;
                     if (currentNode.getMovedPiece().getColour() == maximizingColour) {
                         currentBestMove = currentNode;
                     }
                 }
+
+                //Alpha-Beta pruning - Break out of loop if branch does not possibly contain a good move
                 beta = Math.min(beta, nodeEvaluation);
                 if (beta <= alpha) {
                     break;
